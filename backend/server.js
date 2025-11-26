@@ -1,6 +1,8 @@
 // imports
 import express from "express";
 import cors from "cors";
+import collab_requests from "./routes/collab_requests.js";
+import user_profiles from "./routes/user_profiles.js";
 
 // express app
 const app = express();
