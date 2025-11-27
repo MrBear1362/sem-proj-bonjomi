@@ -16,7 +16,7 @@ app.get("/api/collab-requests/:id", async (req, res) => {
   }
 });
 
-app.post("/api/collab_requests", async (req, res) => {
+app.post("/api/collab-requests", async (req, res) => {
   try {
 
   } catch (error) {
@@ -24,7 +24,7 @@ app.post("/api/collab_requests", async (req, res) => {
   }
 });
 
-app.patch("/api/collab_requests/:id", async (req, res) => {
+app.patch("/api/collab-requests/:id", async (req, res) => {
   try {
 
   } catch (error) {
@@ -32,7 +32,7 @@ app.patch("/api/collab_requests/:id", async (req, res) => {
   }
 });
 
-app.delete("/api/collab_requests/:id", async (req, res) => {
+app.delete("/api/collab-requests/:id", async (req, res) => {
   try {
 
   } catch (error) {
