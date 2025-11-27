@@ -19,7 +19,6 @@
     "@supabase/supabase-js": "^2.58.5",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "pg": "^8.16.3",
     "postgres": "^3.4.7"
   }
 }
