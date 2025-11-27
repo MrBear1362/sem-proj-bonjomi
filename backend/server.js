@@ -12,6 +12,11 @@ const PORT = 3000;
 // middleware
 app.use(cors());
 app.use(express.json());
+// routes
+app.use(
+  collab_requests,
+  user_profiles
+);
 
 // root endpoint - verify server status
 app.get("/", (req, res) => {

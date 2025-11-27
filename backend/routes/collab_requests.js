@@ -1,5 +1,8 @@
+const express = require('express');
+const router = express.Router();
+
 // GET all collab_requests - for feed
-app.get("/api/collab-requests", async (req, res) => {
+router.get("/api/collab-requests", async (req, res) => {
   try {
 
   } catch (error) {
@@ -8,7 +11,7 @@ app.get("/api/collab-requests", async (req, res) => {
 });
 
 // GET specific collab_requests
-app.get("/api/collab-requests/:id", async (req, res) => {
+router.get("/api/collab-requests/:id", async (req, res) => {
   try {
 
   } catch (error) {
@@ -16,7 +19,7 @@ app.get("/api/collab-requests/:id", async (req, res) => {
   }
 });
 
-app.post("/api/collab-requests", async (req, res) => {
+router.post("/api/collab-requests", async (req, res) => {
   try {
 
   } catch (error) {
@@ -24,7 +27,7 @@ app.post("/api/collab-requests", async (req, res) => {
   }
 });
 
-app.patch("/api/collab-requests/:id", async (req, res) => {
+router.patch("/api/collab-requests/:id", async (req, res) => {
   try {
 
   } catch (error) {
@@ -32,10 +35,12 @@ app.patch("/api/collab-requests/:id", async (req, res) => {
   }
 });
 
-app.delete("/api/collab-requests/:id", async (req, res) => {
+router.delete("/api/collab-requests/:id", async (req, res) => {
   try {
 
   } catch (error) {
 
   }
 });
+
+export default router;
