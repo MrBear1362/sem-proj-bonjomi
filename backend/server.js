@@ -4,12 +4,15 @@ import cors from "cors";
 
 // express app
 const app = express();
-// const PORT = process.env.PORT || 3000;
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // middleware
 app.use(cors());
 app.use(express.json());
+
+//routes
+import notesRoutes from "./routes/notes.js";
+app.use(notesRoutes);
 
 // root endpoint - verify server status
 app.get("/", (req, res) => {
