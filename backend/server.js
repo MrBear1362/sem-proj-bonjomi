@@ -1,22 +1,21 @@
 // imports
 import express from "express";
 import cors from "cors";
-import collab_requests from "./routes/collab_requests.js";
-import user_profiles from "./routes/user_profiles.js";
+import sql from "../db.js";
 
 // express app
 const app = express();
-// const PORT = process.env.PORT || 3000;
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // middleware
 app.use(cors());
 app.use(express.json());
+
 // routes
-app.use(
-  collab_requests,
-  user_profiles
-);
+// import routes
+import collab_requestsRoutes from "./routes/collab_requests.js";
+import user_profilesRoutes from "./routes/user_profiles.js";
+app.use(collab_requestsRoutes, user_profilesRoutes);
 
 // root endpoint - verify server status
 app.get("/", (req, res) => {

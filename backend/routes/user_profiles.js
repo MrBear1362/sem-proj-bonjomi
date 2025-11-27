@@ -1,4 +1,6 @@
-const express = require('express');
+import express from "express";
+import sql from "../db.js";
+
 const router = express.Router();
 
 // get all user profiles
@@ -14,10 +16,16 @@ router.get("/api/user-profiles", async (req, res) => {
     FROM users u
     JOIN user_profiles p ON p.user_id = u.auth_user_id
     `;
+
+    res.json(userProfiles);
   } catch (error) {
     console.error("Failed fetching user profiles:", error);
+
+    res.status(500).json({
+      error: "Failed to fetch user profiles from database",
+    });
   }
-})
+});
 
 router.get("/api/user-profiles/:id", async (req, res) => {
   try {
