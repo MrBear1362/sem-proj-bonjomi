@@ -11,8 +11,8 @@ app.use(cors());
 app.use(express.json());
 
 // Import routes AFTER environment variables are loaded
-import cp from "./routes/conversation_participants.js";
-app.use(cp);
+import participantsRoutes from "./routes/conversation_participants.js";
+app.use(participantsRoutes);
 
 // root endpoint - verify server status
 app.get("/", (req, res) => {
