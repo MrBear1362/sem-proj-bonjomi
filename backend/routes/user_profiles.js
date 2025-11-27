@@ -1,14 +1,17 @@
 import express from "express";
 import sql from "../db.js";
+import { requireAuth } from "../auth.js";
+
 
 const router = express.Router();
 
-// get all user profiles
+// GET all user profiles
 router.get("/api/user-profiles", async (req, res) => {
   try {
     // combine users tabel and user profiles table to get user and name
     const userProfiles = await sql`
     SELECT
+    p.user_id,
     u.first_name,
     u.last_name, 
     p.image_url, 
@@ -27,19 +30,29 @@ router.get("/api/user-profiles", async (req, res) => {
   }
 });
 
+// GET specific user profile from id
 router.get("/api/user-profiles/:id", async (req, res) => {
   try {
+    // extract profile id from url
+    const profileId = req.params.id;
 
   } catch (error) {
-
+    res.status(500).json({
+      error: `Failed to fetch user profile: ${profileId}`,
+    });
   }
 });
 
-router.patch("/api/user-profiles/:id", async (req, res) => {
+// PATCH (update) specific user profile from id
+router.patch("/api/user-profiles/:id", requireAuth, async (req, res) => {
   try {
+    // extract profile id from url
+    const profileId = req.params.id;
 
   } catch (error) {
-
+    res.status(500).json({
+      error: `Failed to update user profile: ${profileId}`
+    })
   }
 });
 

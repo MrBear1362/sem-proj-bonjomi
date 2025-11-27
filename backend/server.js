@@ -1,7 +1,6 @@
 // imports
 import express from "express";
 import cors from "cors";
-import sql from "../db.js";
 
 // express app
 const app = express();
