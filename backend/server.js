@@ -4,12 +4,15 @@ import cors from "cors";
 
 // express app
 const app = express();
-// const PORT = process.env.PORT || 3000;
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // middleware
 app.use(cors());
 app.use(express.json());
+
+// Import routes AFTER environment variables are loaded
+import cp from "./routes/conversation_participants.js";
+app.use(cp);
 
 // root endpoint - verify server status
 app.get("/", (req, res) => {
