@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/api/notes", async (req, res) => {
   try {
     const notes = await sql`
-    SELECT * FROM notes
+    SELECT id, title, content, media_url, user_id, tag_id FROM notes
     ORDER BY created_at DESC
     `;
     res.json(notes);
