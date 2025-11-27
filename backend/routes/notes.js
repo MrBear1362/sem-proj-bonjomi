@@ -7,9 +7,77 @@ const router = express.Router();
 router.get("/api/notes", async (req, res) => {
   try {
     const notes = await sql`
-    SELECT id, title, content, media_url, user_id, tag_id FROM notes
-    ORDER BY created_at DESC
+    SELECT 
+      u.auth_user_id,
+      u.first_name,
+      up.image_url,
+      n.title, 
+      n.content, 
+      n.media_url, 
+      n.user_id, 
+      t.name as tags,
+      (SELECT COUNT(*) 
+        FROM note_likes
+        JOIN notes ON notes.id = note_likes.note_id) as number_of_likes
+    /* WHERE note_likes.note_id = n.id) as number_of_likes */
+    FROM notes n
+    JOIN users u on u.auth_user_id = n.user_id 
+    JOIN user_profiles up on up.user_id = u.auth_user_id
+    JOIN tags t on t.id = n.tag_id`;
+
+    /* building blocks */
+
+    /* const userData = await sql`
+    SELECT 
+      u.auth_user_id,
+      u.first_name,
+      up.image_url
+    FROM users u
+    JOIN user_profiles up on up.user_id = u.auth_user_id
     `;
+
+    const notes = await sql`
+    SELECT 
+    n.id,
+    n.title, 
+    n.content, 
+    n.media_url, 
+    n.user_id, 
+    n.tag_id 
+    FROM notes n
+    `;
+
+    const note_likes = await sql`
+    SELECT
+    COUNT(*) as number_of_likes
+    FROM notes n
+    JOIN note_likes nl ON nl.note_id = n.id
+    `;
+
+    const note_comments = await sql`
+    SELECT
+    nc.content
+    FROM notes n
+    JOIN note_comments nc ON nc.note_id = n.id
+    `;
+
+    const note_comment_likes = await sql`
+    SELECT
+    COUNT(*) as number_of_likes
+    FROM note_comments nc
+    JOIN note_comment_likes ncl ON nc.id = ncl.note_comment_id
+    `;
+
+    const note_comment_user = await sql`
+    SELECT
+      nc.content,
+      u.first_name,
+      up.image_url
+    FROM users u
+    JOIN user_profiles up on up.user_id = u.auth_user_id
+    JOIN note_comments nc on nc.user_id = u.auth_user_id
+    `; */
+
     res.json(notes);
   } catch (error) {
     console.log("Error fetching notes:", error);
@@ -23,13 +91,58 @@ router.get("/api/notes", async (req, res) => {
 //endpoint to get a specifik note
 router.get("/api/notes/:id", async (req, res) => {
   try {
-  } catch (error) {}
+    const id = req.params.id;
+
+    const note = await sql`
+    SELECT 
+      u.auth_user_id,
+      u.first_name,
+      up.image_url,
+      n.title, 
+      n.content, 
+      n.media_url, 
+      n.user_id, 
+      t.name as tags,
+      (SELECT COUNT(*) 
+        FROM note_likes
+        WHERE note_likes.note_id = ${id}) as number_of_likes
+    FROM notes n
+    JOIN users u on u.auth_user_id = n.user_id 
+    JOIN user_profiles up on up.user_id = u.auth_user_id
+    JOIN tags t on t.id = n.tag_id
+    WHERE n.user_id = ${id}`;
+
+    res.json(note);
+  } catch (error) {
+    console.log("Error fetching note:", error);
+    res.status(500).json({
+      error: "Failed to fetch note from database",
+    });
+  }
 });
 
 //endpoint to getting a list of comments connected to a note
 router.get("/api/notes/:id/note-comments", async (req, res) => {
   try {
-  } catch (error) {}
+    const noteId = req.params.id;
+
+    const note_comment = await sql`
+    SELECT
+      nc.content,
+      u.first_name,
+      up.image_url
+    FROM users u
+    JOIN user_profiles up on up.user_id = u.auth_user_id
+    JOIN note_comments nc on nc.user_id = u.auth_user_id
+    WHERE nc.id = ${noteId};
+    `;
+    res.json(note_comment);
+  } catch (error) {
+    console.log("Error fetching comment:", error);
+    res.status(500).json({
+      error: "Failed to fetch comment from database",
+    });
+  }
 });
 
 //endpoint for creating a note
