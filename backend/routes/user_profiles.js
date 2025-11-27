@@ -2,7 +2,6 @@ import express from "express";
 import sql from "../db.js";
 import { requireAuth } from "../auth.js";
 
-
 const router = express.Router();
 
 // GET all user profiles

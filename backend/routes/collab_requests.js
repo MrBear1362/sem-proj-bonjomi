@@ -26,6 +26,7 @@ router.get("/api/collab-requests", async (req, res) => {
     ORDER BY c.created_at DESC
     LIMIT 50
     `;
+    // TODO: refactor pagination handling - currently limited to 50, might want pages etc.
 
     res.json(collabRequests);
   } catch (error) {
@@ -48,7 +49,6 @@ router.get("/api/collab-requests/:id", async (req, res) => {
 
 // POST a new collab_request
 // TODO: add requireAuth back
-// TODO: remove hardcoded user id
 router.post("/api/collab-requests", async (req, res) => {
   try {
     const { title, content, due_date, location, tag_id, is_paid, media_url } = req.body;
@@ -78,6 +78,7 @@ router.post("/api/collab-requests", async (req, res) => {
       });
     };
 
+    // TODO: remove hardcoded user id
     const testUserId = '17f55570-6bfe-44d4-9578-c22e181ba387';
 
     // create collab request | RETURNING gets genId for next insert
@@ -96,6 +97,7 @@ router.post("/api/collab-requests", async (req, res) => {
   }
 });
 
+// PATCH specific collab_request from id
 router.patch("/api/collab-requests/:id", requireAuth, async (req, res) => {
   try {
 
@@ -104,6 +106,7 @@ router.patch("/api/collab-requests/:id", requireAuth, async (req, res) => {
   }
 });
 
+// DELETE specific collab_request from id
 router.delete("/api/collab-requests/:id", requireAuth, async (req, res) => {
   try {
 
