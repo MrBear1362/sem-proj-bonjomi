@@ -180,6 +180,34 @@ router.patch("/api/collab-requests/:id", async (req, res) => {
   }
 });
 
+// PATCH close specific collab_request from id
+// TODO: add requireAuth back
+router.patch("/api/collab-requests/:id/close", async (req, res) => {
+  try {
+    const collabRequestId = req.params.id;
+
+    // TODO: remove hardcoded user id
+    const testUserId = '17f55570-6bfe-44d4-9578-c22e181ba387';
+
+    const result = await sql`
+    UPDATE collab_requests
+    SET 
+      is_closed = true,
+      updated_at = now()
+    WHERE id = ${collabRequestId} AND user_id = ${testUserId}
+    RETURNING id, is_closed, updated_at
+    `;
+
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Collaboration request not found", });
+    }
+
+    res.json(result[0]);
+  } catch (error) {
+    console.error("Error closing collaboration request:", error);
+    res.status(500).json({ error: `Failed to close collaboration request: ${collabRequestId}`, });
+  }
+});
 // DELETE specific collab_request from id
 // TODO: add requireAuth back
 router.delete("/api/collab-requests/:id", async (req, res) => {
