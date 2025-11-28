@@ -40,9 +40,38 @@ router.get("/api/collab-requests", async (req, res) => {
 // GET specific collab_requests
 router.get("/api/collab-requests/:id", async (req, res) => {
   try {
+    // extract collaboration request id from url
+    const collabRequestId = req.params.id;
 
+    const collabRequests = await sql`
+    SELECT
+    c.id,
+    u.first_name,
+    c.title,
+    c.content,
+    c.media_url,
+    c.location,
+    c.created_at,
+    c.updated_at,
+    c.due_date,
+    c.user_id,
+    c.tag_id,
+    c.is_paid
+    FROM users u
+    JOIN collab_requests c ON c.user_id = u.auth_user_id
+    WHERE c.id = ${collabRequestId}
+    `;
+
+    // check if collaboration request is found
+    if (collabRequests.length === 0) {
+      return res.status(404).json({ error: "Collaboration request not found", });
+    };
+
+    // return first and only request
+    res.json(collabRequests[0]);
   } catch (error) {
-
+    console.error("Error fetching collaboration request:", error);
+    res.status(500).json({ error: "Failed to fetch collaboration request from database", });
   }
 });
 
