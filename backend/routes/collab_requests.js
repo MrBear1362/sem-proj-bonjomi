@@ -31,7 +31,6 @@ router.get("/api/collab-requests", async (req, res) => {
     res.json(collabRequests);
   } catch (error) {
     console.error("Failed fetching collaboration requests:", error);
-
     res.status(500).json({
       error: "Failed to fetch collaboration requests from database",
     });
@@ -107,11 +106,34 @@ router.patch("/api/collab-requests/:id", requireAuth, async (req, res) => {
 });
 
 // DELETE specific collab_request from id
-router.delete("/api/collab-requests/:id", requireAuth, async (req, res) => {
+// TODO: add requireAuth back
+router.delete("/api/collab-requests/:id", async (req, res) => {
   try {
+    // extract collab_request id from url params
+    const collabRequestId = req.params.id;
 
+    // TODO: remove hardcoded user id
+    const testUserId = '17f55570-6bfe-44d4-9578-c22e181ba387';
+
+    // delete request from db
+    const result = await sql`
+    DELETE FROM collab_requests
+    WHERE id = ${collabRequestId} AND user_id = ${testUserId}
+    RETURNING id
+    `;
+
+    // if no request deleted, no thread exists
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Collaboration request not found", });
+    };
+
+    res.json({
+      message: "Collaboration request deleted",
+      deletedId: result[0].id,
+    });
   } catch (error) {
-
+    console.error("Error deleting thread:", error);
+    res.status(500).json({ error: "Failed to delete request", });
   }
 });
 
