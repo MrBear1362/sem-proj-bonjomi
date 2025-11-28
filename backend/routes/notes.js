@@ -7,76 +7,24 @@ const router = express.Router();
 router.get("/api/notes", async (req, res) => {
   try {
     const notes = await sql`
-    SELECT 
-      u.auth_user_id,
-      u.first_name,
-      up.image_url,
-      n.title, 
-      n.content, 
-      n.media_url, 
-      n.user_id, 
-      t.name as tags,
-      (SELECT COUNT(*) 
-        FROM note_likes
-        JOIN notes ON notes.id = note_likes.note_id) as number_of_likes
-    /* WHERE note_likes.note_id = n.id) as number_of_likes */
-    FROM notes n
-    JOIN users u on u.auth_user_id = n.user_id 
-    JOIN user_profiles up on up.user_id = u.auth_user_id
-    JOIN tags t on t.id = n.tag_id`;
-
-    /* building blocks */
-
-    /* const userData = await sql`
-    SELECT 
-      u.auth_user_id,
-      u.first_name,
-      up.image_url
-    FROM users u
-    JOIN user_profiles up on up.user_id = u.auth_user_id
-    `;
-
-    const notes = await sql`
-    SELECT 
-    n.id,
-    n.title, 
-    n.content, 
-    n.media_url, 
-    n.user_id, 
-    n.tag_id 
-    FROM notes n
-    `;
-
-    const note_likes = await sql`
-    SELECT
-    COUNT(*) as number_of_likes
-    FROM notes n
-    JOIN note_likes nl ON nl.note_id = n.id
-    `;
-
-    const note_comments = await sql`
-    SELECT
-    nc.content
-    FROM notes n
-    JOIN note_comments nc ON nc.note_id = n.id
-    `;
-
-    const note_comment_likes = await sql`
-    SELECT
-    COUNT(*) as number_of_likes
-    FROM note_comments nc
-    JOIN note_comment_likes ncl ON nc.id = ncl.note_comment_id
-    `;
-
-    const note_comment_user = await sql`
-    SELECT
-      nc.content,
-      u.first_name,
-      up.image_url
-    FROM users u
-    JOIN user_profiles up on up.user_id = u.auth_user_id
-    JOIN note_comments nc on nc.user_id = u.auth_user_id
-    `; */
+      SELECT 
+        u.auth_user_id,
+        u.first_name,
+        up.image_url,
+        n.title, 
+        n.content, 
+        n.media_url, 
+        n.user_id, 
+        t.name AS tags,
+        (
+        SELECT COUNT(*)
+        FROM note_likes nl
+        WHERE nl.note_id = n.id
+        ) AS number_of_likes
+      FROM notes n
+      LEFT JOIN users u ON u.auth_user_id = n.user_id 
+      LEFT JOIN user_profiles up ON up.user_id = u.auth_user_id
+      LEFT JOIN tags t ON t.id = n.tag_id`;
 
     res.json(notes);
   } catch (error) {
@@ -93,6 +41,8 @@ router.get("/api/notes/:id", async (req, res) => {
   try {
     const id = req.params.id;
 
+    console.log(id);
+
     const note = await sql`
     SELECT 
       u.auth_user_id,
@@ -102,15 +52,17 @@ router.get("/api/notes/:id", async (req, res) => {
       n.content, 
       n.media_url, 
       n.user_id, 
-      t.name as tags,
-      (SELECT COUNT(*) 
-        FROM note_likes
-        WHERE note_likes.note_id = ${id}) as number_of_likes
+      t.name AS tags,
+      (
+      SELECT COUNT(*)
+      FROM note_likes nl
+      WHERE nl.note_id = n.id
+      ) AS number_of_likes
     FROM notes n
-    JOIN users u on u.auth_user_id = n.user_id 
-    JOIN user_profiles up on up.user_id = u.auth_user_id
-    JOIN tags t on t.id = n.tag_id
-    WHERE n.user_id = ${id}`;
+    LEFT JOIN users u ON u.auth_user_id = n.user_id 
+    LEFT JOIN user_profiles up ON up.user_id = u.auth_user_id
+    LEFT JOIN tags t ON t.id = n.tag_id
+    WHERE n.id = ${id}`;
 
     res.json(note);
   } catch (error) {
@@ -126,17 +78,22 @@ router.get("/api/notes/:id/note-comments", async (req, res) => {
   try {
     const noteId = req.params.id;
 
-    const note_comment = await sql`
+    const note_comments = await sql`
     SELECT
-      nc.content,
-      u.first_name,
-      up.image_url
+    u.first_name,
+    up.image_url,
+    nc.content,
+      (
+      SELECT COUNT(*)
+      FROM note_comment_likes ncl
+      WHERE ncl.note_comment_id = nc.id
+      ) AS number_of_likes
     FROM users u
     JOIN user_profiles up on up.user_id = u.auth_user_id
     JOIN note_comments nc on nc.user_id = u.auth_user_id
-    WHERE nc.id = ${noteId};
+    WHERE nc.note_id = ${noteId};
     `;
-    res.json(note_comment);
+    res.json(note_comments);
   } catch (error) {
     console.log("Error fetching comment:", error);
     res.status(500).json({
