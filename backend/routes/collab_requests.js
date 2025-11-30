@@ -269,14 +269,9 @@ router.delete("/api/collab-requests/:id", async (req, res) => {
     `;
 
     // if no request deleted, no thread exists
-    if (result.length === 0) {
-      return res.status(404).json({ error: "Collaboration request not found", });
-    };
+    if (result.length === 0) { return res.status(404).json({ error: "Collaboration request not found", }); };
 
-    res.json({
-      message: "Collaboration request deleted",
-      deletedId: result[0].id,
-    });
+    res.json({ message: "Collaboration request deleted", deletedId: result[0].id, });
   } catch (error) {
     console.error("Error deleting thread:", error);
     res.status(500).json({ error: "Failed to delete request", });
