@@ -81,23 +81,15 @@ router.post("/api/collab-requests", async (req, res) => {
   try {
     const { title, content, due_date, location, tag_id, is_paid, media_url } = req.body;
 
-    // validate title after trim
-    const trimmedTitle = title.trim();
-    if (trimmedTitle.length === 0) {
-      return res.status(400).json({ error: "Title cannot be empty", });
-    }
-
-    // validate content after trim
-    const trimmedContent = content.trim();
-    if (trimmedContent.length === 0) {
-      return res.status(400).json({ error: "Description cannot be empty", });
-    };
-
-    // validate location after trim
-    const trimmedLocation = location.trim();
-    if (trimmedLocation.length === 0) {
-      return res.status(400).json({ error: "Location cannot be empty", });
-    };
+    // trim
+    const trimmedTitle = title?.trim();
+    const trimmedContent = content?.trim();
+    const trimmedLocation = location?.trim();
+    
+    // validate after trim
+    if (!trimmedTitle) return res.status(400).json({ error: "Title cannot be empty" });
+    if (!trimmedContent) return res.status(400).json({ error: "Description cannot be empty" });
+    if (!trimmedLocation) return res.status(400).json({ error: "Location cannot be empty" });
 
     // validate required fields
     if (!title || !content || !due_date || !location || !tag_id) {
