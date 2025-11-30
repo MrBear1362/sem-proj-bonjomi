@@ -124,23 +124,50 @@ router.patch("/api/collab-requests/:id", async (req, res) => {
     // extract collab_request id from url param
     const collabRequestId = req.params.id;
 
-    // extract new data from req
+    // destructure possible update fields
     const { title, content, media_url, location, due_date, tag_id } = req.body;
 
-    // validate required fields
-    if (!title || !content || !due_date || !location || !tag_id) {
-      return res.status(400).json({ error: "Required fields cannot be empty", });
-    };
+    // update object built dynamically
+    const updates = {};
 
-    // trim
-    const trimmedTitle = title?.trim();
-    const trimmedContent = content?.trim();
-    const trimmedLocation = location?.trim();
+    // validate provided fields (partial update)
+    if (title !== undefined) {
+      const trimmed = title.trim();
+      if(!trimmed) return res.status(400).json({error: "Title cannot be empty"});
+      updates.title = trimmed;
+    }
 
-    // validate after trim
-    if (!trimmedTitle) return res.status(400).json({ error: "Title cannot be empty" });
-    if (!trimmedContent) return res.status(400).json({ error: "Description cannot be empty" });
-    if (!trimmedLocation) return res.status(400).json({ error: "Location cannot be empty" });
+    if (content !== undefined) {
+      const trimmed = content.trim();
+      if (!trimmed) return res.status(400).json({error: "Description cannot be empty"});
+      updates.content = trimmed;
+    }
+
+    if (location !== undefined) {
+      const trimmed = location.trim();
+      if (!trimmed) return res.status(400).json({error: "Location cannot be empty"});
+      updates.location = trimmed;
+    }
+
+    if (due_date !== undefined) {
+      updates.due_date = due_date;
+    }
+
+    if (media_url !== undefined) {
+      updates.media_url = media_url || null;
+    }
+
+    if (tag_id !== undefined) {
+      updates.tag_id = tag_id;
+    }
+
+    // ensure at least one field is provided
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({error: "No fields provided for update"});
+    }
+
+    // add updated_at timestamp automatically
+    updates.updated_at = sql`now()`;
 
     // TODO: remove hardcoded user id
     const testUserId = '17f55570-6bfe-44d4-9578-c22e181ba387';
@@ -148,21 +175,14 @@ router.patch("/api/collab-requests/:id", async (req, res) => {
     // update collaboration request in database
     const result = await sql`
     UPDATE collab_requests
-    SET 
-      title = ${trimmedTitle}, 
-      content = ${trimmedContent}, 
-      media_url = ${media_url}, 
-      location = ${trimmedLocation}, 
-      due_date = ${due_date}, 
-      tag_id = ${tag_id},
-      updated_at = now()
+    SET ${sql(updates)}
     WHERE id = ${collabRequestId} AND user_id = ${testUserId}
-    RETURNING id, title, content, media_url, location, due_date, tag_id, updated_at
+    RETURNING id, title, content, media_url, location, due_date, tag_id, created_at, updated_at
     `;
 
     // if no request updated, means no request exists
     if (result.length === 0) {
-      return res.status(404).json({ error: "Collaboration request not found", });
+      return res.status(404).json({ error: "Collaboration request not found or unauthorised", });
     }
 
     // return updated request
