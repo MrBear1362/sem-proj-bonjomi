@@ -7,13 +7,13 @@ const router = express.Router();
 // GET all user profiles
 router.get("/api/user-profiles", async (req, res) => {
   try {
-    // combine users tabel and user profiles table to get user and name
+    // combine users table and user profiles table to get user and name
     const userProfiles = await sql`
     SELECT
     p.user_id,
     u.first_name,
-    u.last_name, 
-    p.image_url, 
+    u.last_name,
+    p.image_url,
     p.tag_id
     FROM users u
     JOIN user_profiles p ON p.user_id = u.auth_user_id
@@ -22,7 +22,6 @@ router.get("/api/user-profiles", async (req, res) => {
     res.json(userProfiles);
   } catch (error) {
     console.error("Failed fetching user profiles:", error);
-
     res.status(500).json({
       error: "Failed to fetch user profiles from database",
     });
