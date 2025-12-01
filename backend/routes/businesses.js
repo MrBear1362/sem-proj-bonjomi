@@ -83,9 +83,14 @@ router.patch("/api/businesses/:id", requireAuth, async (req, res) => {
 			});
 		}
 
+		// Authorization: verify the authenticated user owns this business
+		if (req.user.id !== businessId) {
+			return res.status(404).json({
+				error: "Business not found",
+			});
+		}
+
 		// Update the business
-		// WHERE clause includes BOTH auth_user_id AND authenticated user's business_id for authorization
-		// This ensures users can only update their own business
 		const result = await sql`
             UPDATE businesses
             SET name = ${name || sql`name`},
@@ -94,9 +99,7 @@ router.patch("/api/businesses/:id", requireAuth, async (req, res) => {
 									is_remote !== undefined ? is_remote : sql`is_remote`
 								},
                 location = ${location || sql`location`}
-            WHERE auth_user_id = ${businessId} AND auth_user_id = ${
-			req.user.business_id
-		}
+            WHERE auth_user_id = ${businessId}
             RETURNING auth_user_id, name, phone, is_remote, location
         `;
 
