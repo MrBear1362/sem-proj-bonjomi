@@ -48,7 +48,9 @@ router.get("/api/user-profiles/:id", async (req, res) => {
     p.youtube_url,
     p.tiktok_url,
     p.facebook_url,
-    p.tag_id
+    p.tag_id,
+    p.created_at,
+    p.updated_at,
     FROM users u
     JOIN user_profiles p ON p.user_id = u.auth_user_id
     WHERE p.user_id = ${profileId}
@@ -72,7 +74,7 @@ router.patch("/api/user-profiles/:id", async (req, res) => {
   const profileId = req.params.id;
   try {
     // destructure possible update fields
-    const { first_name, last_name, image_url, about, tag_id, media_url, instagram_url, twitter_url, youtube_url, tiktok_url, facebook_url } = req.body;
+    const { first_name, last_name, alias, bio, image_url, about, tag_id, media_url, instagram_url, twitter_url, youtube_url, tiktok_url, facebook_url } = req.body;
 
     // update object built dynamically
     const profileUpdates = {};
@@ -91,6 +93,8 @@ router.patch("/api/user-profiles/:id", async (req, res) => {
       userUpdates.last_name = trimmed;
     }
 
+    if (alias !== undefined) profileUpdates.alias = alias;
+    if (bio !== undefined) profileUpdates.bio = bio;
     if (image_url !== undefined) profileUpdates.image_url = image_url;
     if (about !== undefined) profileUpdates.about = about;
     if (tag_id !== undefined) profileUpdates.tag_id = tag_id;
@@ -108,6 +112,8 @@ router.patch("/api/user-profiles/:id", async (req, res) => {
     ) {
       return res.status(400).json({ error: "No fields provided for update" });
     }
+
+    profileUpdates.updated_at = sql`now()`;
 
     // TODO: remove hardcoded user id
     const testUserId = '17f55570-6bfe-44d4-9578-c22e181ba387';
@@ -136,6 +142,8 @@ router.patch("/api/user-profiles/:id", async (req, res) => {
       u.auth_user_id as auth_user_id,
       u.first_name,
       u.last_name,
+      p.alias,
+      p.bio,
       p.image_url,
       p.about,
       p.tag_id,
@@ -144,7 +152,9 @@ router.patch("/api/user-profiles/:id", async (req, res) => {
       p.twitter_url,
       p.youtube_url,
       p.tiktok_url,
-      p.facebook_url
+      p.facebook_url,
+      p.created_at,
+      p.updated_at
     FROM users u
     JOIN user_profiles p ON u.auth_user_id = p.user_id
     WHERE u.auth_user_id = ${testUserId}
