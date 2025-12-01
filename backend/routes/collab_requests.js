@@ -9,6 +9,7 @@ router.get("/api/collab-requests", async (req, res) => {
     const collabRequests = await sql`
     SELECT
     c.id,
+    p.image_url,
     u.first_name,
     c.title,
     c.content,
@@ -22,6 +23,7 @@ router.get("/api/collab-requests", async (req, res) => {
     c.is_paid
     FROM users u
     JOIN collab_requests c ON c.user_id = u.auth_user_id
+    JOIN user_profiles p ON p.user_id = u.auth_user_id
     WHERE c.is_closed = false
     ORDER BY c.created_at DESC
     LIMIT 50
@@ -46,6 +48,7 @@ router.get("/api/collab-requests/:id", async (req, res) => {
     const collabRequests = await sql`
     SELECT
     c.id,
+    p.image_url,
     u.first_name,
     c.title,
     c.content,
@@ -59,6 +62,7 @@ router.get("/api/collab-requests/:id", async (req, res) => {
     c.is_paid
     FROM users u
     JOIN collab_requests c ON c.user_id = u.auth_user_id
+    JOIN user_profiles p ON p.user_id = u.auth_user_id
     WHERE c.id = ${collabRequestId}
     `;
 
