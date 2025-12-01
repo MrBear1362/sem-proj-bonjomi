@@ -21,15 +21,15 @@ router.get("/api/conversation_participants", async (req, res) => {
 });
 
 router.get(
-  "/api/conversation_participants/:conversationId",
+  "/api/conversation_participants/:conversation_Id",
   async (req, res) => {
     try {
-      const conversationId = req.params.conversationId;
+      const conversation_Id = req.params.conversation_Id;
 
       const participant = await sql`
         SELECT id, created_at, conversation_id, user_id
         FROM conversation_participants
-        WHERE conversation_id = ${conversationId}`;
+        WHERE conversation_id = ${conversation_Id}`;
 
       res.json(participant);
     } catch (error) {
@@ -43,19 +43,21 @@ router.get(
 );
 
 router.post(
-  "/api/conversation_participants/:conversationId",
+  "/api/conversation_participants/:conversation_Id",
   async (req, res) => {
     try {
-      const conversationId = req.params.conversationId;
-      const { userId } = req.body;
+      const conversation_Id = req.params.conversation_Id;
+      const { user_Id } = req.body;
 
-      if (!userId) {
-        return res.status(400).json({ error: "userId is required in request body" });
+      if (!user_Id) {
+        return res
+          .status(400)
+          .json({ error: "userId is required in request body" });
       }
 
       const participants = await sql`
         INSERT INTO conversation_participants (conversation_id, user_id) 
-        VALUES (${conversationId}, ${userId})
+        VALUES (${conversation_Id}, ${user_Id})
         RETURNING *`;
 
       res.status(201).json(participants[0]);
@@ -81,12 +83,14 @@ router.delete(
         RETURNING *`;
 
       if (results.length === 0) {
-        return res.status(404).json({ error: "No participants found for this conversation" });
+        return res
+          .status(404)
+          .json({ error: "No participants found for this conversation" });
       }
 
-      res.json({ 
+      res.json({
         message: "Participants deleted successfully",
-        deletedCount: results.length 
+        deletedCount: results.length,
       });
     } catch (error) {
       console.error("Error deleting participants from conversation:", error);
