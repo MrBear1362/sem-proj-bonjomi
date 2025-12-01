@@ -11,8 +11,11 @@ app.use(cors());
 app.use(express.json());
 
 //routes
+// import routes
+import collab_requestsRoutes from "./routes/collab_requests.js";
+import user_profilesRoutes from "./routes/user_profiles.js";
 import notesRoutes from "./routes/notes.js";
-app.use(notesRoutes);
+app.use(collab_requestsRoutes, user_profilesRoutes, notesRoutes);
 
 // root endpoint - verify server status
 app.get("/", (req, res) => {

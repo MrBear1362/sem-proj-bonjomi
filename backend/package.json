@@ -1,1 +1,25 @@
-{"name":"lineup-backend","version":"0.0.1","description":"Express API for lineUp webapp","type":"module","main":"server.js","scripts":{"start":"node server.js","dev":"node --env-file=.env --watch server.js"},"keywords":["express","api","postgres"],"author":"bonjomi","license":"ISC","dependencies":{"@supabase/supabase-js":"^2.86.0","cors":"^2.8.5","express":"^5.1.0","postgres":"^3.4.7"}}
+{
+  "name": "lineup-backend",
+  "version": "0.0.1",
+  "description": "Express API for lineUp webapp",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --env-file=.env --watch server.js"
+  },
+  "keywords": [
+    "express",
+    "api",
+    "postgres"
+  ],
+  "author": "bonjomi",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.58.5",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "postgres": "^3.4.7"
+  }
+}

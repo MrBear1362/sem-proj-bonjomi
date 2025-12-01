@@ -7,8 +7,11 @@ import {
   ScrollRestoration,
 } from "react-router";
 
+// import styles
 import "./app.css";
 
+// Add links to external stylesheets, fonts, etc. here
+// https://reactrouter.com/start/framework/route-module#links
 export const links = () => [];
 
 export function Layout({ children }) {
@@ -17,6 +20,7 @@ export function Layout({ children }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>LineUp - Find your place in the LineUp</title>
         <Meta />
         <Links />
       </head>
@@ -30,7 +34,7 @@ export function Layout({ children }) {
 }
 
 export function HydrateFallback() {
-  return <div>Loading...</div>;
+  return <div>Loading...</div>
 }
 
 export default function App() {
@@ -54,11 +58,11 @@ export function ErrorBoundary({ error }) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
+    <main>
       <h1>{message}</h1>
       <p>{details}</p>
       {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
+        <pre style={{ width: "100%", padding: 16, overflowX: "auto" }}>
           <code>{stack}</code>
         </pre>
       )}
