@@ -15,7 +15,10 @@ app.use(express.json());
 import collab_requestsRoutes from "./routes/collab_requests.js";
 import user_profilesRoutes from "./routes/user_profiles.js";
 import notesRoutes from "./routes/notes.js";
-app.use(collab_requestsRoutes, user_profilesRoutes, notesRoutes);
+import servicesRoutes from "./routes/services.js";
+import businessesRoutes from "./routes/businesses.js";
+import onboardingRoutes from "./routes/onboarding.js";
+app.use(collab_requestsRoutes, user_profilesRoutes, notesRoutes, servicesRoutes, businessesRoutes, onboardingRoutes);
 
 // root endpoint - verify server status
 app.get("/", (req, res) => {
