@@ -50,7 +50,7 @@ router.get("/api/user-profiles/:id", async (req, res) => {
     p.facebook_url,
     p.tag_id,
     p.created_at,
-    p.updated_at,
+    p.updated_at
     FROM users u
     JOIN user_profiles p ON p.user_id = u.auth_user_id
     WHERE p.user_id = ${profileId}
