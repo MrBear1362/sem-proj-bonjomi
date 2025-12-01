@@ -69,7 +69,7 @@ router.get("/api/services/:id", async (req, res) => {
 });
 
 // GET all services from specific business
-router.get("/api/businesses/:id/services", requireAuth, async (req, res) => {
+router.get("/api/businesses/:id/services", async (req, res) => {
 	try {
 		const businessId = req.params.id;
 
@@ -104,7 +104,8 @@ router.post("/api/businesses/:id/services", requireAuth, async (req, res) => {
 		}
 
 		// Verify the authenticated user owns this business
-		if (req.user.business_id !== parseInt(businessId)) {
+		// TODO: does req.user work?
+		if (req.userId !== parseInt(businessId)) {
 			return res.status(403).json({
 				error:
 					"Unauthorized: You can only create services for your own business",
@@ -114,9 +115,8 @@ router.post("/api/businesses/:id/services", requireAuth, async (req, res) => {
 		// Insert new service into database
 		const result = await sql`
             INSERT INTO services (title, content, location, price, tags, img_url, business_id, tag_id)
-            VALUES (${title}, ${content}, ${location}, ${price}, ${
-			tags || null
-		}, ${img_url || null}, ${businessId}, ${tag_id || null})
+            VALUES (${title}, ${content}, ${location}, ${price}, ${tags || null
+			}, ${img_url || null}, ${businessId}, ${tag_id || null})
             RETURNING id, title, content, location, price, tags, img_url, business_id, tag_id
         `;
 
@@ -157,9 +157,10 @@ router.patch("/api/services/:id", requireAuth, async (req, res) => {
                 price = ${price || sql`price`}, 
                 tags = ${tags || null}, 
                 img_url = ${img_url || null}
-            WHERE id = ${serviceId} AND business_id = ${req.user.business_id}
+            WHERE id = ${serviceId} AND business_id = ${req.userId}
             RETURNING id, title, content, location, price, tags, img_url, business_id, tag_id
         `;
+		// TODO: does req.user work??
 
 		// If no service was updated, it means the service doesn't exist or user doesn't own it
 		// We return 404 in both cases to avoid leaking information
@@ -191,9 +192,10 @@ router.delete("/api/services/:id", requireAuth, async (req, res) => {
 		// This ensures users can only delete services owned by their business
 		const result = await sql`
             DELETE FROM services
-            WHERE id = ${serviceId} AND business_id = ${req.user.business_id}
+            WHERE id = ${serviceId} AND business_id = ${req.userId}
             RETURNING id
         `;
+		// TODO: does req.user work??
 
 		// If no service was deleted, it means the service doesn't exist or user doesn't own it
 		// We return 404 in both cases to avoid leaking information

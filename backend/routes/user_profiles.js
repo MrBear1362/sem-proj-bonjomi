@@ -68,8 +68,7 @@ router.get("/api/user-profiles/:id", async (req, res) => {
 });
 
 // PATCH (update) specific user profile from id
-// TODO: add requireAuth back
-router.patch("/api/user-profiles/:id", async (req, res) => {
+router.patch("/api/user-profiles/:id", requireAuth, async (req, res) => {
   // extract profile id from url
   const profileId = req.params.id;
   try {
@@ -115,15 +114,12 @@ router.patch("/api/user-profiles/:id", async (req, res) => {
 
     profileUpdates.updated_at = sql`now()`;
 
-    // TODO: remove hardcoded user id
-    const testUserId = '17f55570-6bfe-44d4-9578-c22e181ba387';
-
     // update name fields
     if (Object.keys(userUpdates).length > 0) {
       await sql`
       UPDATE users
       SET ${sql(userUpdates)}
-      WHERE auth_user_id = ${testUserId}
+      WHERE auth_user_id = ${req.userId}
       `;
     }
 
@@ -132,7 +128,7 @@ router.patch("/api/user-profiles/:id", async (req, res) => {
       await sql`
       UPDATE user_profiles
       SET ${sql(profileUpdates)}
-      WHERE user_id = ${testUserId}
+      WHERE user_id = ${req.userId}
       `;
     }
 
@@ -157,7 +153,7 @@ router.patch("/api/user-profiles/:id", async (req, res) => {
       p.updated_at
     FROM users u
     JOIN user_profiles p ON u.auth_user_id = p.user_id
-    WHERE u.auth_user_id = ${testUserId}
+    WHERE u.auth_user_id = ${req.userId}
     `;
 
     // if no profile updated, means profile doesn't exist
