@@ -1,8 +1,11 @@
 import express from "express";
-import sql from "../db.js"; // Adjust path to your database connection file
+import sql from "../db.js";
 
+// Create a new router instance to handle conversation_participants endpoints
 const router = express.Router();
 
+// GET /api/conversation_participants - List all conversation participants
+// Returns an array of all participants across all conversations
 router.get("/api/conversation_participants", async (req, res) => {
   try {
     const participants = await sql`
@@ -20,6 +23,8 @@ router.get("/api/conversation_participants", async (req, res) => {
   }
 });
 
+// GET /api/conversation_participants/:conversation_Id - Get participants for a specific conversation
+// Returns an array of users who are participating in the specified conversation
 router.get(
   "/api/conversation_participants/:conversation_Id",
   async (req, res) => {
@@ -42,6 +47,8 @@ router.get(
   }
 );
 
+// POST /api/conversation_participants/:conversation_Id - Add a user to a conversation
+// Creates a new participant record linking a user to a conversation
 router.post(
   "/api/conversation_participants/:conversation_Id",
   async (req, res) => {
@@ -71,6 +78,8 @@ router.post(
   }
 );
 
+// DELETE /api/conversation_participants/:conversationId - Remove all participants from a conversation
+// Deletes all participant records for a specific conversation (useful for cleanup)
 router.delete(
   "/api/conversation_participants/:conversationId",
   async (req, res) => {
@@ -101,4 +110,5 @@ router.delete(
   }
 );
 
+// Export the router so it can be imported and used in server.js
 export default router;
