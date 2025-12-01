@@ -12,7 +12,11 @@ app.use(express.json());
 
 // Import routes AFTER environment variables are loaded
 import participantsRoutes from "./routes/conversation_participants.js";
+import messagesRoutes from "./routes/messages.js";
+import conversationsRoutes from "./routes/conversations.js";
 app.use(participantsRoutes);
+app.use(messagesRoutes);
+app.use(conversationsRoutes);
 
 // root endpoint - verify server status
 app.get("/", (req, res) => {
