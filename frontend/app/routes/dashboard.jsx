@@ -10,7 +10,7 @@ export function meta({ }) {
 export default function DashboardPage() {
   return (
     <ProtectedRoute>
-      <h1>This is dashboard 👍</h1>
+      <h1>This is das Board 👍</h1>
     </ProtectedRoute>
   );
 }
