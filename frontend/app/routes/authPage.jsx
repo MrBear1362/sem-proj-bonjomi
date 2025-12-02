@@ -1,35 +1,50 @@
-import { useSearchParams, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams, Navigate } from "react-router";
+import { supabase } from "../library/supabase.js";
 import SignupForm from "../components/onboarding/SignupForm.jsx";
 import LoginForm from "../components/onboarding/LoginForm.jsx";
 import OnboardingSteps from "../components/onboarding/OnboardingSteps.jsx";
-import { supabase } from "../library/supabase.js";
 
 export default function AuthPage() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const stepParam = searchParams.get("step");
-  const user = supabase.auth.user();
+  const step = stepParam || "signup";
 
-  // determine step to show
-  let step = stepParam || "signup";
+  useEffect(() => {
+    async function loadUser() {
+      const { data: { session } } = await supabase.auth.getSession();
 
-  // if user is logged in and tries to access signup/login
-  if (user && step !== "onboarding") {
-    // already logged in, send to dashboard
-    navigate("/");
-    return null;
-  }
+      // if no session, stop loading
+      if (!session) {
+        setLoading(false);
+        return;
+      }
 
-  const handleNext = (nextStep) => {
-    // updates URL
-    setSearchParams({ step: nextStep });
-  };
+      // if there is a session, fetch full user
+      const { data } = await supabase.auth.getUser();
+      setUser(data?.user);
+      setLoading(false);
+    }
+    loadUser();
+  }, []);
+
+  useEffect(() => {
+    if (!loading && user && step !== "onboarding") {
+      navigate("/");
+    }
+  }, [loading, user, step, navigate]);
+
+  if (loading) return <div>Loading... from auth</div>;
 
   return (
     <div className="auth-page">
-      {step === "signup" && <SignupForm onNext={() => handleNext("login")} />}
-      {step === "login" && <LoginForm onNext={() => handleNext("onboarding")} />}
+      {step === "signup" && <SignupForm onNext={() => setSearchParams({ step: "login" })} />}
+      {step === "login" && <LoginForm onNext={() => setSearchParams({ step: "onboarding" })} />}
       {step === "onboarding" && <OnboardingSteps />}
     </div>
   );

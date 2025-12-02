@@ -1,10 +1,25 @@
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import { supabase } from "../library/supabase.js";
 
 export default function ProtectedRoute({ children }) {
-  const user = supabase.auth.user();
-  // redirect if not authenticated
-  if (!user) return <Navigate to="/auth" />;
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function getUser() {
+      const { data } = await supabase.auth.getUser();
+      setUser(data?.user || null);
+      setLoading(false);
+    }
+    getUser();
+  }, []);
+
+  // keep layout from flashing redirect if not authenticated
+  if (loading) return null;
+
+  if (!user) return <Navigate to="/auth" replace />;
+
   // user authenticated, render page and return the kidnapped children
   return children;
 }
