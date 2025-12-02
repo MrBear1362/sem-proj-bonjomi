@@ -21,7 +21,7 @@ router.get("/api/conversation-participants", requireAuth, async (req, res) => {
         FROM conversation_participants 
         WHERE user_id = ${userId}
       )
-      ORDER BY cp.created_at DESC`;
+      ORDER BY cpa.created_at DESC`;
 
     res.json(participants);
   } catch (error) {
