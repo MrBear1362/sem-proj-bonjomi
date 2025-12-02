@@ -63,8 +63,8 @@ router.get("/api/notes/feed", requireAuth, async (req, res) => {
       LEFT JOIN users u ON u.auth_user_id = n.user_id 
       LEFT JOIN user_profiles up ON up.user_id = u.auth_user_id
       LEFT JOIN tags t ON t.id = n.tag_id
-      LEFT JOIN user_follows uf ON uf.following_id = n.user_id
-      WHERE uf.follower_id = ${req.userId}
+      INNER JOIN user_follows uf ON uf.following_id = n.user_id
+      WHERE uf.follower_id = ${req.userId} OR n.user_id = ${req.userId}
       ORDER BY n.created_at DESC
       `;
 
@@ -78,7 +78,7 @@ router.get("/api/notes/feed", requireAuth, async (req, res) => {
   }
 });
 
-//endpoint to get a specifik note
+//endpoint to get a specific note
 router.get("/api/notes/:id", async (req, res) => {
   try {
     const noteId = req.params.id;
