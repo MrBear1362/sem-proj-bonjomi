@@ -18,15 +18,13 @@ router.get("/api/notes", async (req, res) => {
         n.media_url, 
         n.user_id, 
         t.name AS tags,
-        (
-        SELECT COUNT(*)
-        FROM note_likes nl
-        WHERE nl.note_id = n.id
-        ) AS number_of_likes
+        COUNT(DISTINCT nl.id) AS number_of_likes
       FROM notes n
       LEFT JOIN users u ON u.auth_user_id = n.user_id 
       LEFT JOIN user_profiles up ON up.user_id = u.auth_user_id
       LEFT JOIN tags t ON t.id = n.tag_id
+      LEFT JOIN note_likes nl ON nl.note_id = n.id
+      GROUP BY n.id, u.auth_user_id, u.first_name, up.image_url, n.title, n.content, n.media_url, n.user_id, t.name
       ORDER BY n.created_at DESC
       `;
 
@@ -54,17 +52,15 @@ router.get("/api/notes/feed", requireAuth, async (req, res) => {
         n.media_url, 
         n.user_id, 
         t.name AS tags,
-        (
-        SELECT COUNT(*)
-        FROM note_likes nl
-        WHERE nl.note_id = n.id
-        ) AS number_of_likes
+        COUNT(DISTINCT nl.id) AS number_of_likes
       FROM notes n
       LEFT JOIN users u ON u.auth_user_id = n.user_id 
       LEFT JOIN user_profiles up ON up.user_id = u.auth_user_id
       LEFT JOIN tags t ON t.id = n.tag_id
       INNER JOIN user_follows uf ON uf.following_id = n.user_id
+      LEFT JOIN note_likes nl ON nl.note_id = n.id
       WHERE uf.follower_id = ${req.userId} OR n.user_id = ${req.userId}
+      GROUP BY n.id, u.auth_user_id, u.first_name, up.image_url, n.title, n.content, n.media_url, n.user_id, t.name
       ORDER BY n.created_at DESC
       `;
 
