@@ -6,7 +6,7 @@ const router = express.Router();
 
 // GET /api/conversation_participants - List all conversation participants
 // Returns an array of all participants across all conversations
-router.get("/api/conversation_participants", async (req, res) => {
+router.get("/api/conversation-participants", async (req, res) => {
   try {
     const participants = await sql`
       SELECT id, created_at, conversation_id, user_id
@@ -26,15 +26,15 @@ router.get("/api/conversation_participants", async (req, res) => {
 // GET /api/conversation_participants/:conversation_Id - Get participants for a specific conversation
 // Returns an array of users who are participating in the specified conversation
 router.get(
-  "/api/conversation_participants/:conversation_Id",
+  "/api/conversation-participants/:conversationId",
   async (req, res) => {
     try {
-      const conversation_Id = req.params.conversation_Id;
+      const conversationId = req.params.conversationId;
 
       const participant = await sql`
         SELECT id, created_at, conversation_id, user_id
         FROM conversation_participants
-        WHERE conversation_id = ${conversation_Id}`;
+        WHERE conversation_id = ${conversationId}`;
 
       res.json(participant);
     } catch (error) {
@@ -50,13 +50,13 @@ router.get(
 // POST /api/conversation_participants/:conversation_Id - Add a user to a conversation
 // Creates a new participant record linking a user to a conversation
 router.post(
-  "/api/conversation_participants/:conversation_Id",
+  "/api/conversation_participants/:conversationId",
   async (req, res) => {
     try {
-      const conversation_Id = req.params.conversation_Id;
-      const { user_Id } = req.body;
+      const conversationId = req.params.conversationId;
+      const { userId } = req.body;
 
-      if (!user_Id) {
+      if (!userId) {
         return res
           .status(400)
           .json({ error: "userId is required in request body" });
@@ -64,7 +64,7 @@ router.post(
 
       const participants = await sql`
         INSERT INTO conversation_participants (conversation_id, user_id) 
-        VALUES (${conversation_Id}, ${user_Id})
+        VALUES (${conversationId}, ${userId})
         RETURNING *`;
 
       res.status(201).json(participants[0]);

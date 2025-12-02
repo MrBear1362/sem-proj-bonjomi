@@ -6,13 +6,13 @@ const router = express.Router();
 // List messages, optionally filter by conversation_id
 router.get("/api/messages", async (req, res) => {
   try {
-    const { conversation_id } = req.query;
+    const { conversationid } = req.query;
 
-    const messages = conversation_id
+    const messages = conversationid
       ? await sql`
           SELECT id, content, created_at, updated_at, conversation_id, user_id
           FROM messages
-          WHERE conversation_id = ${conversation_id}
+          WHERE conversation_id = ${conversationid}
           ORDER BY created_at ASC`
       : await sql`
           SELECT id, content, created_at, updated_at, conversation_id, user_id
@@ -50,9 +50,9 @@ router.get("/api/messages/:id", async (req, res) => {
 // Create a new message
 router.post("/api/messages", async (req, res) => {
   try {
-    const { content, conversation_id, user_id } = req.body;
+    const { content, conversationid, userid } = req.body;
 
-    if (!content || !conversation_id || !user_id) {
+    if (!content || !conversationid || !userid) {
       return res.status(400).json({
         error: "content, conversation_id and user_id are required",
       });
@@ -60,7 +60,7 @@ router.post("/api/messages", async (req, res) => {
 
     const rows = await sql`
       INSERT INTO messages (content, conversation_id, user_id)
-      VALUES (${content}, ${conversation_id}, ${user_id})
+      VALUES (${content}, ${conversationid}, ${userid})
       RETURNING id, content, created_at, updated_at, conversation_id, user_id`;
 
     res.status(201).json(rows[0]);
