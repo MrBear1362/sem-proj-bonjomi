@@ -1,15 +1,23 @@
 import express from "express";
 import sql from "../db.js";
+import { requireAuth, isParticipant } from "../middleware/auth.js";
 
 const router = express.Router();
 
 // List all conversations
-router.get("/api/conversations", async (req, res) => {
+// Requires authentication - only returns conversations user participates in
+router.get("/api/conversations", requireAuth, async (req, res) => {
   try {
+    const userId = req.user.id;
+    
+    // Only return conversations where user is a participant
     const rows = await sql`
-      SELECT id, title, created_at
-      FROM conversations
-      ORDER BY created_at DESC`;
+      SELECT DISTINCT c.id, c.title, c.created_at
+      FROM conversations c
+      INNER JOIN conversation_participants cp ON c.id = cp.conversation_id
+      WHERE cp.user_id = ${userId}
+      ORDER BY c.created_at DESC`;
+    
     res.json(rows);
   } catch (error) {
     console.error("Error fetching conversations:", error);
@@ -18,9 +26,18 @@ router.get("/api/conversations", async (req, res) => {
 });
 
 // Get single conversation by id
-router.get("/api/conversations/:id", async (req, res) => {
+// Requires authentication - verifies user is participant
+router.get("/api/conversations/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
+    const userId = req.user.id;
+    
+    // Verify user is participant in this conversation
+    const hasAccess = await isParticipant(sql, userId, id);
+    if (!hasAccess) {
+      return res.status(403).json({ error: "You are not a participant in this conversation" });
+    }
+    
     const rows = await sql`
       SELECT id, title, created_at
       FROM conversations
@@ -38,14 +55,24 @@ router.get("/api/conversations/:id", async (req, res) => {
 });
 
 // List messages for a conversation
-router.get("/api/conversations/:id/messages", async (req, res) => {
+// Requires authentication - verifies user is participant
+router.get("/api/conversations/:id/messages", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
+    const userId = req.user.id;
+    
+    // Verify user is participant in this conversation
+    const hasAccess = await isParticipant(sql, userId, id);
+    if (!hasAccess) {
+      return res.status(403).json({ error: "You are not a participant in this conversation" });
+    }
+    
     const rows = await sql`
       SELECT id, content, created_at, updated_at, conversation_id, user_id
       FROM messages
       WHERE conversation_id = ${id}
       ORDER BY created_at ASC`;
+    
     res.json(rows);
   } catch (error) {
     console.error("Error fetching messages for conversation:", error);
@@ -56,19 +83,30 @@ router.get("/api/conversations/:id/messages", async (req, res) => {
 });
 
 // Create a conversation
-router.post("/api/conversations", async (req, res) => {
+// Requires authentication - creator is automatically added as participant
+router.post("/api/conversations", requireAuth, async (req, res) => {
   try {
     const { title } = req.body;
+    const userId = req.user.id;
+    
     if (!title) {
       return res.status(400).json({ error: "title is required" });
     }
 
+    // Create conversation
     const rows = await sql`
       INSERT INTO conversations (title)
       VALUES (${title})
       RETURNING id, title, created_at`;
+    
+    const conversation = rows[0];
+    
+    // Automatically add creator as participant
+    await sql`
+      INSERT INTO conversation_participants (conversation_id, user_id)
+      VALUES (${conversation.id}, ${userId})`;
 
-    res.status(201).json(rows[0]);
+    res.status(201).json(conversation);
   } catch (error) {
     console.error("Error creating conversation:", error);
     res.status(500).json({ error: "Failed to create conversation" });
@@ -76,10 +114,19 @@ router.post("/api/conversations", async (req, res) => {
 });
 
 // Delete a conversation by id
-router.delete("/api/conversations/:id", async (req, res) => {
+// Requires authentication - verifies user is participant (consider adding owner-only check)
+router.delete("/api/conversations/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
+    const userId = req.user.id;
+    
+    // Verify user is participant in this conversation
+    const hasAccess = await isParticipant(sql, userId, id);
+    if (!hasAccess) {
+      return res.status(403).json({ error: "You are not a participant in this conversation" });
+    }
 
+    // Delete conversation (participants will cascade if ON DELETE CASCADE is set)
     const rows = await sql`
       DELETE FROM conversations
       WHERE id = ${id}
