@@ -34,3 +34,8 @@ export async function clientAction({ request }) {
   return redirect("../onboarding/onboarding.jsx");
 }
 
+export default function SignupForm() {
+  return <div>signup content here</div>;
+}
+
+
