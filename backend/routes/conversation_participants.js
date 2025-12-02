@@ -14,9 +14,9 @@ router.get("/api/conversation-participants", requireAuth, async (req, res) => {
     
     // Only return participants from conversations the user is part of
     const participants = await sql`
-      SELECT cp.id, cp.created_at, cp.conversation_id, cp.user_id
-      FROM conversation_participants cp
-      WHERE cp.conversation_id IN (
+      SELECT cpa.id, cpa.created_at, cpa.conversation_id, cpa.user_id
+      FROM conversation_participants cpa
+      WHERE cpa.conversation_id IN (
         SELECT conversation_id 
         FROM conversation_participants 
         WHERE user_id = ${userId}
