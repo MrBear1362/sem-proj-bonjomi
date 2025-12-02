@@ -15,7 +15,9 @@ router.get("/api/messages", requireAuth, async (req, res) => {
       // Verify user is participant in this conversation
       const hasAccess = await isParticipant(sql, userId, conversationid);
       if (!hasAccess) {
-        return res.status(403).json({ error: "You are not a participant in this conversation" });
+        return res
+          .status(403)
+          .json({ error: "You are not a participant in this conversation" });
       }
 
       const messages = await sql`
@@ -23,7 +25,7 @@ router.get("/api/messages", requireAuth, async (req, res) => {
         FROM messages
         WHERE conversation_id = ${conversationid}
         ORDER BY created_at ASC`;
-      
+
       return res.json(messages);
     }
 
@@ -31,9 +33,9 @@ router.get("/api/messages", requireAuth, async (req, res) => {
     const messages = await sql`
       SELECT m.id, m.content, m.created_at, m.updated_at, m.conversation_id, m.user_id
       FROM messages m
-      INNER JOIN conversation_participants cp 
-        ON m.conversation_id = cp.conversation_id
-      WHERE cp.user_id = ${userId}
+      INNER JOIN conversation_participants cpa 
+        ON m.conversation_id = cpa.conversation_id
+      WHERE cpa.user_id = ${userId}
       ORDER BY m.created_at DESC`;
 
     res.json(messages);
@@ -62,7 +64,9 @@ router.get("/api/messages/:id", requireAuth, async (req, res) => {
     // Verify user is participant in this message's conversation
     const hasAccess = await isParticipant(sql, userId, rows[0].conversation_id);
     if (!hasAccess) {
-      return res.status(403).json({ error: "You do not have access to this message" });
+      return res
+        .status(403)
+        .json({ error: "You do not have access to this message" });
     }
 
     res.json(rows[0]);
@@ -88,7 +92,9 @@ router.post("/api/messages", requireAuth, async (req, res) => {
     // Verify user is participant in this conversation
     const hasAccess = await isParticipant(sql, userId, conversationid);
     if (!hasAccess) {
-      return res.status(403).json({ error: "You are not a participant in this conversation" });
+      return res
+        .status(403)
+        .json({ error: "You are not a participant in this conversation" });
     }
 
     const rows = await sql`
@@ -118,7 +124,9 @@ router.put("/api/messages/:id", requireAuth, async (req, res) => {
     // Verify user owns this message
     const isOwner = await ownsMessage(sql, userId, id);
     if (!isOwner) {
-      return res.status(403).json({ error: "You can only update your own messages" });
+      return res
+        .status(403)
+        .json({ error: "You can only update your own messages" });
     }
 
     const rows = await sql`
@@ -149,7 +157,9 @@ router.delete("/api/messages/:id", requireAuth, async (req, res) => {
     // Verify user owns this message
     const isOwner = await ownsMessage(sql, userId, id);
     if (!isOwner) {
-      return res.status(403).json({ error: "You can only delete your own messages" });
+      return res
+        .status(403)
+        .json({ error: "You can only delete your own messages" });
     }
 
     const rows = await sql`

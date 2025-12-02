@@ -11,17 +11,17 @@ const router = express.Router();
 router.get("/api/conversation-participants", requireAuth, async (req, res) => {
   try {
     const userId = req.user.id;
-    
+
     // Only return participants from conversations the user is part of
     const participants = await sql`
-      SELECT cp.id, cp.created_at, cp.conversation_id, cp.user_id
-      FROM conversation_participants cp
-      WHERE cp.conversation_id IN (
+      SELECT cpa.id, cpa.created_at, cpa.conversation_id, cpa.user_id
+      FROM conversation_participants cpa
+      WHERE cpa.conversation_id IN (
         SELECT conversation_id 
         FROM conversation_participants 
         WHERE user_id = ${userId}
       )
-      ORDER BY cp.created_at DESC`;
+      ORDER BY cpa.created_at DESC`;
 
     res.json(participants);
   } catch (error) {
@@ -43,11 +43,13 @@ router.get(
     try {
       const conversationId = req.params.conversationId;
       const userId = req.user.id;
-      
+
       // Verify user is participant in this conversation
       const hasAccess = await isParticipant(sql, userId, conversationId);
       if (!hasAccess) {
-        return res.status(403).json({ error: "You are not a participant in this conversation" });
+        return res
+          .status(403)
+          .json({ error: "You are not a participant in this conversation" });
       }
 
       const participant = await sql`
@@ -83,11 +85,17 @@ router.post(
           .status(400)
           .json({ error: "userId is required in request body" });
       }
-      
+
       // Verify requesting user is participant in this conversation
-      const hasAccess = await isParticipant(sql, requestingUserId, conversationId);
+      const hasAccess = await isParticipant(
+        sql,
+        requestingUserId,
+        conversationId
+      );
       if (!hasAccess) {
-        return res.status(403).json({ error: "You must be a participant to add others" });
+        return res
+          .status(403)
+          .json({ error: "You must be a participant to add others" });
       }
 
       // Check if user is already a participant
@@ -95,7 +103,7 @@ router.post(
         SELECT id FROM conversation_participants
         WHERE conversation_id = ${conversationId} AND user_id = ${userId}
         LIMIT 1`;
-      
+
       if (existingParticipant.length > 0) {
         return res.status(409).json({ error: "User is already a participant" });
       }
@@ -126,11 +134,13 @@ router.delete(
     try {
       const conversationId = req.params.conversationId;
       const userId = req.user.id;
-      
+
       // Verify user is participant in this conversation
       const hasAccess = await isParticipant(sql, userId, conversationId);
       if (!hasAccess) {
-        return res.status(403).json({ error: "You are not a participant in this conversation" });
+        return res
+          .status(403)
+          .json({ error: "You are not a participant in this conversation" });
       }
 
       const results = await sql`
