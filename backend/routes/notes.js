@@ -1,5 +1,6 @@
 import express from "express";
 import sql from "../db.js";
+import { requireAuth } from "../auth.js";
 
 const router = express.Router();
 
@@ -35,6 +36,44 @@ router.get("/api/notes", async (req, res) => {
 
     res.status(500).json({
       error: "Failed to fetch notes from database",
+    });
+  }
+});
+
+//endpoint to get all notes from followed users
+router.get("/api/notes/feed", requireAuth, async (req, res) => {
+  try {
+    const notes = await sql`
+      SELECT 
+        n.id,
+        u.auth_user_id,
+        u.first_name,
+        up.image_url,
+        n.title, 
+        n.content, 
+        n.media_url, 
+        n.user_id, 
+        t.name AS tags,
+        (
+        SELECT COUNT(*)
+        FROM note_likes nl
+        WHERE nl.note_id = n.id
+        ) AS number_of_likes
+      FROM notes n
+      LEFT JOIN users u ON u.auth_user_id = n.user_id 
+      LEFT JOIN user_profiles up ON up.user_id = u.auth_user_id
+      LEFT JOIN tags t ON t.id = n.tag_id
+      LEFT JOIN user_follows uf ON uf.following_id = n.user_id
+      WHERE uf.follower_id = ${req.userId}
+      ORDER BY n.created_at DESC
+      `;
+
+    res.json(notes);
+  } catch (error) {
+    console.log("Error fetching feed:", error);
+
+    res.status(500).json({
+      error: "Failed to fetch feed from database",
     });
   }
 });
