@@ -49,6 +49,10 @@ router.get("/api/user-profiles/:id", async (req, res) => {
     p.tiktok_url,
     p.facebook_url,
     p.tag_id,
+    (SELECT COUNT(*)
+    FROM connections c
+    WHERE (u.auth_user_id = c.user_id OR c.connection_id = u.auth_user_id) AND c.status = 'connected'
+    ) AS connection_count,
     p.created_at,
     p.updated_at
     FROM users u
