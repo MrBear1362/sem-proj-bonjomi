@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heart {
+  width: 2rem;
+  height: 2rem;
+  background: #e0e0e0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 100ms ease-in-out;
+}
+
+.likeCount {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.heartActive {
+  background: #ff1744;
+}
