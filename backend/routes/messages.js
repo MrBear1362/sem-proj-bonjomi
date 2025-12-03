@@ -9,7 +9,7 @@ const router = express.Router();
 router.get("/api/messages", requireAuth, async (req, res) => {
   try {
     const { conversationid } = req.query;
-    const userId = req.user.id; // From requireAuth middleware
+    const userId = req.userId; // From requireAuth middleware
 
     if (conversationid) {
       // Verify user is participant in this conversation
@@ -50,7 +50,7 @@ router.get("/api/messages", requireAuth, async (req, res) => {
 router.get("/api/messages/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     const rows = await sql`
       SELECT id, content, created_at, updated_at, conversation_id, user_id
@@ -81,7 +81,7 @@ router.get("/api/messages/:id", requireAuth, async (req, res) => {
 router.post("/api/messages", requireAuth, async (req, res) => {
   try {
     const { content, conversationid } = req.body;
-    const userId = req.user.id; // Use authenticated user's id, not from body
+    const userId = req.userId; // Use authenticated user's id, not from body
 
     if (!content || !conversationid) {
       return res.status(400).json({
@@ -115,7 +115,7 @@ router.put("/api/messages/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const { content } = req.body;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     if (!content) {
       return res.status(400).json({ error: "content is required" });
@@ -152,7 +152,7 @@ router.put("/api/messages/:id", requireAuth, async (req, res) => {
 router.delete("/api/messages/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     // Verify user owns this message
     const isOwner = await ownsMessage(sql, userId, id);

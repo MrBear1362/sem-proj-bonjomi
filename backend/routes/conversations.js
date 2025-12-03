@@ -8,7 +8,7 @@ const router = express.Router();
 // Requires authentication - only returns conversations user participates in
 router.get("/api/conversations", requireAuth, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.userId;
 
     // Only return conversations where user is a participant
     const rows = await sql`
@@ -30,7 +30,7 @@ router.get("/api/conversations", requireAuth, async (req, res) => {
 router.get("/api/conversations/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     // Verify user is participant in this conversation
     const hasAccess = await isParticipant(sql, userId, id);
@@ -61,7 +61,7 @@ router.get("/api/conversations/:id", requireAuth, async (req, res) => {
 router.get("/api/conversations/:id/messages", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     // Verify user is participant in this conversation
     const hasAccess = await isParticipant(sql, userId, id);
@@ -91,7 +91,7 @@ router.get("/api/conversations/:id/messages", requireAuth, async (req, res) => {
 router.post("/api/conversations", requireAuth, async (req, res) => {
   try {
     const { title } = req.body;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     if (!title || !title.trim()) {
       return res.status(400).json({ error: "title is required" });
@@ -123,7 +123,7 @@ router.put("/api/conversations/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const { title } = req.body;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     if (!title || !title.trim()) {
       return res.status(400).json({ error: "title is required" });
@@ -159,7 +159,7 @@ router.put("/api/conversations/:id", requireAuth, async (req, res) => {
 router.delete("/api/conversations/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     // Verify user is participant in this conversation
     const hasAccess = await isParticipant(sql, userId, id);

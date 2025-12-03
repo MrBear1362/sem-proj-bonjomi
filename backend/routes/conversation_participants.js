@@ -10,7 +10,7 @@ const router = express.Router();
 // Requires authentication
 router.get("/api/conversation-participants", requireAuth, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.userId;
 
     // Only return participants from conversations the user is part of
     const participants = await sql`
@@ -42,7 +42,7 @@ router.get(
   async (req, res) => {
     try {
       const conversationId = req.params.conversationId;
-      const userId = req.user.id;
+      const userId = req.userId;
 
       // Verify user is participant in this conversation
       const hasAccess = await isParticipant(sql, userId, conversationId);
@@ -78,7 +78,7 @@ router.post(
     try {
       const conversationId = req.params.conversationId;
       const { userId } = req.body;
-      const requestingUserId = req.user.id;
+      const requestingUserId = req.userId;
 
       if (!userId) {
         return res
@@ -133,7 +133,7 @@ router.delete(
   async (req, res) => {
     try {
       const conversationId = req.params.conversationId;
-      const userId = req.user.id;
+      const userId = req.userId;
 
       // Verify user is participant in this conversation
       const hasAccess = await isParticipant(sql, userId, conversationId);
