@@ -6,11 +6,11 @@ const router = express.Router();
 
 router.post("/api/signup", requireAuth, async (req, res) => {
   try {
-    const { firstName, lastName, phone, city, birthYear } = req.body;
+    const { first_name, last_name, phone, city, birth_year } = req.body;
 
     const signup = await sql`
     INSERT INTO users (auth_user_id, first_name, last_name, phone, city, birth_year)
-    VALUES (${req.userId}, ${firstName}, ${lastName}, ${phone}, ${city}, ${birthYear})
+    VALUES (${req.userId}, ${first_name}, ${last_name}, ${phone}, ${city}, ${birth_year})
     RETURNING auth_user_id, first_name, last_name, phone, city, birth_year
     `;
 

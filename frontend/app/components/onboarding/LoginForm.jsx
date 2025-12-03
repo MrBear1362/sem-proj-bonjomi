@@ -3,6 +3,7 @@ import { useState } from "react";
 import { supabase } from "../../library/supabase.js";
 import LoadingSpinner from "../ui/LoadingSpinner.jsx";
 import ButtonLink from "../ui/ButtonLink.jsx";
+import InputField from "../ui/InputField.jsx";
 // TODO: find icon library and IMPORT here pls
 
 export default function LoginForm() {
@@ -40,27 +41,29 @@ export default function LoginForm() {
         <h1>Login</h1>
 
         <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              autoComplete="email"
-              placeholder="Enter your email"
-            />
-          </div>
 
-          <div className="form-group">
-            <input
-              type="password"
-              id="password"
-              name="password"
-              required
-              autoComplete="new-password"
-              placeholder="Enter your password"
-            />
-          </div>
+          {/* input field for email */}
+          <InputField
+            type="email"
+            id="email"
+            name="email"
+            label="Email address"
+            required
+            placeholder="Enter your email"
+            autoComplete="email"
+          />
+
+          {/* input field for password */}
+          <InputField
+            type="password"
+            id="password"
+            name="password"
+            label="Password"
+            required
+            placeholder="Enter your password"
+            minLength={6}
+            autoComplete="new-password"
+          />
 
           {/* // TODO: design error message */}
           {error && <div className="error-message">{error}</div>}
