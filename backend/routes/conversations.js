@@ -93,14 +93,14 @@ router.post("/api/conversations", requireAuth, async (req, res) => {
     const { title } = req.body;
     const userId = req.user.id;
 
-    if (!title) {
+    if (!title || !title.trim()) {
       return res.status(400).json({ error: "title is required" });
     }
 
     // Create conversation
     const rows = await sql`
       INSERT INTO conversations (title)
-      VALUES (${title})
+      VALUES (${title.trim()})
       RETURNING id, title, created_at`;
 
     const conversation = rows[0];
@@ -139,7 +139,7 @@ router.put("/api/conversations/:id", requireAuth, async (req, res) => {
 
     const rows = await sql`
       UPDATE conversations
-      SET title = ${title}
+      SET title = ${title.trim()}
       WHERE id = ${id}
       RETURNING id, title, created_at`;
 
