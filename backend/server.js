@@ -15,22 +15,26 @@ app.use(express.json());
 import collab_requestsRoutes from "./routes/collab_requests.js";
 import user_profilesRoutes from "./routes/user_profiles.js";
 import notesRoutes from "./routes/notes.js";
-import participantsRoutes from "./routes/conversation_participants.js";
-import messagesRoutes from "./routes/messages.js";
-import conversationsRoutes from "./routes/conversations.js";
-app.use(collab_requestsRoutes, user_profilesRoutes, notesRoutes);
-app.use(participantsRoutes);
-app.use(messagesRoutes);
-app.use(conversationsRoutes);
+import servicesRoutes from "./routes/services.js";
+import businessesRoutes from "./routes/businesses.js";
+import onboardingRoutes from "./routes/onboarding.js";
+app.use(
+	collab_requestsRoutes,
+	user_profilesRoutes,
+	notesRoutes,
+	servicesRoutes,
+	businessesRoutes,
+	onboardingRoutes
+);
 
 // root endpoint - verify server status
 app.get("/", (req, res) => {
-  res.json({
-    message: "Welcome to lineUp API server! 🎶",
-    version: "0.0.1",
-  });
+	res.json({
+		message: "Welcome to lineUp API server! 🎶",
+		version: "0.0.1",
+	});
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+	console.log(`Server is running on http://localhost:${PORT}`);
 });

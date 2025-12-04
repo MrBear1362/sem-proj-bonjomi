@@ -84,7 +84,8 @@ router.patch("/api/businesses/:id", requireAuth, async (req, res) => {
 		}
 
 		// Authorization: verify the authenticated user owns this business
-		if (req.user.id !== businessId) {
+		// TODO:: req.user.id ?
+		if (req.userId !== businessId) {
 			return res.status(404).json({
 				error: "Business not found",
 			});
@@ -99,7 +100,7 @@ router.patch("/api/businesses/:id", requireAuth, async (req, res) => {
 									is_remote !== undefined ? is_remote : sql`is_remote`
 								},
                 location = ${location || sql`location`}
-            WHERE auth_user_id = ${businessId}
+            WHERE ${req.userId} = ${businessId}
             RETURNING auth_user_id, name, phone, is_remote, location
         `;
 
