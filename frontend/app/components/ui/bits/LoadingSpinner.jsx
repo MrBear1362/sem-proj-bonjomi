@@ -1,5 +1,5 @@
 // import styles
-import "./LoadingSpinner.css";
+import "./loading-spinner.css";
 
 export default function LoadingSpinner() {
   return (
