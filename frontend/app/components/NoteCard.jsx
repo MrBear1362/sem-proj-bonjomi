@@ -1,35 +1,33 @@
 import React from "react";
+import Tag from "./Tag";
+import Menu from "./Menu";
+import Like from "./Like";
+import Comment from "./Comment";
+import Repost from "./Repost";
 
-function Note({ children }) {
+export default function NoteCard({ note }) {
   return (
     <div className="note">
-      <div className="grid">
-        <img>{notes.img_url}</img>
-        <p>{notes.first_name}</p>
-        <Tag type="static" label={notes.name} />
+      <div className="grid note__nav">
+        <img
+          src={note.image_url}
+          alt={note.first_name}
+          className="note__nav--pic"
+        />
+        <p className="xs-text">{note.first_name}</p>
+        <Tag type="static" label={note.tags} />
         <Menu />
       </div>
-      <h2 className="element-l">{notes.title}</h2>
-      <img>{notes.media_url}</img>
-      <p className="element-m"> {notes.content}</p>
+      <div>
+        <h2 className="xxl-heading">{note.title}</h2>
+        {note.media_url && <img src={note.media_url} alt={note.title} />}
+        <p className="m-text"> {note.content}</p>
+      </div>
       <div className="grid">
-        <Like />
-        <Comment />
+        <Like noteId={note.id} likeCount={note.number_of_likes} />
+        <Comment noteId={note.id} />
         <Repost />
       </div>
     </div>
   );
 }
-
-function NoteCard({ notes = [] }) {
-  return (
-    <div className="note-card">
-      {/* Using .map() to render each message - this is DYNAMIC RENDERING! */}
-      {notes.map((notes) => (
-        <NoteCard key={notes.id}>{notes.content}</NoteCard>
-      ))}
-    </div>
-  );
-}
-
-export { Note, NoteCard };

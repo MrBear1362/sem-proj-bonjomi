@@ -1,9 +1,10 @@
 import React from "react";
-import Navigation from "../components/Navigation.jsx";
-import NoteCard from "../components/NoteCard.jsx";
+import NoteCard from "./NoteCard.jsx";
 import { apiFetch } from "../lib/apiFetch.js";
 import { supabase } from "../lib/supabase.js";
 import { useLoaderData } from "react-router";
+
+import "../feed.css";
 
 export async function clientLoader() {
   const response = await apiFetch("/api/notes/feed");
@@ -19,9 +20,13 @@ export async function clientLoader() {
 
 export default function Feed() {
   const { notes } = useLoaderData();
+
   return (
-    <section>
-      <NoteCards notes={notes} />
-    </section>
+    <div className="note-card">
+      {/* Using .map() to render each message - this is DYNAMIC RENDERING! */}
+      {notes.map((note) => (
+        <NoteCard key={note.id} note={note} />
+      ))}
+    </div>
   );
 }
