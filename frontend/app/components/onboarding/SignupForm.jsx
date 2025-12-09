@@ -1,9 +1,9 @@
-import { Form, Link, redirect, useNavigation } from "react-router";
+import { Form, Link, redirect, useNavigate } from "react-router";
 import { useState } from "react";
 import { supabase } from "../../library/supabase.js";
-import LoadingSpinner from "../ui/LoadingSpinner.jsx";
-import ButtonLink from "../ui/ButtonLink.jsx";
-import InputField from "../ui/InputField.jsx";
+import LoadingSpinner from "../ui/bits/LoadingSpinner.jsx";
+import ButtonLink from "../ui/buttons/ButtonLink.jsx";
+import InputField from "../ui/inputs/InputField.jsx";
 
 export default function SignupForm() {
   const [error, setError] = useState(null);

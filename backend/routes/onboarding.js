@@ -1,6 +1,7 @@
 import express from "express";
 import sql from "../db.js";
 import { requireAuth } from "../auth.js";
+import { ONBOARDING_STEPS } from "../onboardingSteps.js";
 
 const router = express.Router();
 

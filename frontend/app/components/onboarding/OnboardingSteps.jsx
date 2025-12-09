@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../../library/supabase.js";
 import { apiFetch } from "../../library/apiFetch.js";
 import LineUpPRO from "../LineUpPRO";
-import RadioCard from "../ui/RadioCard";
-import InputField from "../ui/InputField";
-import LoadingSpinner from "../ui/LoadingSpinner.jsx";
-import Button from "../ui/Button.jsx";
+import RadioCard from "../ui/inputs/RadioCard.jsx";
+import InputField from "../ui/inputs/InputField.jsx";
+import LoadingSpinner from "../ui/bits/LoadingSpinner.jsx";
+import Button from "../ui/buttons/Button.jsx";
+import { ONBOARDING_STEPS } from "../../../../backend/onboardingSteps.js";
 
 
 export default function OnboardingSteps() {

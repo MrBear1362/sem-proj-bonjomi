@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import { supabase } from "../library/supabase.js";
+import { apiFetch } from "../library/apiFetch.js";
+import LoadingSpinner from "./ui/bits/LoadingSpinner.jsx";
 
 export default function ProtectedRoute({ children }) {
   const [user, setUser] = useState(null);
