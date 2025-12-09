@@ -11,17 +11,14 @@ app.use(cors());
 app.use(express.json());
 
 //routes
-// Import routes AFTER environment variables are loaded
+// import routes
 import collab_requestsRoutes from "./routes/collab_requests.js";
 import user_profilesRoutes from "./routes/user_profiles.js";
 import notesRoutes from "./routes/notes.js";
-import participantsRoutes from "./routes/conversation_participants.js";
-import messagesRoutes from "./routes/messages.js";
-import conversationsRoutes from "./routes/conversations.js";
-app.use(collab_requestsRoutes, user_profilesRoutes, notesRoutes);
-app.use(participantsRoutes);
-app.use(messagesRoutes);
-app.use(conversationsRoutes);
+import servicesRoutes from "./routes/services.js";
+import businessesRoutes from "./routes/businesses.js";
+import onboardingRoutes from "./routes/onboarding.js";
+app.use(collab_requestsRoutes, user_profilesRoutes, notesRoutes, servicesRoutes, businessesRoutes, onboardingRoutes);
 
 // root endpoint - verify server status
 app.get("/", (req, res) => {
