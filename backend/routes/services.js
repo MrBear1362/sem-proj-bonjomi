@@ -12,11 +12,24 @@ router.get("/api/services", async (req, res) => {
 	try {
 		// Execute SQL query using the sql`` tagged template
 		const services = await sql`
-			SELECT id, title, content, location, price, tags, img_url, business_id, tag_id
-			FROM services
-		`;
+            SELECT 
+                s.id, 
+                s.title, 
+                s.content, 
+                s.location, 
+                s.price, 
+                s.tags, 
+                s.img_url, 
+                s.business_id, 
+                s.tag_id,
+                b.name AS business_name,
+                up.image_url AS user_profile_img
+            FROM services s
+            LEFT JOIN businesses b ON s.business_id = b.auth_user_id
+            LEFT JOIN user_profiles up ON b.auth_user_id = up.user_id
+        `;
 
-		// Return the threads as JSON
+		// Return the services as JSON
 		// Express automatically sets Content-Type: serverlication/json
 		res.status(200).json(services);
 	} catch (error) {
@@ -41,10 +54,23 @@ router.get("/api/services/:id", async (req, res) => {
 		// Execute SQL query with WHERE clause for auth_user_id
 		// The ${servicesId} is safely parameterized by the postgres library
 		const services = await sql`
-			SELECT id, title, content, location, price, tags, img_url, business_id, tag_id
-			FROM services
-			WHERE id = ${serviceId}
-		`;
+            SELECT 
+                s.id, 
+                s.title, 
+                s.content, 
+                s.location, 
+                s.price, 
+                s.tags, 
+                s.img_url, 
+                s.business_id, 
+                s.tag_id,
+                b.name AS business_name,
+                up.image_url AS user_profile_img
+            FROM services s
+            LEFT JOIN businesses b ON s.business_id = b.auth_user_id
+            LEFT JOIN user_profiles up ON b.auth_user_id = up.user_id
+            WHERE s.id = ${serviceId}
+        `;
 
 		// Check if services was found
 		// SQL returns an empty array if no matches (either doesn't exist or not owned by user)
@@ -74,9 +100,22 @@ router.get("/api/businesses/:id/services", async (req, res) => {
 		const businessId = req.params.id;
 
 		const services = await sql`
-            SELECT id, title, content, location, price, tags, img_url, business_id, tag_id
-            FROM services
-            WHERE business_id = ${businessId}
+            SELECT 
+                s.id, 
+                s.title, 
+                s.content, 
+                s.location, 
+                s.price, 
+                s.tags, 
+                s.img_url, 
+                s.business_id, 
+                s.tag_id,
+                b.name AS business_name,
+                up.image_url AS user_profile_img
+            FROM services s
+            LEFT JOIN businesses b ON s.business_id = b.auth_user_id
+            LEFT JOIN user_profiles up ON b.auth_user_id = up.user_id
+            WHERE s.business_id = ${businessId}
         `;
 
 		res.status(200).json(services);
@@ -91,36 +130,67 @@ router.get("/api/businesses/:id/services", async (req, res) => {
 /* ---------- POST routes ---------- */
 
 // POST new service to database
-router.post("/api/businesses/:id/services", requireAuth, async (req, res) => {
+router.post("/api/services", requireAuth, async (req, res) => {
 	try {
-		const businessId = req.params.id;
 		const { title, content, location, price, tags, img_url, tag_id } = req.body;
 
-		// Validate required fields
+		// Get auth_user_id from authenticated user
+		const businessId = req.user.id;
+
+		// Step 1: Validate required fields
 		if (!title || !content || !location || !price) {
 			return res.status(400).json({
 				error: "Missing required fields: title, content, location, price",
 			});
 		}
 
-		// Verify the authenticated user owns this business
-		// TODO: does req.user work?
-		if (req.userId !== parseInt(businessId)) {
-			return res.status(403).json({
-				error:
-					"Unauthorized: You can only create services for your own business",
+		// Validate title is not empty after trimming
+		const trimmedTitle = title.trim();
+		if (trimmedTitle.length === 0) {
+			return res.status(400).json({
+				error: "Title cannot be empty",
 			});
 		}
 
-		// Insert new service into database
+		// Validate content is not empty after trimming
+		const trimmedContent = content.trim();
+		if (trimmedContent.length === 0) {
+			return res.status(400).json({
+				error: "Content cannot be empty",
+			});
+		}
+
+		// Validate location is not empty after trimming
+		const trimmedLocation = location.trim();
+		if (trimmedLocation.length === 0) {
+			return res.status(400).json({
+				error: "Location cannot be empty",
+			});
+		}
+
+		// Validate price is not empty after trimming (accept any text)
+		const trimmedPrice = price.trim();
+		if (trimmedPrice.length === 0) {
+			return res.status(400).json({
+				error: "Price cannot be empty",
+			});
+		}
+
+		// Step 2: Create the service
+		// Use RETURNING to get the full service data to return to the client
+		// Set business_id to auth_user_id - this service belongs to their business
 		const result = await sql`
             INSERT INTO services (title, content, location, price, tags, img_url, business_id, tag_id)
-            VALUES (${title}, ${content}, ${location}, ${price}, ${tags || null
-			}, ${img_url || null}, ${businessId}, ${tag_id || null})
-            RETURNING id, title, content, location, price, tags, img_url, business_id, tag_id
+            VALUES (${trimmedTitle}, ${trimmedContent}, ${trimmedLocation}, ${trimmedPrice}, ${
+			tags || null
+		}, ${img_url || null}, ${businessId}, ${tag_id || null})
+            RETURNING id, title, content, location, price, tags, img_url, business_id, tag_id, created_at
         `;
 
-		res.status(201).json(result[0]);
+		const service = result[0];
+
+		// Return the created service with 201 Created status
+		res.status(201).json(service);
 	} catch (error) {
 		console.error("Error creating service:", error);
 		res.status(500).json({
@@ -128,8 +198,6 @@ router.post("/api/businesses/:id/services", requireAuth, async (req, res) => {
 		});
 	}
 });
-
-//
 
 /* ---------- PATCH routes ---------- */
 
@@ -157,10 +225,9 @@ router.patch("/api/services/:id", requireAuth, async (req, res) => {
                 price = ${price || sql`price`}, 
                 tags = ${tags || null}, 
                 img_url = ${img_url || null}
-            WHERE id = ${serviceId} AND business_id = ${req.userId}
+            WHERE id = ${serviceId} AND business_id = ${req.user.id}
             RETURNING id, title, content, location, price, tags, img_url, business_id, tag_id
         `;
-		// TODO: does req.user work??
 
 		// If no service was updated, it means the service doesn't exist or user doesn't own it
 		// We return 404 in both cases to avoid leaking information
@@ -192,10 +259,9 @@ router.delete("/api/services/:id", requireAuth, async (req, res) => {
 		// This ensures users can only delete services owned by their business
 		const result = await sql`
             DELETE FROM services
-            WHERE id = ${serviceId} AND business_id = ${req.userId}
+            WHERE id = ${serviceId} AND business_id = ${req.user.id}
             RETURNING id
         `;
-		// TODO: does req.user work??
 
 		// If no service was deleted, it means the service doesn't exist or user doesn't own it
 		// We return 404 in both cases to avoid leaking information
