@@ -1,11 +1,16 @@
-import React from "react";
-import Tag from "./Tag";
-import Menu from "./Menu";
-import Like from "./Like";
-import Comment from "./Comment";
-import Repost from "./Repost";
+import React, { useState } from "react";
+import Tag from "./UI/Tag";
+/* import Menu from "./UI/Menu"; */
+import Like from "./UI/Like";
+import Comment from "./UI/Comment";
+import CommentSection from "./CommentSection";
+/* import Repost from "./UI/Repost"; */
+
+import "./noteCard.css";
+import "../app.css";
 
 export default function NoteCard({ note }) {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="note">
       <div className="grid note__nav">
@@ -15,8 +20,8 @@ export default function NoteCard({ note }) {
           className="note__nav--pic"
         />
         <p className="xs-text">{note.first_name}</p>
-        <Tag type="static" label={note.tags} />
-        <Menu />
+        {note.tags && <Tag type="static" label={note.tags} />}
+        {/* <Menu /> */}
       </div>
       <div>
         <h2 className="xxl-heading">{note.title}</h2>
@@ -24,10 +29,20 @@ export default function NoteCard({ note }) {
         <p className="m-text"> {note.content}</p>
       </div>
       <div className="grid">
-        <Like noteId={note.id} likeCount={note.number_of_likes} />
-        <Comment noteId={note.id} />
-        <Repost />
+        <Like
+          noteId={note.id}
+          likeCount={note.number_of_likes}
+          isLiked={note.is_liked}
+        />
+        <Comment
+          noteId={note.id}
+          commentCount={note.number_of_comments}
+          isOpen={isOpen}
+          onClick={() => setIsOpen((v) => !v)}
+        />
+        {/* <Repost /> */}
       </div>
+      {isOpen && <CommentSection noteId={note.id} />}
     </div>
   );
 }

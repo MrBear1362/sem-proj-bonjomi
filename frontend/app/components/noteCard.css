@@ -1,0 +1,9 @@
+.note {
+  margin-top: 2rem;
+}
+
+.note__nav--pic {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+}
