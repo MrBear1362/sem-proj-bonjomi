@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Like.css";
+import styles from "./Like.module.css";
 
 export default function Like() {
 	const [likeCount, setLikeCount] = useState(2);
@@ -11,13 +11,13 @@ export default function Like() {
 	};
 
 	return (
-		<div className="container">
+		<div className={styles.container}>
 			<button
-				className={`heart ${isLiked ? "heartActive" : ""}`}
+				className={`${styles.heart} ${isLiked ? styles.heartActive : ""}`}
 				onClick={toggleLike}
 				aria-label="Toggle like"
 			/>
-			<span className="likeCount">{likeCount}</span>
+			<span className={styles.likeCount}>{likeCount}</span>
 		</div>
 	);
 }

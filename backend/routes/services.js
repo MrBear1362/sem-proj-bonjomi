@@ -135,7 +135,7 @@ router.post("/api/services", requireAuth, async (req, res) => {
 		const { title, content, location, price, tags, img_url, tag_id } = req.body;
 
 		// Get auth_user_id from authenticated user
-		const businessId = req.user.id;
+		const businessId = req.userId;
 
 		// Step 1: Validate required fields
 		if (!title || !content || !location || !price) {
@@ -184,7 +184,7 @@ router.post("/api/services", requireAuth, async (req, res) => {
             VALUES (${trimmedTitle}, ${trimmedContent}, ${trimmedLocation}, ${trimmedPrice}, ${
 			tags || null
 		}, ${img_url || null}, ${businessId}, ${tag_id || null})
-            RETURNING id, title, content, location, price, tags, img_url, business_id, tag_id, created_at
+            RETURNING id, title, content, location, price, tags, img_url, business_id, tag_id
         `;
 
 		const service = result[0];
@@ -225,7 +225,7 @@ router.patch("/api/services/:id", requireAuth, async (req, res) => {
                 price = ${price || sql`price`}, 
                 tags = ${tags || null}, 
                 img_url = ${img_url || null}
-            WHERE id = ${serviceId} AND business_id = ${req.user.id}
+            WHERE id = ${serviceId} AND business_id = ${req.userId}
             RETURNING id, title, content, location, price, tags, img_url, business_id, tag_id
         `;
 
@@ -259,7 +259,7 @@ router.delete("/api/services/:id", requireAuth, async (req, res) => {
 		// This ensures users can only delete services owned by their business
 		const result = await sql`
             DELETE FROM services
-            WHERE id = ${serviceId} AND business_id = ${req.user.id}
+            WHERE id = ${serviceId} AND business_id = ${req.userId}
             RETURNING id
         `;
 

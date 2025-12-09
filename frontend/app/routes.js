@@ -7,7 +7,6 @@ export default [
 	// Service routes
 	route("services", "routes/servicePage.jsx"),
 	route("services/create", "routes/createService.jsx"),
-	route("services/:serviceId", "routes/service.jsx", [
-		route("edit", "routes/editService.jsx"),
-	]),
+	route("services/:serviceId", "routes/service.jsx"),
+	route("services/:serviceId/edit", "routes/editService.jsx"),
 ];

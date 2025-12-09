@@ -13,34 +13,41 @@ import "./Service.css";
  * - "Read more" link navigates to full service details
  */
 export function ServicePreviewCard({ service }) {
+	const {
+		id,
+		title,
+		content,
+		user_profile_img,
+		business_name,
+		img_url,
+		location,
+		tags,
+	} = service;
+
 	return (
 		<section className="service-card-container">
 			<header>
 				<div className="profile-container">
-					<img src={service.user_profile_img} alt="Business profile" />
-					<h3>{service.business_name}</h3>
+					<img src={user_profile_img} alt="Business profile" />
+					<h3>{business_name}</h3>
 					<p>offers</p>
-					<Tag type="static" />
+					<Tag type="static" label={tags} />
 				</div>
 				<div className="bookmark-container">
 					<Bookmark />
 				</div>
 			</header>
-			<h2>{service.title}</h2>
-			<img
-				className="service-media"
-				src={service.img_url}
-				alt={service.title}
-			/>
-			<p className="service-description">{service.content}</p>
+			<h2>{title}</h2>
+			<img className="service-media" src={img_url} alt={title} />
+			<p className="service-description">{content}</p>
 			<div className="bottom-container">
 				<div className="link-container">
-					<Link to={`/services/${service.id}`} className="read-more">
+					<Link to={`/services/${id}`} className="read-more">
 						Read more
 					</Link>
 				</div>
 				<div className="info-container">
-					<p>{service.location}</p>
+					<p>{location}</p>
 					<p> posted at</p>
 				</div>
 			</div>
@@ -58,45 +65,49 @@ export function ServicePreviewCard({ service }) {
  * - Provides action button to contact the business
  */
 export function ServiceDetailCard({ service }) {
+	const {
+		id,
+		title,
+		content,
+		user_profile_img,
+		business_name,
+		img_url,
+		location,
+		price,
+		created_at,
+	} = service;
 	return (
 		<section className="service-card-container service-card-full">
 			<header>
 				<div className="profile-container">
-					<img src={service.user_profile_img} alt="Business profile" />
-					<h3>{service.business_name}</h3>
+					<img src={user_profile_img} alt="Business profile" />
+					<h3>{business_name}</h3>
 				</div>
 				<div className="bookmark-container">
 					<Bookmark />
 				</div>
 			</header>
-			<h2>{service.title}</h2>
-			<img
-				className="service-media"
-				src={service.img_url}
-				alt={service.title}
-			/>
+			<h2>{title}</h2>
+			<img className="service-media" src={img_url} alt={title} />
 			<div className="service-details">
-				<p className="service-description">{service.content}</p>
+				<p className="service-description">{content}</p>
+				<div className="action-buttons">
+					<button className="contact-button">Start a chat</button>
+					<Link to={`/services/${id}/edit`} className="edit-button">
+						Edit Service
+					</Link>
+				</div>
 				<div className="info-container">
 					<p className="location">
-						<strong>Location:</strong> {service.location}
+						<strong>Location:</strong> {location}
 					</p>
 					<p className="price">
-						<strong>Price:</strong> ${service.price}
+						<strong>Price:</strong> {price}
 					</p>
 					<p className="date">
-						<strong>Posted:</strong>{" "}
-						{new Date(service.created_at).toLocaleDateString()}
+						<strong>Posted:</strong>
 					</p>
-					{service.tags && (
-						<p className="tags">
-							<strong>Tags:</strong> {service.tags}
-						</p>
-					)}
 				</div>
-			</div>
-			<div className="action-buttons">
-				<button className="contact-button">Contact Business</button>
 			</div>
 		</section>
 	);

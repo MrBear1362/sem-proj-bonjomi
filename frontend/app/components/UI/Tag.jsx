@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Tag.css";
+import styles from "./Tag.module.css";
 
 export default function Tag({
 	label = "Tag",
@@ -23,7 +23,7 @@ export default function Tag({
 
 	return (
 		<button
-			className={`tag ${isTagActive ? "tagActive" : ""}`}
+			className={`${styles.tag} ${isTagActive ? styles.tagActive : ""}`}
 			disabled={type === "static"}
 			onClick={handleClick}
 		>

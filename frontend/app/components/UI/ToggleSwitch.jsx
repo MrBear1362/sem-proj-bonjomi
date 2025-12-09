@@ -1,17 +1,17 @@
 import { useState } from "react";
-import "./ToggleSwitch.css";
+import styles from "./ToggleSwitch.module.css";
 
 export default function ToggleSwitch() {
 	const [isToggled, setIsToggled] = useState(false);
 
 	return (
 		<button
-			className={`toggle ${isToggled ? "toggleActive" : ""}`}
+			className={`${styles.toggle} ${isToggled ? styles.toggleActive : ""}`}
 			onClick={() => setIsToggled(!isToggled)}
 			role="switch"
 			aria-checked={isToggled}
 		>
-			<span className="toggleCircle" />
+			<span className={styles.toggleCircle} />
 		</button>
 	);
 }
