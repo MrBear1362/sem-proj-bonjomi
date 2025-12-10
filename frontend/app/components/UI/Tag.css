@@ -1,16 +1,23 @@
+@import "../../app.css";
+
 .tag {
-  padding: 0.2rem 1rem;
-  border: 2px solid var(--greyscale-500);
-  border-radius: 2rem;
+  padding: 0.2rem 0.5rem;
   background: transparent;
-  font-size: 1rem;
+  font-size: 0.7rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 100ms ease-in-out;
   width: fit-content;
+  height: fit-content;
+  margin: 0;
 }
 
 .tagActive {
   background: #000;
   color: #fff;
+}
+
+.with--border {
+  border: 1px solid var(--greyscale-500);
+  border-radius: 2rem;
 }

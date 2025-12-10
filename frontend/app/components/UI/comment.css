@@ -1,31 +1,28 @@
-.container {
+.comment-container {
   display: flex;
   align-items: center;
 }
 
-.heart {
+.comment-btn {
   background: none;
   border: none;
+  padding: 0.25rem;
   cursor: pointer;
-  padding: 0.5rem;
   /* remove margin later */
   margin: 0;
 }
 
-.heart svg {
+.comment-btn svg {
   color: var(--greyscale-500);
   transition: color 0.2s;
 }
 
-.active svg {
+.comment-btn--active svg {
   color: var(--primary-yellow);
+  fill: var(--greyscale-100);
 }
 
-.likeCount {
-  font-size: 0.8rem;
-  font-weight: 500;
+.comment-count {
+  font-size: 0.85rem;
   color: var(--greyscale-500);
-}
-.likeCount--comment {
-  font-size: 0.75rem;
 }

@@ -191,7 +191,7 @@ router.post("/api/notes", requireAuth, async (req, res) => {
   }
 });
 
-router.post("/api/notes/:id/note-likes", requireAuth, async (req, res) => {
+router.post("/api/notes/:id/likes", requireAuth, async (req, res) => {
   try {
     const noteId = req.params.id;
 
@@ -254,9 +254,10 @@ router.post("/api/note-comments", requireAuth, async (req, res) => {
   }
 });
 
-router.post("/api/note-comments/likes", requireAuth, async (req, res) => {
+router.post("/api/note-comments/:id/likes", requireAuth, async (req, res) => {
   try {
-    const { noteCommentId } = req.body;
+    //const { noteCommentId } = req.body;
+    const noteCommentId = req.params.id;
 
     if (!req.userId || !noteCommentId) {
       return res.status(400).json({
@@ -391,35 +392,31 @@ router.delete("/api/notes/:id", requireAuth, async (req, res) => {
 });
 
 //endpoint for deleting a like on a note
-router.delete(
-  "/api/notes/:noteId/note-likes",
-  requireAuth,
-  async (req, res) => {
-    try {
-      const noteId = req.params.noteId;
+router.delete("/api/notes/:id/likes", requireAuth, async (req, res) => {
+  try {
+    const noteId = req.params.id;
 
-      const result = await sql`
+    const result = await sql`
     DELETE FROM note_likes 
     WHERE note_id = ${noteId} AND user_id = ${req.userId}
     RETURNING id 
     `;
-      if (result.length === 0) {
-        return res.status(404).json({
-          error: "Like not found",
-        });
-      }
-      res.json({
-        message: "Like removed successfully",
-        deleteId: result[0].id,
-      });
-    } catch (error) {
-      console.error("Error removing like:", error);
-      res.status(500).json({
-        error: "Failed to remove like",
+    if (result.length === 0) {
+      return res.status(404).json({
+        error: "Like not found",
       });
     }
+    res.json({
+      message: "Like removed successfully",
+      deleteId: result[0].id,
+    });
+  } catch (error) {
+    console.error("Error removing like:", error);
+    res.status(500).json({
+      error: "Failed to remove like",
+    });
   }
-);
+});
 
 //endpoint for deleting a comment
 router.delete("/api/note-comments/:id", requireAuth, async (req, res) => {

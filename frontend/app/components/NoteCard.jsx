@@ -6,30 +6,37 @@ import Comment from "./UI/Comment";
 import CommentSection from "./CommentSection";
 /* import Repost from "./UI/Repost"; */
 
-import "./noteCard.css";
 import "../app.css";
+import "./noteCard.css";
 
 export default function NoteCard({ note }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="note">
-      <div className="grid note__nav">
+    <div className="note__card">
+      <div className="flex note__nav">
         <img
           src={note.image_url}
           alt={note.first_name}
           className="note__nav--pic"
         />
-        <p className="xs-text">{note.first_name}</p>
-        {note.tags && <Tag type="static" label={note.tags} />}
+        <p className="s-text">{note.first_name}</p>
+        {note.tags && <Tag type="static" withBorder="true" label={note.tags} />}
         {/* <Menu /> */}
       </div>
       <div>
         <h2 className="xxl-heading">{note.title}</h2>
-        {note.media_url && <img src={note.media_url} alt={note.title} />}
+        {note.media_url && (
+          <img
+            src={note.media_url}
+            alt={note.title}
+            className="note__content--img"
+          />
+        )}
         <p className="m-text"> {note.content}</p>
       </div>
-      <div className="grid">
+      <div className="flex">
         <Like
+          type="note"
           noteId={note.id}
           likeCount={note.number_of_likes}
           isLiked={note.is_liked}

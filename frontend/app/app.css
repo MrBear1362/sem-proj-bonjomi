@@ -119,3 +119,12 @@ body {
   height: 9.688rem;
   width: 15.313rem;
 }
+
+.wrapper {
+  max-width: 90%;
+  margin-inline: auto;
+}
+
+img {
+  max-width: 100%;
+}

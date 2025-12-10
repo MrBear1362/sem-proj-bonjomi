@@ -4,6 +4,8 @@ import Like from "./UI/Like";
 import Comment from "./UI/Comment";
 import InputField from "./UI/InputField";
 
+import "./commentSection.css";
+
 export default function CommentSection({ noteId }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,17 +35,26 @@ export default function CommentSection({ noteId }) {
   return (
     <div className="comment-section">
       <InputField />
-      {comments.map((comment) => (
-        <div key={comment.id} className="comment">
-          <p>
-            {comment.first_name}: {comment.content}
-          </p>
-          <div className="grid">
-            <Like />
-            <p>reply</p>
+      {comments.length === 0 ? (
+        <p>No comments yet. Be the first to comment!</p>
+      ) : (
+        comments.map((comment) => (
+          <div key={comment.id} className="comment">
+            <p>
+              {comment.first_name}: {comment.content}
+            </p>
+            <div className="grid">
+              <Like
+                type="comment"
+                commentId={comment.id}
+                likeCount={comment.number_of_likes}
+                isLiked={comment.is_liked}
+              />
+              <p>reply</p>
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 }

@@ -1,9 +1,59 @@
-.note {
+@import "../app.css";
+
+.flex {
+  display: flex;
+  align-content: space-around;
+  gap: 0.5rem;
+}
+
+.note__card {
   margin-top: 2rem;
 }
 
+.note__nav {
+  align-items: center;
+}
+
 .note__nav--pic {
-  height: 2rem;
-  width: 2rem;
+  height: 1.5rem;
+  width: 1.5rem;
   border-radius: 50%;
+}
+
+.note__content--img {
+  border-radius: 2rem;
+}
+
+/* midlertidig styling */
+
+.collab__container {
+  background-color: var(--greyscale-300);
+  padding: 1rem;
+  margin-inline: -0.5rem;
+}
+.flex-space {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.bold {
+  font-weight: 600;
+}
+.extra-bold {
+  font-weight: 900;
+}
+button {
+  background-color: var(--primary-yellow);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  margin: 1rem 0 0 1rem;
+}
+.collab__card {
+  background-color: var(--greyscale-100);
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.collab__card--nav {
+  align-items: center;
 }
