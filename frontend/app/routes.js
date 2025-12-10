@@ -6,4 +6,6 @@
     ]),
     // authentication routes outside main layout
     route("auth", "routes/authPage.jsx"),
+    // styleguide - no auth, outside main layout
+    route("styleguide", "routes/styleguide.jsx"),
   ];
