@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from "react-router";
+import { Link, useLoaderData, Form } from "react-router";
 
 // ===== CLIENTLOADER =====
 // This runs BEFORE the component renders
@@ -13,7 +13,7 @@ export async function clientLoader({ params }) {
       id: conversationId,
       name: "Jonas Jacobsen",
       avatar:
-        "https://ui-avatars.com/api/?name=Jonas+Jacobsen&background=random",
+        "https://ui-avatars.com/api/?name=Jonas+Jacobsen&background=0D8ABC&color=fff",
     },
     messages: [
       {
@@ -98,10 +98,37 @@ export async function clientAction({ params, request }) {
   return { success: true };
 }
 
-function ConversationHeader() {
+function ConversationHeader({ conversation }) {
   return (
     <header className="conversation-header">
-      {/* Back button, avatar, name, menu */}
+      <Link to="/messages" className="back-btn">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path
+            d="M19 12H5M12 19l-7-7 7-7"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
+      </Link>
+      <img
+        src={conversation.avatar}
+        alt={conversation.name}
+        className="conversation-header-avatar"
+      />
+      <h2 className="conversation-header-name">{conversation.name}</h2>
+      <button className="menu-btn" aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="5" r="2" />
+          <circle cx="12" cy="12" r="2" />
+          <circle cx="12" cy="19" r="2" />
+        </svg>
+      </button>
     </header>
   );
 }
@@ -112,8 +139,16 @@ function Message({ message, conversationAvatar }) {
     <div
       className={`message-row ${isMe ? "message-row-me" : "message-row-other"}`}
     >
-      {/* Show avatar only for other user */}
-      {/* Message bubble */}
+      {!isMe && (
+        <img src={conversationAvatar} alt="User" className="message-avatar" />
+      )}
+      <div
+        className={`message-bubble ${
+          isMe ? "message-bubble-me" : "message-bubble-other"
+        }`}
+      >
+        {message.content}
+      </div>
     </div>
   );
 }
@@ -122,7 +157,38 @@ function MessageInput() {
   return (
     <div className="message-input-container">
       <Form method="post" className="message-input-form">
-        {/* Add button, input, voice button */}
+        <button type="button" className="add-btn" aria-label="Add attachment">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10" fill="#4A5568" />
+            <path
+              d="M12 8v8M8 12h8"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+        <input
+          type="text"
+          name="message"
+          placeholder="Aa"
+          className="message-input"
+          required
+        />
+        <button type="button" className="voice-btn" aria-label="Voice message">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10" fill="#4A5568" />
+            <path
+              d="M12 14a3 3 0 0 0 3-3V7a3 3 0 0 0-6 0v4a3 3 0 0 0 3 3z"
+              fill="white"
+            />
+            <path
+              d="M8 11a4 4 0 0 0 8 0M12 14v3"
+              stroke="white"
+              strokeWidth="2"
+            />
+          </svg>
+        </button>
       </Form>
     </div>
   );

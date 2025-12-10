@@ -7,13 +7,14 @@ import {
   ScrollRestoration,
 } from "react-router";
 
-// import styles
-import "./app.css";
-import "./test.css";
+import appStylesHref from "./app.css?url";
+import testStylesHref from "./test.css?url";
 
-// Add links to external stylesheets, fonts, etc. here
-// https://reactrouter.com/start/framework/route-module#links
-export const links = () => [];
+// Ensure styles load via <link> tags for stable SSR/CSR hydration
+export const links = () => [
+  { rel: "stylesheet", href: appStylesHref },
+  { rel: "stylesheet", href: testStylesHref },
+];
 
 export function Layout({ children }) {
   return (
