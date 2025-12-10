@@ -9,6 +9,7 @@ import {
 
 // import styles
 import "./app.css";
+import "./test.css";
 
 // Add links to external stylesheets, fonts, etc. here
 // https://reactrouter.com/start/framework/route-module#links
@@ -34,7 +35,7 @@ export function Layout({ children }) {
 }
 
 export function HydrateFallback() {
-  return <div>Loading...</div>
+  return <div>Loading...</div>;
 }
 
 export default function App() {

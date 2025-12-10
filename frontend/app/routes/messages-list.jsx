@@ -1,4 +1,5 @@
-import { useState, Link, useLoaderData } from "react-router";
+import { useState } from "react";
+import { Link, useLoaderData } from "react-router";
 
 // This function runs BEFORE the MessagesList component renders
 // It fetches conversation data and returns it
