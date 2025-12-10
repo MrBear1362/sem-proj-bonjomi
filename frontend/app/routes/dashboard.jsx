@@ -12,9 +12,25 @@ export function meta({ }) {
 }
 
 export default function DashboardPage() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const {data: {subscription}} = supabase.auth.onAuthStateChange((e) => {
+      if (e === "SIGNED_OUT") {
+        navigate("/auth?step=login");
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
   return (
     <ProtectedRoute>
       <h1>This is das Board 👍</h1>
+      <Button onClick={handleLogout}>Logout</Button>
     </ProtectedRoute>
   );
 }

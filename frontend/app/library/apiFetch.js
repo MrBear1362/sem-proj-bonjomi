@@ -30,7 +30,8 @@ export async function apiFetch(path, options = {}) {
   });
 
   // special handling for for 401 unauth (session expired/invalid)
-  if (response.status === 401) {
+  // dont redirect if checking onboarding state during signup
+  if (response.status === 401 && !path.includes('/onboarding-state')) {
     const currentPath = window.location.pathname + window.location.search;
     throw redirect(`/auth?redirect=${encodeURIComponent(currentPath)}`);
   }

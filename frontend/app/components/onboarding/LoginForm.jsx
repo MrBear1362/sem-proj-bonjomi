@@ -14,6 +14,7 @@ export default function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
     const formData = new FormData(e.target);
     const email = formData.get("email");
     const password = formData.get("password");
@@ -24,15 +25,34 @@ export default function LoginForm() {
       return;
     }
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (error) {
-      setError(error.message);
+    if (authError) {
+      setError(authError.message);
       setIsSubmitting(false);
       return;
     }
 
-    // redirect to dashboard
+    // check onboarding status before redirect
+    try {
+      const response = await apiFetch("/api/onboarding-state");
+      if (response.ok) {
+        const userData = await response.json();
+        const step = userData.onboarding_step;
+
+        // if onboarding not finished, redirect to onboarding
+        if (step && step !== 'finished') {
+          window.location.href = "/auth?step=onboarding";
+          return;
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch onboarding status:", error);
+      // continue to dashboard even if check fails
+      // TODO: reconsider this
+    }
+
+    // if onboarding finished, redirect to dashboard
     window.location.href = "/";
   };
 
