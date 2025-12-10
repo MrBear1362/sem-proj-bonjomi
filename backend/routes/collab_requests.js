@@ -80,8 +80,7 @@ router.get("/api/collab-requests/:id", async (req, res) => {
 });
 
 // POST a new collab_request
-// TODO: add requireAuth back
-router.post("/api/collab-requests", async (req, res) => {
+router.post("/api/collab-requests", requireAuth, async (req, res) => {
   try {
     const { title, content, due_date, location, tag_id, is_paid, media_url } = req.body;
 
@@ -102,13 +101,10 @@ router.post("/api/collab-requests", async (req, res) => {
       });
     };
 
-    // TODO: remove hardcoded user id
-    const testUserId = '17f55570-6bfe-44d4-9578-c22e181ba387';
-
     // create collab request | RETURNING gets genId for next insert
     const collabRequests = await sql`
     INSERT INTO collab_requests (title, content, due_date, location, tag_id, is_paid, user_id, media_url)
-    VALUES (${trimmedTitle}, ${trimmedContent}, ${due_date}, ${trimmedLocation}, ${tag_id}, ${is_paid}, ${testUserId}, ${media_url || null})
+    VALUES (${trimmedTitle}, ${trimmedContent}, ${due_date}, ${trimmedLocation}, ${tag_id}, ${is_paid}, ${userId}, ${media_url || null})
     RETURNING id, title, user_id, created_at, content, due_date, location, tag_id, is_paid, media_url
     `;
 
@@ -122,8 +118,7 @@ router.post("/api/collab-requests", async (req, res) => {
 });
 
 // PATCH specific collab_request from id
-// TODO: add requireAuth back
-router.patch("/api/collab-requests/:id", async (req, res) => {
+router.patch("/api/collab-requests/:id", requireAuth, async (req, res) => {
   try {
     // extract collab_request id from url param
     const collabRequestId = req.params.id;
@@ -173,14 +168,11 @@ router.patch("/api/collab-requests/:id", async (req, res) => {
     // add updated_at timestamp automatically
     updates.updated_at = sql`now()`;
 
-    // TODO: remove hardcoded user id
-    const testUserId = '17f55570-6bfe-44d4-9578-c22e181ba387';
-
     // update collaboration request in database
     const result = await sql`
     UPDATE collab_requests
     SET ${sql(updates)}
-    WHERE id = ${collabRequestId} AND user_id = ${testUserId}
+    WHERE id = ${collabRequestId} AND user_id = ${req.userId}
     RETURNING id, title, content, media_url, location, due_date, tag_id, created_at, updated_at
     `;
 
@@ -198,20 +190,16 @@ router.patch("/api/collab-requests/:id", async (req, res) => {
 });
 
 // PATCH close specific collab_request from id
-// TODO: add requireAuth back
-router.patch("/api/collab-requests/:id/close", async (req, res) => {
+router.patch("/api/collab-requests/:id/close", requireAuth, async (req, res) => {
   try {
     const collabRequestId = req.params.id;
-
-    // TODO: remove hardcoded user id
-    const testUserId = '17f55570-6bfe-44d4-9578-c22e181ba387';
 
     const result = await sql`
     UPDATE collab_requests
     SET 
       is_closed = true,
       updated_at = now()
-    WHERE id = ${collabRequestId} AND user_id = ${testUserId}
+    WHERE id = ${collabRequestId} AND user_id = ${req.userId}
     RETURNING id, is_closed, updated_at
     `;
 
@@ -227,20 +215,16 @@ router.patch("/api/collab-requests/:id/close", async (req, res) => {
 });
 
 // PATCH open specific collab_request from id
-// TODO: add requireAuth back
-router.patch("/api/collab-requests/:id/open", async (req, res) => {
+router.patch("/api/collab-requests/:id/open", requireAuth, async (req, res) => {
   try {
     const collabRequestId = req.params.id;
-
-    // TODO: remove hardcoded user id
-    const testUserId = '17f55570-6bfe-44d4-9578-c22e181ba387';
 
     const result = await sql`
     UPDATE collab_requests
     SET 
       is_closed = false,
       updated_at = now()
-    WHERE id = ${collabRequestId} AND user_id = ${testUserId}
+    WHERE id = ${collabRequestId} AND user_id = ${req.userId}
     RETURNING id, is_closed, updated_at
     `;
 
@@ -256,19 +240,15 @@ router.patch("/api/collab-requests/:id/open", async (req, res) => {
 });
 
 // DELETE specific collab_request from id
-// TODO: add requireAuth back
-router.delete("/api/collab-requests/:id", async (req, res) => {
+router.delete("/api/collab-requests/:id", requireAuth, async (req, res) => {
   try {
     // extract collab_request id from url params
     const collabRequestId = req.params.id;
 
-    // TODO: remove hardcoded user id
-    const testUserId = '17f55570-6bfe-44d4-9578-c22e181ba387';
-
     // delete request from db
     const result = await sql`
     DELETE FROM collab_requests
-    WHERE id = ${collabRequestId} AND user_id = ${testUserId}
+    WHERE id = ${collabRequestId} AND user_id = ${req.userId}
     RETURNING id
     `;
 
