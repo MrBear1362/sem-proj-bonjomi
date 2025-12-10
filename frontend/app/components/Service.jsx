@@ -1,70 +1,17 @@
 import { Link } from "react-router";
 import Bookmark from "../components/ui/Bookmark.jsx";
 import Tag from "../components/ui/Tag.jsx";
-import "./Service.css";
+import styles from "./Service.module.css";
 
 /**
- * ServicePreviewCard Component
+ * ServiceCard Component
  *
- * Displays a compact preview of a service.
- * - Shows business profile information
- * - Displays service title, image, and description
- * - Includes bookmark functionality
- * - "Read more" link navigates to full service details
+ * A flexible component that displays a service in either preview or detail mode.
+ * - Preview mode: Shows compact card with limited content and "Read more" link
+ * - Detail mode: Shows full card with all information and action buttons
+ * - Uses the same styling with CSS classes that adapt to the mode
  */
-export function ServicePreviewCard({ service }) {
-	const {
-		id,
-		title,
-		content,
-		user_profile_img,
-		business_name,
-		img_url,
-		location,
-		tags,
-	} = service;
-
-	return (
-		<section className="service-card-container">
-			<header>
-				<div className="profile-container">
-					<img src={user_profile_img} alt="Business profile" />
-					<h3>{business_name}</h3>
-					<p>offers</p>
-					<Tag type="static" label={tags} />
-				</div>
-				<div className="bookmark-container">
-					<Bookmark />
-				</div>
-			</header>
-			<h2>{title}</h2>
-			<img className="service-media" src={img_url} alt={title} />
-			<p className="service-description">{content}</p>
-			<div className="bottom-container">
-				<div className="link-container">
-					<Link to={`/services/${id}`} className="read-more">
-						Read more
-					</Link>
-				</div>
-				<div className="info-container">
-					<p>{location}</p>
-					<p> posted at</p>
-				</div>
-			</div>
-		</section>
-	);
-}
-
-/**
- * ServiceDetailCard Component
- *
- * Displays the full details of a service.
- * - Shows all service information (title, description, price, tags)
- * - Includes business profile and bookmark functionality
- * - Displays formatted location and posting date
- * - Provides action button to contact the business
- */
-export function ServiceDetailCard({ service }) {
+export function ServiceCard({ service, mode = "preview" }) {
 	const {
 		id,
 		title,
@@ -74,41 +21,82 @@ export function ServiceDetailCard({ service }) {
 		img_url,
 		location,
 		price,
+		tags,
 		created_at,
 	} = service;
+
+	const isDetailMode = mode === "detail";
+
 	return (
-		<section className="service-card-container service-card-full">
+		<section
+			className={`${styles.serviceCardContainer} ${
+				isDetailMode ? styles.serviceCardFull : ""
+			}`}
+		>
 			<header>
-				<div className="profile-container">
+				<div className={styles.profileContainer}>
 					<img src={user_profile_img} alt="Business profile" />
-					<h3>{business_name}</h3>
+					<p>{business_name}</p>
+					<p>offers</p>
+					<Tag type="static" label={tags} />
 				</div>
-				<div className="bookmark-container">
+				<div className={styles.bookmarkContainer}>
 					<Bookmark />
 				</div>
 			</header>
-			<h2>{title}</h2>
-			<img className="service-media" src={img_url} alt={title} />
-			<div className="service-details">
-				<p className="service-description">{content}</p>
-				<div className="action-buttons">
-					<button className="contact-button">Start a chat</button>
-					<Link to={`/services/${id}/edit`} className="edit-button">
-						Edit Service
-					</Link>
-				</div>
-				<div className="info-container">
-					<p className="location">
-						<strong>Location:</strong> {location}
-					</p>
-					<p className="price">
-						<strong>Price:</strong> {price}
-					</p>
-					<p className="date">
-						<strong>Posted:</strong>
-					</p>
-				</div>
-			</div>
+
+			{!isDetailMode && <div className={styles.divider}></div>}
+
+			<h3 className={styles.serviceTitle}>{title}</h3>
+			<img className={styles.serviceMedia} src={img_url} alt={title} />
+			<p className={styles.serviceDescription}>{content}</p>
+			{
+				isDetailMode ?
+					// Detail mode: Show all info and action buttons
+					<div className={styles.serviceDetails}>
+						<div className={styles.actionButtons}>
+							<button className={styles.contactButton}>Start a chat</button>
+							<Link to={`/services/${id}/edit`} className={styles.editButton}>
+								Edit Service
+							</Link>
+						</div>
+						<div className={styles.infoContainer}>
+							<p className={styles.location}>
+								<strong>Location:</strong> {location}
+							</p>
+							<p className={styles.price}>
+								<strong>Price:</strong> {price}
+							</p>
+						</div>
+						<div className={styles.reviewContainer}>
+							<p>
+								<strong>Previous reviews:</strong>
+								<p>Review component goes here</p>
+							</p>
+						</div>
+					</div>
+					// Preview mode: Show link and basic info
+				:	<div className={styles.bottomContainer}>
+						<div className={styles.linkContainer}>
+							<Link to={`/services/${id}`} className={styles.readMore}>
+								Read more
+							</Link>
+						</div>
+						<div className={styles.infoContainer}>
+							<p>{location} - posted at</p>
+						</div>
+					</div>
+
+			}
 		</section>
 	);
+}
+
+// Export convenience components that use the same underlying component
+export function ServicePreviewCard({ service }) {
+	return <ServiceCard service={service} mode="preview" />;
+}
+
+export function ServiceDetailCard({ service }) {
+	return <ServiceCard service={service} mode="detail" />;
 }
