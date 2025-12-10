@@ -59,9 +59,11 @@ export default function LoginForm() {
   return (
     <section className="auth-container">
       <article className="auth-card">
-        <h1>Login</h1>
+        <header className="auth-header">
+          <h1 className="auth-title xxl-heading">Login</h1>
+        </header>
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleSubmit} className="auth-form flex-clm">
 
           {/* input field for email */}
           <InputField
@@ -72,6 +74,7 @@ export default function LoginForm() {
             required
             placeholder="Enter your email"
             autoComplete="email"
+            className="auth-input"
           />
 
           {/* input field for password */}
@@ -84,6 +87,7 @@ export default function LoginForm() {
             placeholder="Enter your password"
             minLength={6}
             autoComplete="new-password"
+            className="auth-input"
           />
 
           {/* // TODO: design error message */}
