@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 import ProtectedRoute from "../components/ProtectedRoute";
+import { supabase } from "../library/supabase";
+import Button from "../components/ui/buttons/Button";
 
 export function meta({ }) {
   return [

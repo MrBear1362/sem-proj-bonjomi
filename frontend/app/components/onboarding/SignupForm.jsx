@@ -1,6 +1,8 @@
 import { Form, Link, redirect, useNavigate } from "react-router";
 import { useState } from "react";
 import { supabase } from "../../library/supabase.js";
+import { ONBOARDING_STEPS } from "../../library/onboardingSteps.js";
+import { apiFetch } from "../../library/apiFetch.js";
 import LoadingSpinner from "../ui/bits/LoadingSpinner.jsx";
 import ButtonLink from "../ui/buttons/ButtonLink.jsx";
 import InputField from "../ui/inputs/InputField.jsx";

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router";
 import { supabase } from "../../library/supabase.js";
 import { apiFetch } from "../../library/apiFetch.js";
-import LineUpPRO from "../LineUpPRO";
+import { ONBOARDING_STEPS } from "../../library/onboardingSteps.js";
+import LoadingSpinner from "../ui/bits/LoadingSpinner.jsx";
 import RadioCard from "../ui/inputs/RadioCard.jsx";
 import InputField from "../ui/inputs/InputField.jsx";
-import LoadingSpinner from "../ui/bits/LoadingSpinner.jsx";
 import Button from "../ui/buttons/Button.jsx";
-import { ONBOARDING_STEPS } from "../../../../backend/onboardingSteps.js";
-
+import LineUpSubscription from "../LineUpSubscription.jsx";
 
 export default function OnboardingSteps() {
   // set initial step

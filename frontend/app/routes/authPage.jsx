@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router";
-import { supabase } from "../library/supabase.js";
+import { useSearchParams } from "react-router";
 import SignupForm from "../components/onboarding/SignupForm.jsx";
 import LoginForm from "../components/onboarding/LoginForm.jsx";
 import OnboardingSteps from "../components/onboarding/OnboardingSteps.jsx";
-import { apiFetch } from "../library/apiFetch.js";
+import ProtectedRoute from "../components/ProtectedRoute.jsx";
 
 export default function AuthPage() {
   const [user, setUser] = useState(null);
