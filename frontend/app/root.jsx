@@ -9,6 +9,8 @@ import {
 
 // import styles
 import "./app.css";
+import "./layout.css";
+import "./authPage.css";
 
 // Add links to external stylesheets, fonts, etc. here
 // https://reactrouter.com/start/framework/route-module#links

@@ -84,10 +84,12 @@ export default function SignupForm() {
   return (
     <section className="auth-container">
       <article className="auth-card">
-        <h1>Sign up</h1>
-        <p className="auth-subtitle">By continuing you agree to LineUp! Terms of use and Privacy Policy</p>
+        <header className="auth-header flex-clm">
+          <h1 className="auth-title xxl-heading">Sign up</h1>
+          <p className="auth-subtitle m-text">By continuing you agree to LineUp! Terms of use and Privacy Policy</p>
+        </header>
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleSubmit} className="auth-form flex-clm">
 
           {/* input field for email */}
           <InputField
@@ -98,6 +100,7 @@ export default function SignupForm() {
             required
             placeholder="Enter your email"
             autoComplete="email"
+            className="auth-input"
           />
 
           {/* input field for password */}
@@ -110,6 +113,7 @@ export default function SignupForm() {
             placeholder="Enter your password"
             minLength={6}
             autoComplete="new-password"
+            className="auth-input"
           />
 
           {/* input field for password confirm */}
@@ -122,6 +126,7 @@ export default function SignupForm() {
             placeholder="Repeat your password"
             minLength={6}
             autoComplete="new-password"
+            className="auth-input"
           />
 
 
