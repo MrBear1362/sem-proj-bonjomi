@@ -86,6 +86,36 @@ router.get("/api/conversations/:id/messages", requireAuth, async (req, res) => {
   }
 });
 
+router.get("/api/conversations", requireAuth, async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    const rows = await sql`
+      SELECT DISTINCT
+        c.id,
+        c.title,
+        c.created_at,
+        m.content as last_message_content,
+        m.created_at as last_message_time
+      FROM conversations c
+      INNER JOIN conversation_participants cpa ON c.id = cpa.conversation_id
+      LEFT JOIN LATERAL (
+        SELECT content, created_at
+        FROM messages
+        WHERE conversation_id = c.id
+        ORDER BY created_at DESC
+        LIMIT 1
+      ) m on true
+      WHERE cpa.user_id = ${userId}
+      ORDER BY COALESCE(m.created_at, c.created_at) DESC`;
+
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching conversations:", error);
+    res.status(500).json({ error: "Failed to fetch conversations" });
+  }
+});
+
 // Create a conversation
 // Requires authentication - creator is automatically added as participant
 router.post("/api/conversations", requireAuth, async (req, res) => {

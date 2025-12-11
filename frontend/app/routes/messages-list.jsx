@@ -1,61 +1,30 @@
 import { useState } from "react";
 import { Link, useLoaderData } from "react-router";
+import { apiFetch } from "../lib/apiFetch.js";
 
 // This function runs BEFORE the MessagesList component renders
 // It fetches conversation data and returns it
 export async function clientLoader() {
-  // TODO: Replace this with a real API call later
-  // For now, return mock data that matches the UI mockup
+  try {
+    const conversations = await apiFetch("/api/conversations");
 
-  return {
-    conversations: [
-      {
-        id: "1",
-        name: "Jonas Jacobsen",
-        avatar:
-          "https://ui-avatars.com/api/?name=Jonas+Jacobsen&background=0D8ABC&color=fff",
-        lastMessage: "perfect. I'll layer some gui...",
-        timestamp: "22:34",
+    // Mapping backend fields to frontend shape
+    return {
+      conversations: conversations.map((conv) => ({
+        id: conv.id,
+        name: conv.title,
+        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(conv.title)}&background=0D8ABC&color=fff`,
+        lastMessage: conv.last_message_content || "No messages yet",
+        timestamp: new Date(
+          conv.last_message_time || conv.created_at
+        ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         unread: false,
-      },
-      {
-        id: "2",
-        name: "LunaVisuals",
-        avatar:
-          "https://ui-avatars.com/api/?name=Luna+Visuals&background=0D8ABC&color=fff",
-        lastMessage: "absolutely, i can do that fo...",
-        timestamp: "20:11",
-        unread: false,
-      },
-      {
-        id: "3",
-        name: "Lina Kozyrieva",
-        avatar:
-          "https://ui-avatars.com/api/?name=Lina+Kozyrieva&background=0D8ABC&color=fff",
-        lastMessage: "Hey, I'm interested in joini...",
-        timestamp: "18:23",
-        unread: false,
-      },
-      {
-        id: "4",
-        name: "Victor Cretu",
-        avatar:
-          "https://ui-avatars.com/api/?name=Victor+Cretu&background=0D8ABC&color=fff",
-        lastMessage: "You: Thank you for your fee...",
-        timestamp: "10:23",
-        unread: false,
-      },
-      {
-        id: "5",
-        name: "Sveta Borisova",
-        avatar:
-          "https://ui-avatars.com/api/?name=Sveta+Borisova&background=0D8ABC&color=fff",
-        lastMessage: "Sounds like a plan!",
-        timestamp: "08:14",
-        unread: false,
-      },
-    ],
-  };
+      })),
+    };
+  } catch (error) {
+    console.error("Failed to load conversations:", error);
+    throw error;
+  }
 }
 
 function MessagesHeader() {
