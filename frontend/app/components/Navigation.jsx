@@ -1,9 +1,9 @@
 import React from "react";
 /* import Logo from "./Logo"; */
-import InputField from "./UI/InputField";
+import InputField from "./UI/inputs/InputField";
 /* import Notifications from "./NotificationFeed";
 import Menu from "./Menu"; */
-import Like from "./UI/Like";
+import Like from "./UI/buttons/Like";
 
 import "../app.css";
 import "./noteCard.css";

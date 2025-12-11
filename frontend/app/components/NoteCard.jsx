@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Tag from "./UI/Tag";
+import Tag from "./UI/buttons/Tag";
 /* import Menu from "./UI/Menu"; */
-import Like from "./UI/Like";
-import Comment from "./UI/Comment";
+import Like from "./UI/buttons/Like";
+import Comment from "./UI/buttons/Comment";
 import CommentSection from "./CommentSection";
 /* import Repost from "./UI/Repost"; */
 
