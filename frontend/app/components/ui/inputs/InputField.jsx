@@ -1,4 +1,4 @@
-import "./InputField.css";
+import "./input.css";
 
 export default function InputField({
   type = "text",

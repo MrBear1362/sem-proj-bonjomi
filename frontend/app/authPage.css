@@ -1,0 +1,18 @@
+.auth-page {
+  margin: 0 auto;
+  max-width: 70vw;
+
+  .auth-header {
+    gap: 2rem;
+
+    .auth-title,
+    .auth-subtitle {
+      text-align: center;
+    }
+  }
+
+  .auth-form {
+    padding: 1rem 0;
+    gap: 1rem;
+  }
+}

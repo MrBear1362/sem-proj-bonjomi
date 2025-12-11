@@ -1,0 +1,43 @@
+/* radio dot stored inside radio-card to keep it scoped - ensures high specificity */
+.radio-card {
+  /* radio circle outer - just an outline */
+  .radio-dot {
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border: 1px solid var(--outline);
+    border-radius: 50%;
+    position: relative;
+    display: inline-block;
+    transition: border-color 200ms;
+
+    /* checkmark inside radio circle */
+    /* checkmark defined here to enable smooth transitions */
+    &::after {
+      content: "";
+      position: absolute;
+      top: 42%;
+      left: 50%;
+      /* checkmark always defined but scale 0 hides it */
+      transform: translate(-50%, -50%) rotate(45deg) scale(0);
+      width: 5px;
+      height: 10px;
+      border: solid black;
+      border-width: 0 2px 2px 0;
+      transition: transform 300ms;
+    }
+  }
+  /* the selected radio circle - visible checkmark and background */
+  &.selected {
+    .radio-dot {
+      border-color: transparent;
+      background: var(--primary-yellow);
+      &::after {
+        /* checkmark becomes visible once selected by scale 1 */
+        transform: translate(-50%, -50%) rotate(45deg) scale(1);
+      }
+    }
+  }
+}
+
+

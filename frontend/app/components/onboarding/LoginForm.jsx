@@ -1,9 +1,10 @@
 import { Form, Link, redirect, useNavigation } from "react-router";
 import { useState } from "react";
 import { supabase } from "../../library/supabase.js";
-import LoadingSpinner from "../ui/LoadingSpinner.jsx";
-import ButtonLink from "../ui/ButtonLink.jsx";
-import InputField from "../ui/InputField.jsx";
+import { apiFetch } from "../../library/apiFetch.js";
+import LoadingSpinner from "../ui/bits/LoadingSpinner.jsx";
+import ButtonLink from "../ui/buttons/ButtonLink.jsx";
+import InputField from "../ui/inputs/InputField.jsx";
 // TODO: find icon library and IMPORT here pls
 
 export default function LoginForm() {
@@ -13,6 +14,7 @@ export default function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
     const formData = new FormData(e.target);
     const email = formData.get("email");
     const password = formData.get("password");
@@ -23,24 +25,45 @@ export default function LoginForm() {
       return;
     }
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (error) {
-      setError(error.message);
+    if (authError) {
+      setError(authError.message);
       setIsSubmitting(false);
       return;
     }
 
-    // redirect to dashboard
+    // check onboarding status before redirect
+    try {
+      const response = await apiFetch("/api/onboarding-state");
+      if (response.ok) {
+        const userData = await response.json();
+        const step = userData.onboarding_step;
+
+        // if onboarding not finished, redirect to onboarding
+        if (step && step !== 'finished') {
+          window.location.href = "/auth?step=onboarding";
+          return;
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch onboarding status:", error);
+      // continue to dashboard even if check fails
+      // TODO: reconsider this
+    }
+
+    // if onboarding finished, redirect to dashboard
     window.location.href = "/";
   };
 
   return (
     <section className="auth-container">
       <article className="auth-card">
-        <h1>Login</h1>
+        <header className="auth-header">
+          <h1 className="auth-title xxl-heading">Login</h1>
+        </header>
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleSubmit} className="auth-form flex-clm">
 
           {/* input field for email */}
           <InputField

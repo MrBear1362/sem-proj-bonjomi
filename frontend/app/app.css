@@ -1,8 +1,13 @@
+/* imports */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://db.onlinewebfonts.com/c/0976a2619014c5855690b7509fab4c6e?family=Helvetica+Now+Display");
+
 /* global */
 
 *,
 *::before,
 *::after {
+  margin: 0;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -26,21 +31,39 @@
   /*accent colours*/
   --danger: #800000;
   --success: #40826d;
+  /* outline */
+  --outline: rgba(0, 0, 0, 0.1);
   /*fonts*/
   --font-body: "Helvetica Now Display", "sans-serif";
   --font-header: "Inter", "sans-serif";
 }
 
 body {
-  color: var(--black);
+  /* !setting color here might not be ideal */
+  color: var(--greyscale-900);
   font-family: var(--font-body);
 }
 
 /*utility*/
 
-.grid {
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-clm {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid,
+.app-layout {
   display: grid;
-  grid-template-columns: repeat(6, 2.5rem);
+  grid-template-columns: repeat(6, 1fr);
   gap: 0.625rem;
 }
 .spacing-2 {
@@ -57,7 +80,6 @@ body {
 }
 
 /*screen reader*/
-
 .sr-only {
   position: absolute;
   width: 1px;
@@ -71,6 +93,15 @@ body {
 
 /* !Typography */
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-header);
+}
+
 .xs-text {
   font-size: 0.75rem;
 }
@@ -79,6 +110,7 @@ body {
 }
 .m-text {
   font-size: 1rem;
+  font-weight: 500;
 }
 .l-heading {
   font-size: 1.125rem;
@@ -88,7 +120,6 @@ body {
 }
 .xxl-heading {
   font-size: 1.5rem;
-  font-family: var(--font-header);
   font-weight: 700;
   line-height: 1.5rem;
   letter-spacing: 0.75%;
@@ -109,7 +140,7 @@ body {
 }
 .element-m {
   height: 3.111rem;
-  width: 3.111;
+  width: 3.111rem;
 }
 .element-l {
   height: 4.25rem;
