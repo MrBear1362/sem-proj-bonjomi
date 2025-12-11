@@ -17,7 +17,7 @@ export async function clientLoader() {
         lastMessage: conv.last_message_content || "No messages yet",
         timestamp: new Date(
           conv.last_message_time || conv.created_at
-        ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        ).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
         unread: false,
       })),
     };

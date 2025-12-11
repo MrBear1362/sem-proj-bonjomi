@@ -1,4 +1,4 @@
-import { Link, useLoaderData, Form } from "react-router";
+import { Link, useLoaderData, Form, useActionData } from "react-router";
 import { apiFetch } from "../lib/apiFetch.js";
 import { supabase } from "../lib/supabase.js";
 
@@ -55,16 +55,20 @@ export async function clientAction({ params, request }) {
     return { error: "Message cannot be empty" };
   }
 
-  // TODO: Replace with real API call later
-  // Example of what it would look like:
-  // const response = await fetch(`/api/conversations/${conversationId}/messages`, {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify({ content: message.trim() }),
-  // });
+  try {
+    await apiFetch("/api/messages", {
+      method: "POST",
+      body: JSON.stringify({
+        content: message.trim(),
+        conversationid: conversationId,
+      }),
+    });
 
-  // For now, just return success (React Router will auto-refresh data)
-  return { success: true };
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to send messge:", error);
+    return { error: error.message || "Failed to send message" };
+  }
 }
 
 function ConversationHeader({ conversation }) {
@@ -165,6 +169,7 @@ function MessageInput() {
 
 export default function ConversationThread() {
   const { conversation, messages } = useLoaderData();
+  const actionData = useActionData();
 
   return (
     <div className="conversation-page">
@@ -179,6 +184,15 @@ export default function ConversationThread() {
         ))}
       </div>
       <MessageInput />
+
+      {actionData?.error && (
+        <div
+          className="error-message"
+          style={{ color: "red", padding: "10px" }}
+        >
+          {actionData.error}
+        </div>
+      )}
     </div>
   );
 }
