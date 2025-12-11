@@ -59,9 +59,11 @@ export default function LoginForm() {
   return (
     <section className="auth-container">
       <article className="auth-card">
-        <h1>Login</h1>
+        <header className="auth-header">
+          <h1 className="auth-title xxl-heading">Login</h1>
+        </header>
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleSubmit} className="auth-form flex-clm">
 
           {/* input field for email */}
           <InputField

@@ -11,46 +11,50 @@ import LineUpSubscription from "../LineUpSubscription.jsx";
 
 export default function OnboardingSteps() {
   // start step at user details after initial signup
-  const [step, setStep] = useState(ONBOARDING_STEPS.USER_DETAILS);
+  // const [step, setStep] = useState(ONBOARDING_STEPS.USER_DETAILS);
+  const [step, setStep] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // stores "musician" or "business"
   const [userType, setUserType] = useState(null);
 
   useEffect(() => {
-    async function init() {
-      // check if user has valid session
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    let cancelled = false;
 
-      if (!session || sessionError) {
-        console.error("No valid session, redirect to signup");
+    async function init() {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (cancelled) return;
+
+      // no session - send to signup
+      if (!session || error) {
         window.location.href = "/auth?step=signup";
         return;
       }
 
-      // session exists
+      // session exists - continue
       try {
         const response = await apiFetch("/api/onboarding-state");
+        if (cancelled) return;
+
         if (response.ok) {
           const data = await response.json();
           setStep(data.onboarding_step || ONBOARDING_STEPS.USER_DETAILS);
           setUserType(data.manage_business ? "business" : "musician");
         } else if (response.status === 404) {
-          // user missing - create it
-          // await createUser();
           setStep(ONBOARDING_STEPS.USER_DETAILS);
         } else {
-          setError("Failed to load onboarding state after calling createUser");
+          setError("Failed to load after checking onboarding state");
         }
       } catch (error) {
         console.error(error);
         setError("Failed to load onboarding state in catch block");
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     }
 
     init();
+    return () => { cancelled = true };
   }, []);
 
   const nextStep = async (payload = {}) => {
@@ -98,6 +102,8 @@ export default function OnboardingSteps() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ step: "finished" }),
       });
+      // is apifetch throwing before catch?
+      console.log("after fetch");
       window.location.href = "/";
     } catch (error) {
       console.error(error);
@@ -112,7 +118,6 @@ export default function OnboardingSteps() {
 
   return (
     <section className="onboarding-container">
-      {console.log("step here:", step)}
       {step === ONBOARDING_STEPS.USER_DETAILS && (
         <UserDetails onContinue={(data) => nextStep(data)} />
       )}
@@ -184,17 +189,18 @@ export function UserDetails({ onContinue }) {
 
       if (!response.ok) {
         setError(data.error || "Something went wrong");
-        // setIsSubmitting(false);
+        setIsSubmitting(false);
         return;
       }
 
       // continue to next onboarding step
       onContinue();
-      // return { success: true };
+      setIsSubmitting(false);
+      return { success: true };
     } catch (error) {
       console.error(error);
       setError("Network error");
-      // setIsSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -501,7 +507,7 @@ export function BusinessDetails({ onContinue }) {
 export function LineUpPro({ onContinue, onSkip }) {
   return (
     <div className="auth-form">
-      <h1>Hello</h1>
+      <h1>Hello from lineup pro</h1>
       {/* <LineUpSubscription /> */}
       <Button className="btn-primary" onClick={onContinue} >
         Finish
