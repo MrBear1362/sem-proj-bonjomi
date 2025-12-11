@@ -1,74 +1,43 @@
 import { Link, useLoaderData, Form } from "react-router";
+import { apiFetch } from "../lib/apiFetch.js";
+import { supabase } from "../lib/supabase.js";
 
 // ===== CLIENTLOADER =====
 // This runs BEFORE the component renders
 // It fetches the conversation data and messages
 export async function clientLoader({ params }) {
   const { conversationId } = params; // Get the ID from the URL like /messages/1
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const currentUserId = session?.user?.id;
 
-  // TODO: Replace with real API call later
-  // For now, return mock data
-  return {
-    conversation: {
-      id: conversationId,
-      name: "Jonas Jacobsen",
-      avatar:
-        "https://ui-avatars.com/api/?name=Jonas+Jacobsen&background=0D8ABC&color=fff",
-    },
-    messages: [
-      {
-        id: "1",
-        senderId: "other",
-        content: "guitar over it and see if we can make it a full track",
-        timestamp: "3:14 PM",
+  try {
+    const [conversation, messages] = await Promise.all([
+      apiFetch(`/api/conversations/${conversationId}`),
+      apiFetch(`/api/conversations/${conversationId}/messages`),
+    ]);
+
+    return {
+      conversation: {
+        id: conversation.id,
+        name: conversation.title,
+        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(conversation.title)}&background=0D8ABC&color=fff`,
       },
-      {
-        id: "2",
-        senderId: "me",
-        content: "ok, so that was cool!",
-        timestamp: "3:15 PM",
-      },
-      {
-        id: "3",
-        senderId: "other",
-        content: "yo that jam was fire 🔥",
-        timestamp: "3:16 PM",
-      },
-      {
-        id: "4",
-        senderId: "me",
-        content: "omg i know right? crazy vibes",
-        timestamp: "3:17 PM",
-      },
-      {
-        id: "5",
-        senderId: "other",
-        content: "we def gotta record that version",
-        timestamp: "3:18 PM",
-      },
-      {
-        id: "6",
-        senderId: "other",
-        content: "the one after the second chorus",
-        timestamp: "3:18 PM",
-      },
-      {
-        id: "7",
-        senderId: "me",
-        content:
-          "yep! I'll clean up the synth line tonight and send you the file",
-        timestamp: "3:19 PM",
-      },
-      {
-        id: "8",
-        senderId: "other",
-        content:
-          "perfect. I'll layer some guitar over it and see if we can make it a full track",
-        timestamp: "3:20 PM",
-        unread: true,
-      },
-    ],
-  };
+      messages: messages.map((msg) => ({
+        id: msg.id,
+        senderId: msg.user_id === currentUserId ? "me" : "other",
+        content: msg.content,
+        timestamp: new Date(msg.created_at).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      })),
+    };
+  } catch (error) {
+    console.error("Failed to load conversation:", error);
+    throw error;
+  }
 }
 
 // ===== CLIENTACTION =====

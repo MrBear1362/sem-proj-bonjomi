@@ -13,6 +13,7 @@ export async function apiFetch(path, options = {}) {
   const token = session?.access_token;
 
   const headers = {
+    "Content-Type": "application/json",
     ...options.headers,
   };
 
@@ -30,5 +31,10 @@ export async function apiFetch(path, options = {}) {
     throw redirect(`/login?redirect=${encodeURIComponent(currentPath)}`);
   }
 
-  return response;
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || `API error: ${response.status}`);
+  }
+
+  return response.json();
 }
