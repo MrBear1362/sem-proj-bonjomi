@@ -1,17 +1,43 @@
-import { Form, Link, redirect, useNavigation } from "react-router";
+import { Form, Link, redirect, useNavigate } from "react-router";
 import { useState } from "react";
 import { supabase } from "../../library/supabase.js";
-import LoadingSpinner from "../ui/LoadingSpinner.jsx";
-import ButtonLink from "../ui/ButtonLink.jsx";
-import InputField from "../ui/InputField.jsx";
+import { ONBOARDING_STEPS } from "../../library/onboardingSteps.js";
+import { apiFetch } from "../../library/apiFetch.js";
+import LoadingSpinner from "../ui/bits/LoadingSpinner.jsx";
+import ButtonLink from "../ui/buttons/ButtonLink.jsx";
+import InputField from "../ui/inputs/InputField.jsx";
+
+async function createUser() {
+	const response = await apiFetch("/api/signup", {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({
+			first_name: "",
+			last_name: "",
+			phone: "",
+			city: "",
+			birth_year: null,
+		}),
+	});
+
+	if (response.ok) {
+		const data = await response.json();
+		setStep(data.onboarding_step || ONBOARDING_STEPS.USER_DETAILS);
+	} else {
+		setError("Could not create user");
+	}
+}
 
 export default function SignupForm() {
 	const [error, setError] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setIsSubmitting(true);
+		setError(null);
+
 		const formData = new FormData(e.target);
 		const email = formData.get("email");
 		const password = formData.get("password");
@@ -35,15 +61,27 @@ export default function SignupForm() {
 			return;
 		}
 
-		const { data, error } = await supabase.auth.signUp({ email, password });
-		if (error) {
-			setError(error.message);
-			setIsSubmitting(false);
-			return;
-		}
+		try {
+			// create supabase auth user only
+			const { error: authError } = await supabase.auth.signUp({
+				email,
+				password,
+			});
+			if (authError) {
+				setError(authError.message);
+				setIsSubmitting(false);
+				return;
+			}
 
-		// redirect to onboarding
-		window.location.href = "/auth?step=onboarding";
+			createUser();
+
+			// send user to onboarding flow
+			window.location.href = "/auth?step=onboarding";
+		} catch (error) {
+			console.error("Signup error:", error);
+			setError("An unexpected error occured on signup");
+			setIsSubmitting(false);
+		}
 	};
 
 	return (

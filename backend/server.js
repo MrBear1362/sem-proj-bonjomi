@@ -12,19 +12,26 @@ app.use(express.json());
 
 //routes
 // Import routes AFTER environment variables are loaded
+import participantsRoutes from "./routes/conversation_participants.js";
 import collab_requestsRoutes from "./routes/collab_requests.js";
 import user_profilesRoutes from "./routes/user_profiles.js";
-import notesRoutes from "./routes/notes.js";
-import servicesRoutes from "./routes/services.js";
+import conversationsRoutes from "./routes/conversations.js";
 import businessesRoutes from "./routes/businesses.js";
 import onboardingRoutes from "./routes/onboarding.js";
+import servicesRoutes from "./routes/services.js";
+import messagesRoutes from "./routes/messages.js";
+import notesRoutes from "./routes/notes.js";
+
 app.use(
 	collab_requestsRoutes,
 	user_profilesRoutes,
 	notesRoutes,
 	servicesRoutes,
 	businessesRoutes,
-	onboardingRoutes
+	onboardingRoutes,
+	participantsRoutes,
+	messagesRoutes,
+	conversationsRoutes
 );
 
 // root endpoint - verify server status
