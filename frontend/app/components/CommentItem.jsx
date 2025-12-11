@@ -75,7 +75,11 @@ export default function CommentItem({
         </button>
       </div>
       {replyTo === comment.id && (
-        <InputField commentId={comment.id} noteId={noteId} />
+        <InputField
+          commentId={comment.id}
+          noteId={noteId}
+          placeholder="Leave a comment"
+        />
       )}
 
       {replies.length > 0 && (

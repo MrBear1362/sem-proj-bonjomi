@@ -5,7 +5,6 @@ import InputField from "./UI/inputs/InputField";
 
 import "../app.css";
 import "./commentSection.css";
-import { replace } from "react-router";
 
 export default function CommentSection({ noteId }) {
   const [comments, setComments] = useState([]);
@@ -51,7 +50,11 @@ export default function CommentSection({ noteId }) {
 
   return (
     <div className="comment-section">
-      <InputField noteId={noteId} />
+      <InputField
+        noteId={noteId}
+        placeholder="Leave a comment"
+        className="input"
+      />
       {comments.length === 0 ? (
         <p>No comments yet. Be the first to comment!</p>
       ) : (

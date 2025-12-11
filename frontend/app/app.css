@@ -66,6 +66,10 @@ body {
   grid-template-columns: repeat(6, 1fr);
   gap: 0.625rem;
 }
+
+.spacing-1 {
+  padding-block: 1rem;
+}
 .spacing-2 {
   padding-block: 2rem;
 }
@@ -77,6 +81,13 @@ body {
 }
 .spacing-8 {
   padding-block: 8rem;
+}
+
+.gap-025 {
+  gap: 0.25rem;
+}
+.gap-1 {
+  gap: 1rem;
 }
 
 /*screen reader*/
@@ -158,4 +169,9 @@ h6 {
 
 img {
   max-width: 100%;
+}
+
+.justify-center {
+  justify-self: center;
+  justify-content: center;
 }
