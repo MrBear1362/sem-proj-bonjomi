@@ -84,7 +84,7 @@ export default function Feed() {
             <p>Aarhus - 9h ago</p>
           </div>
         </article>
-        <button>See more collabs</button>
+        <button className="placeholder">See more collabs</button>
       </section>
       <div className="feed--container wrapper">
         {/* Using .map() to render each message - this is DYNAMIC RENDERING! */}

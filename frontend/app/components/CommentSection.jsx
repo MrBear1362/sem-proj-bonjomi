@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { apiFetch } from "../library/apiFetch";
-import Like from "./UI/Like";
-import Comment from "./UI/Comment";
+import CommentItem from "./CommentItem";
 import InputField from "./UI/InputField";
 
+import "../app.css";
 import "./commentSection.css";
+import { replace } from "react-router";
 
 export default function CommentSection({ noteId }) {
   const [comments, setComments] = useState([]);
@@ -14,6 +15,7 @@ export default function CommentSection({ noteId }) {
   useEffect(() => {
     const fetchComments = async () => {
       try {
+        setLoading(true);
         const response = await apiFetch(`/api/notes/${noteId}/note-comments`);
         if (!response.ok)
           throw new Error(`Failed to fetch: ${response.status}`);
@@ -32,27 +34,34 @@ export default function CommentSection({ noteId }) {
   if (loading) return <p>Loading comments...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  const topLevel = comments
+    .filter((c) => !c.parent_comment_id)
+    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+  const byParent = comments.reduce((acc, c) => {
+    if (c.parent_comment_id) {
+      (acc[c.parent_comment_id] ||= []).push(c);
+    }
+    return acc;
+  }, {});
+
+  Object.values(byParent).forEach((replies) =>
+    replies.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+  );
+
   return (
     <div className="comment-section">
-      <InputField />
+      <InputField noteId={noteId} />
       {comments.length === 0 ? (
         <p>No comments yet. Be the first to comment!</p>
       ) : (
-        comments.map((comment) => (
-          <div key={comment.id} className="comment">
-            <p>
-              {comment.first_name}: {comment.content}
-            </p>
-            <div className="grid">
-              <Like
-                type="comment"
-                commentId={comment.id}
-                likeCount={comment.number_of_likes}
-                isLiked={comment.is_liked}
-              />
-              <p>reply</p>
-            </div>
-          </div>
+        topLevel.map((c) => (
+          <CommentItem
+            key={c.id}
+            comment={c}
+            noteId={noteId}
+            repliesMap={byParent}
+          />
         ))
       )}
     </div>

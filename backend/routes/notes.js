@@ -132,6 +132,7 @@ router.get("/api/notes/:id/note-comments", requireAuth, async (req, res) => {
     u.first_name,
     up.image_url,
     nc.content,
+    nc.parent_comment_id,
     nc.created_at,
     COUNT(DISTINCT ncl.id) AS number_of_likes,
      EXISTS (
@@ -145,7 +146,7 @@ router.get("/api/notes/:id/note-comments", requireAuth, async (req, res) => {
     LEFT JOIN user_profiles up ON up.user_id = u.auth_user_id
     LEFT JOIN note_comment_likes ncl ON ncl.note_comment_id = nc.id
     WHERE nc.note_id = ${noteId}
-    GROUP BY nc.id, nc.user_id, u.first_name, up.image_url, nc.content, nc.created_at
+    GROUP BY nc.id, nc.user_id, u.first_name, up.image_url, nc.content, nc.parent_comment_id, nc.created_at
     ORDER BY nc.created_at DESC
     `;
 
@@ -224,7 +225,7 @@ router.post("/api/notes/:id/likes", requireAuth, async (req, res) => {
 //endpoint for creating comments
 router.post("/api/note-comments", requireAuth, async (req, res) => {
   try {
-    const { content, noteId } = req.body;
+    const { content, noteId, parentCommentId = null } = req.body;
 
     if (!content) {
       return res.status(400).json({
@@ -240,9 +241,9 @@ router.post("/api/note-comments", requireAuth, async (req, res) => {
     }
 
     const comment = await sql`
-    INSERT INTO note_comments (content, user_id, note_id)
+    INSERT INTO note_comments (content, user_id, note_id, parent_comment_id)
     VALUES (${trimmedContent}, ${req.userId}, ${noteId})
-    RETURNING id, content, user_id, note_id, created_at, updated_at
+    RETURNING id, content, user_id, note_id, parent_comment_id, created_at, updated_at
     `;
 
     res.status(201).json(comment[0]);

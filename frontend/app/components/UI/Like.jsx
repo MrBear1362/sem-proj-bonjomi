@@ -14,9 +14,7 @@ export default function Like({ type, noteId, commentId, likeCount, isLiked }) {
 
   const handleLike = () => {
     setOptimisticLiked(!optimisticLiked);
-    setOptimisticCount(
-      optimisticLiked ? optimisticCount - 1 : optimisticCount + 1
-    );
+    setOptimisticCount((prev) => (optimisticLiked ? prev - 1 : prev + 1));
 
     if (type === "note") {
       fetcher.submit(
