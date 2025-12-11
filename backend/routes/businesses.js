@@ -68,6 +68,49 @@ router.get("/api/businesses/:id", async (req, res) => {
 	}
 });
 
+/* ---------- POST routes ----------- */
+
+router.post("/api/businesses", requireAuth, async (req, res) => {
+	try {
+		const { name, phone, is_remote, location } = req.body;
+		const businessId = req.userId;
+
+		// Validate required fields
+		if (!name) {
+			return res.status(400).json({
+				error: "Business name is required",
+			});
+		}
+
+		// Validate name is not empty after trimming
+		const trimmedName = name.trim();
+		if (trimmedName.length === 0) {
+			return res.status(400).json({
+				error: "Business name cannot be empty",
+			});
+		}
+
+		// Insert the business
+		const result = await sql`
+            INSERT INTO businesses (auth_user_id, name, phone, is_remote, location)
+            VALUES (${businessId}, ${trimmedName}, ${phone || null}, ${
+			is_remote || false
+		}, ${location || null})
+            RETURNING auth_user_id, name, phone, is_remote, location
+        `;
+
+		const business = result[0];
+
+		// Return the created business with 201 Created status
+		res.status(201).json(business);
+	} catch (error) {
+		console.error("Error creating business:", error);
+		res.status(500).json({
+			error: "Failed to create business",
+		});
+	}
+});
+
 /* ---------- PATCH routes ---------- */
 
 // PATCH specific business using id

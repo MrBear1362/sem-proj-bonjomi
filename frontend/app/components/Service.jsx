@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import Bookmark from "../components/ui/Bookmark.jsx";
-import Tag from "../components/ui/Tag.jsx";
+import Bookmark from "../components/ui/buttons/Bookmark.jsx";
+import Tag from "../components/ui/buttons/Tag.jsx";
 import styles from "./Service.module.css";
 
 /**
@@ -71,8 +71,8 @@ export function ServiceCard({ service, mode = "preview" }) {
 						<div className={styles.reviewContainer}>
 							<p>
 								<strong>Previous reviews:</strong>
-								<p>Review component goes here</p>
 							</p>
+							<p>Review component goes here</p>
 						</div>
 					</div>
 					// Preview mode: Show link and basic info

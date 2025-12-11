@@ -8,6 +8,7 @@ import RadioCard from "../ui/inputs/RadioCard.jsx";
 import InputField from "../ui/inputs/InputField.jsx";
 import Button from "../ui/buttons/Button.jsx";
 import LineUpSubscription from "../LineUpSubscription.jsx";
+import ToggleSwitch from "../ui/buttons/ToggleSwitch.jsx";
 
 export default function OnboardingSteps() {
 	// start step at user details after initial signup
@@ -488,13 +489,112 @@ export function LookingFor({ onContinue, onSkip }) {
 }
 
 export function BusinessDetails({ onContinue }) {
+	const [error, setError] = useState(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isRemote, setIsRemote] = useState(false);
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setIsSubmitting(true);
+		setError(null);
+
+		const formData = new FormData(e.target);
+
+		const payload = {
+			name: formData.get("name"),
+			phone: formData.get("phone"),
+			location: formData.get("location"),
+			is_remote: isRemote,
+		};
+
+		// validation
+		const { name, phone, location } = payload;
+
+		if (!name || !phone || !location) {
+			setError("All fields are required");
+			setIsSubmitting(false);
+			return;
+		}
+
+		// submit
+		try {
+			const response = await apiFetch("/api/businesses", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(payload),
+			});
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				setError(data.error || "Something went wrong");
+				setIsSubmitting(false);
+				return;
+			}
+
+			// continue to next onboarding step
+			setIsSubmitting(false);
+			onContinue();
+		} catch (error) {
+			console.error(error);
+			setError("Network error");
+			setIsSubmitting(false);
+		}
+	};
+
 	return (
-		<div className="auth-form">
-			<h2>Business details</h2>
-			<Button className="btn-primary" onClick={onContinue}>
-				Continue
-			</Button>
-		</div>
+		<form onSubmit={handleSubmit} className="auth-form">
+			{/* input field for business name */}
+			<InputField
+				type="text"
+				id="name"
+				name="name"
+				label="Business name"
+				showLabel={true}
+				required
+				placeholder="Enter the name of your business"
+				minLength={2}
+			/>
+
+			{/* input field for phone number */}
+			<InputField
+				type="tel"
+				id="phone"
+				name="phone"
+				label="Phone number"
+				showLabel={true}
+				required
+				placeholder="Phone number"
+				minLength={8}
+			/>
+
+			{/* toggle switch for remote option */}
+			<ToggleSwitch label="Remote" onChange={setIsRemote} />
+
+			{/* input field for location */}
+			<InputField
+				type="text"
+				id="location"
+				name="location"
+				label="Location"
+				showLabel={true}
+				required
+				placeholder="Enter your location"
+			/>
+
+			{/* error message */}
+			{error && <div className="error-message">{error}</div>}
+
+			<button className="btn-primary" type="submit" disabled={isSubmitting}>
+				{isSubmitting ?
+					<>
+						Continue <LoadingSpinner />
+					</>
+				:	"Continue"}
+			</button>
+		</form>
 	);
 }
 
