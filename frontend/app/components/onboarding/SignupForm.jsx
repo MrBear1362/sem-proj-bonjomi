@@ -100,7 +100,6 @@ export default function SignupForm() {
             required
             placeholder="Enter your email"
             autoComplete="email"
-            className="auth-input"
           />
 
           {/* input field for password */}
@@ -113,7 +112,6 @@ export default function SignupForm() {
             placeholder="Enter your password"
             minLength={6}
             autoComplete="new-password"
-            className="auth-input"
           />
 
           {/* input field for password confirm */}
@@ -126,7 +124,6 @@ export default function SignupForm() {
             placeholder="Repeat your password"
             minLength={6}
             autoComplete="new-password"
-            className="auth-input"
           />
 
 

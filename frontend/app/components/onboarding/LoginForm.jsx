@@ -74,7 +74,6 @@ export default function LoginForm() {
             required
             placeholder="Enter your email"
             autoComplete="email"
-            className="auth-input"
           />
 
           {/* input field for password */}
@@ -87,7 +86,6 @@ export default function LoginForm() {
             placeholder="Enter your password"
             minLength={6}
             autoComplete="new-password"
-            className="auth-input"
           />
 
           {/* // TODO: design error message */}
