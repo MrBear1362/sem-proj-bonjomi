@@ -11,15 +11,23 @@ export default function AuthPage() {
   if (step === "onboarding") {
     return (
       <ProtectedRoute>
-        <OnboardingSteps />
+        <div className="app-layout">
+          <main className="main-content">
+            <OnboardingSteps />
+          </main>
+        </div>
       </ProtectedRoute>
     );
   }
 
   return (
-    <div className="auth-page">
-      {step === "signup" && <SignupForm />}
-      {step === "login" && <LoginForm />}
+    <div className="app-layout">
+      <main className="main-content">
+        <div className="auth-page">
+          {step === "signup" && <SignupForm />}
+          {step === "login" && <LoginForm />}
+        </div>
+      </main>
     </div>
   );
 }

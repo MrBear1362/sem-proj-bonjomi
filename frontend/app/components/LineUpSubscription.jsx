@@ -1,3 +1,3 @@
-export default function LineUpPRO() {
+export default function LineUpSubscription() {
   return;
 }

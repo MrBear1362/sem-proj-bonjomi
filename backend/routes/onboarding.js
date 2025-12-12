@@ -60,8 +60,20 @@ router.patch("/api/signup/user-details", requireAuth, async (req, res) => {
     RETURNING auth_user_id, first_name, last_name, phone, city, birth_year, onboarding_step
     `;
 
+    // old error handling
+    // if (updated.length === 0) {
+    //   return res.status(404).json({ error: "User not found" });
+    // }
+
+    // new attempt at failsafe
     if (updated.length === 0) {
-      return res.status(404).json({ error: "User not found" });
+      // user row doesnt exist, create with provided data from user details
+      const created = await sql`
+      INSERT INTO users (auth_user_id, first_name, last_name, phone, city, birth_year, onboarding_step)
+      VALUES (${req.userId}, ${first_name}, ${last_name}, ${phone}, ${city}, ${birth_year}, ${nextStep})
+      RETURNING auth_user_id, first_name, last_name, phone, city, birth_year, onboarding_step
+      `;
+      return res.json(created[0]);
     }
 
     res.json(updated[0]);
@@ -105,13 +117,6 @@ router.get("/api/onboarding-state", requireAuth, async (req, res) => {
   try {
     const user = await sql`
     SELECT
-      auth_user_id,
-      first_name,
-      last_name,
-      phone,
-      city,
-      birth_year,
-      manage_business,
       onboarding_step
     FROM users
     WHERE auth_user_id = ${req.userId}
