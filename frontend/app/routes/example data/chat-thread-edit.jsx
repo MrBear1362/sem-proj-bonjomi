@@ -5,7 +5,7 @@ import {
   Link,
   useRouteLoaderData,
 } from "react-router";
-import { apiFetch } from "../lib/apiFetch.js";
+import { apiFetch } from "../../lib/apiFetch.js";
 
 export default function ChatThreadEdit() {
   const { thread } = useRouteLoaderData("routes/chat-thread");

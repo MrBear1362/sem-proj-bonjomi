@@ -1,6 +1,6 @@
 import { useActionData, redirect } from "react-router";
 import { ChatInput, ChatMessages } from "../components/Chat.jsx";
-import { apiFetch } from "../lib/apiFetch.js";
+import { apiFetch } from "../../lib/apiFetch.js";
 
 /**
  * CLIENT ACTION FUNCTION

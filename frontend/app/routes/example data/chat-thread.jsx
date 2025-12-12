@@ -7,7 +7,7 @@ import {
   Outlet,
 } from "react-router";
 import { ChatMessages, ChatInput } from "../components/Chat.jsx";
-import { apiFetch } from "../lib/apiFetch.js";
+import { apiFetch } from "../../lib/apiFetch.js";
 
 /**
  * ERROR BOUNDARY COMPONENT
@@ -84,7 +84,7 @@ export async function clientLoader({ params }) {
   // Fetch messages for this thread
   // Our API handles filtering by thread_id and sorting chronologically
   const messagesResponse = await apiFetch(
-    `/api/threads/${params.threadId}/messages`,
+    `/api/threads/${params.threadId}/messages`
   );
 
   if (!messagesResponse.ok) {
@@ -139,7 +139,7 @@ export async function clientAction({ params, request }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newMessage),
-      },
+      }
     );
 
     // Check for validation errors (400)
