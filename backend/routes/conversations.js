@@ -101,25 +101,72 @@ router.get("/api/conversations/:id/messages", requireAuth, async (req, res) => {
 // Requires authentication - creator is automatically added as participant
 router.post("/api/conversations", requireAuth, async (req, res) => {
   try {
-    const { title } = req.body;
+    const { title, participantId } = req.body;
     const userId = req.userId;
 
-    if (!title || !title.trim()) {
-      return res.status(400).json({ error: "title is required" });
+    let finalTitle = title;
+
+    // If participantId provided, derive title and check for duplicates
+    if (participantId) {
+      // Fetch participant's name
+      const targetUser = await sql`
+        SELECT id, first_name, last_name
+        FROM users
+        WHERE id = ${participantId}
+      `;
+
+      if (!targetUser || targetUser.length === 0) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const { first_name, last_name } = targetUser[0];
+      // Combine first and last name for title
+      finalTitle =
+        [first_name, last_name].filter(Boolean).join(" ") || "New Conversation";
+
+      // Check if a 1:1 conversation already exists with exactly these 2 users
+      const existing = await sql`
+        SELECT c.id, c.title
+        FROM conversations c
+        JOIN conversation_participants p1 ON p1.conversation_id = c.id AND p1.user_id = ${userId}
+        JOIN conversation_participants p2 ON p2.conversation_id = c.id AND p2.user_id = ${participantId}
+        WHERE (SELECT COUNT(*) FROM conversation_participants WHERE conversation_id = c.id) = 2
+        LIMIT 1
+      `;
+
+      if (existing && existing.length > 0) {
+        // Return existing conversation instead of creating new one
+        return res.status(200).json(existing[0]);
+      }
+    } else {
+      // title-only mode: require a title
+      if (!finalTitle || !finalTitle.trim()) {
+        return res
+          .status(400)
+          .json({ error: "title or participantId required" });
+      }
+      finalTitle = finalTitle.trim();
     }
 
     // Create conversation
     const rows = await sql`
       INSERT INTO conversations (title)
-      VALUES (${title.trim()})
+      VALUES (${finalTitle})
       RETURNING id, title, created_at`;
 
     const conversation = rows[0];
 
-    // Automatically add creator as participant
+    // Add creator as participant
     await sql`
       INSERT INTO conversation_participants (conversation_id, user_id)
       VALUES (${conversation.id}, ${userId})`;
+
+    // If participantId provided, add them as participant too
+    if (participantId) {
+      await sql`
+        INSERT INTO conversation_participants (conversation_id, user_id)
+        VALUES (${conversation.id}, ${participantId})`;
+    }
 
     res.status(201).json(conversation);
   } catch (error) {

@@ -44,7 +44,11 @@ function MessagesHeader() {
             <path d="m21 21-4.35-4.35" strokeWidth="2" />
           </svg>
         </button>
-        <button className="icon-btn" aria-label="Edit">
+        <Link
+          to="/messages/new"
+          className="icon-btn"
+          aria-label="New Conversation"
+        >
           <svg
             width="24"
             height="24"
@@ -61,7 +65,7 @@ function MessagesHeader() {
               strokeWidth="2"
             />
           </svg>
-        </button>
+        </Link>
       </div>
     </header>
   );

@@ -7,5 +7,6 @@ export default [
   // styleguide - no auth, outside main layout
   route("styleguide", "routes/styleguide.jsx"),
   route("/messages", "routes/messages-list.jsx"),
+  route("/messages/new", "routes/conversation-new.jsx"),
   route("/messages/:conversationId", "routes/conversation-thread.jsx"),
 ];
