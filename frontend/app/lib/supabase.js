@@ -1,10 +1,3 @@
-
-Step 14: Frontend register and signup routes #14
-Files changed 8
-Merged
-Step 14: Frontend register and signup routes
-#14
-File filter
 /**
  * Supabase Client for Frontend
  *
@@ -37,16 +30,16 @@ File filter
  * - Never use the service role key on the frontend (it bypasses all security)
  */
 
-import {createClient} from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if(!supabaseUrl || !supabaseAnonKey) {
-    throw new Error(
-        "Missing Supabase enviroment variablesl  " +
-        "Please create a .env file with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY",
-    );
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error(
+    "Missing Supabase enviroment variablesl  " +
+      "Please create a .env file with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY"
+  );
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
