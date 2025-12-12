@@ -1,10 +1,11 @@
 import { useState } from "react";
-import styles from "./Tag.module.css";
+import "./Tag.css";
 
 export default function Tag({
 	label = "Tag",
 	type = "toggle",
 	isActive = false,
+	withBorder = false,
 	onClick,
 }) {
 	const [internalActive, setInternalActive] = useState(false);
@@ -23,7 +24,7 @@ export default function Tag({
 
 	return (
 		<button
-			className={`${styles.tag} ${isTagActive ? styles.tagActive : ""}`}
+			className={`tag ${isTagActive ? "tagActive" : ""} ${withBorder ? "with--border" : ""}`}
 			disabled={type === "static"}
 			onClick={handleClick}
 		>

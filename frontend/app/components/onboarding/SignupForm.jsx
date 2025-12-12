@@ -125,6 +125,7 @@ export default function SignupForm() {
 						placeholder="Enter your password"
 						minLength={6}
 						autoComplete="new-password"
+						className="input__form"
 					/>
 
 					{/* input field for password confirm */}
@@ -137,29 +138,44 @@ export default function SignupForm() {
 						placeholder="Repeat your password"
 						minLength={6}
 						autoComplete="new-password"
+						className="input__form"
 					/>
 
 					{/* // TODO: design error message */}
 					{error && <div className="error-message">{error}</div>}
 
-					<button className="btn-primary" type="submit" disabled={isSubmitting}>
-						{isSubmitting ?
-							<>
-								Continue <LoadingSpinner />
-							</>
-						:	"Continue"}
-					</button>
+					<div className="flex justify-center">
+						<button
+							className="btn-primary"
+							type="submit"
+							disabled={isSubmitting}
+						>
+							{isSubmitting ?
+								<>
+									Continue <LoadingSpinner />
+								</>
+							:	"Continue"}
+						</button>
+					</div>
 				</form>
 
-				<p>or</p>
+				<p className="justify-center spacing-1">or</p>
 
-				<div className="signup-providers">
-					<button className="signup-providers-btn">Sign up with Google</button>
-					<button className="signup-providers-btn">Sign up with AppleID</button>
+				<div className="signup-providers justify-center flex-clm gap-1">
+					<button className="signup-providers-btn btn-white">
+						Sign up with Google
+					</button>
+					<button className="signup-providers-btn btn-white">
+						Sign up with AppleID
+					</button>
 				</div>
 
-				<ButtonLink to="/auth" query={{ step: "login" }}>
-					Already have an account? <span>Log in</span>
+				<ButtonLink
+					to="/auth"
+					query={{ step: "login" }}
+					className="btn-link spacing-1 flex gap-025"
+				>
+					Already have an account? <span className="blue">Log in</span>
 				</ButtonLink>
 			</article>
 		</section>

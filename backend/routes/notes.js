@@ -52,13 +52,21 @@ router.get("/api/notes/feed", requireAuth, async (req, res) => {
         n.media_url, 
         n.user_id, 
         t.name AS tags,
-        COUNT(DISTINCT nl.id) AS number_of_likes
+        COUNT(DISTINCT nl.id) AS number_of_likes,
+        COUNT(DISTINCT nc.id) AS number_of_comments,
+        EXISTS (
+        SELECT
+         nl.id
+         from note_likes nl
+        WHERE n.id = nl.note_id AND nl.user_id = ${req.userId}
+        ) AS is_liked
       FROM notes n
       LEFT JOIN users u ON u.auth_user_id = n.user_id 
       LEFT JOIN user_profiles up ON up.user_id = u.auth_user_id
       LEFT JOIN tags t ON t.id = n.tag_id
       LEFT JOIN user_follows uf ON uf.following_id = n.user_id AND uf.follower_id = ${req.userId}
       LEFT JOIN note_likes nl ON nl.note_id = n.id
+      LEFT JOIN note_comments nc on nc.note_id = n.id
       WHERE uf.following_id IS NOT NULL OR n.user_id = ${req.userId}
       GROUP BY n.id, u.auth_user_id, u.first_name, up.image_url, n.title, n.content, n.media_url, n.user_id, t.name
       ORDER BY n.created_at DESC
@@ -90,16 +98,13 @@ router.get("/api/notes/:id", async (req, res) => {
       n.media_url, 
       n.user_id, 
       t.name AS tags,
-      (
-      SELECT COUNT(*)
-      FROM note_likes nl
-      WHERE nl.note_id = n.id
-      ) AS number_of_likes
+      COUNT(DISTINCT nl.id) AS number_of_likes
     FROM notes n
     LEFT JOIN users u ON u.auth_user_id = n.user_id 
     LEFT JOIN user_profiles up ON up.user_id = u.auth_user_id
     LEFT JOIN tags t ON t.id = n.tag_id
     WHERE n.id = ${noteId}
+    GROUP BY n.id, u.auth_user_id, u.first_name, up.image_url, n.title, n.content, n.media_url, n.user_id, t.name
     `;
 
     if (note.length === 0) {
@@ -116,7 +121,7 @@ router.get("/api/notes/:id", async (req, res) => {
 });
 
 //endpoint to getting a list of comments connected to a note
-router.get("/api/notes/:id/note-comments", async (req, res) => {
+router.get("/api/notes/:id/note-comments", requireAuth, async (req, res) => {
   try {
     const noteId = req.params.id;
 
@@ -127,16 +132,21 @@ router.get("/api/notes/:id/note-comments", async (req, res) => {
     u.first_name,
     up.image_url,
     nc.content,
+    nc.parent_comment_id,
     nc.created_at,
-      (
-      SELECT COUNT(*)
-      FROM note_comment_likes ncl
-      WHERE ncl.note_comment_id = nc.id
-      ) AS number_of_likes
+    COUNT(DISTINCT ncl.id) AS number_of_likes,
+     EXISTS (
+        SELECT
+         ncl.id
+         from note_comment_likes ncl
+        WHERE nc.id = ncl.note_comment_id AND ncl.user_id = ${req.userId}
+        ) AS is_liked
     FROM note_comments nc
-    JOIN users u ON u.auth_user_id = nc.user_id
-    JOIN user_profiles up ON up.user_id = u.auth_user_id
+    LEFT JOIN users u ON u.auth_user_id = nc.user_id
+    LEFT JOIN user_profiles up ON up.user_id = u.auth_user_id
+    LEFT JOIN note_comment_likes ncl ON ncl.note_comment_id = nc.id
     WHERE nc.note_id = ${noteId}
+    GROUP BY nc.id, nc.user_id, u.first_name, up.image_url, nc.content, nc.parent_comment_id, nc.created_at
     ORDER BY nc.created_at DESC
     `;
 
@@ -182,7 +192,7 @@ router.post("/api/notes", requireAuth, async (req, res) => {
   }
 });
 
-router.post("/api/notes/:id/note-likes", requireAuth, async (req, res) => {
+router.post("/api/notes/:id/likes", requireAuth, async (req, res) => {
   try {
     const noteId = req.params.id;
 
@@ -215,7 +225,7 @@ router.post("/api/notes/:id/note-likes", requireAuth, async (req, res) => {
 //endpoint for creating comments
 router.post("/api/note-comments", requireAuth, async (req, res) => {
   try {
-    const { content, noteId } = req.body;
+    const { content, noteId, parentCommentId = null } = req.body;
 
     if (!content) {
       return res.status(400).json({
@@ -231,9 +241,9 @@ router.post("/api/note-comments", requireAuth, async (req, res) => {
     }
 
     const comment = await sql`
-    INSERT INTO note_comments (content, user_id, note_id)
+    INSERT INTO note_comments (content, user_id, note_id, parent_comment_id)
     VALUES (${trimmedContent}, ${req.userId}, ${noteId})
-    RETURNING id, content, user_id, note_id, created_at, updated_at
+    RETURNING id, content, user_id, note_id, parent_comment_id, created_at, updated_at
     `;
 
     res.status(201).json(comment[0]);
@@ -245,9 +255,10 @@ router.post("/api/note-comments", requireAuth, async (req, res) => {
   }
 });
 
-router.post("/api/note-comments/likes", requireAuth, async (req, res) => {
+router.post("/api/note-comments/:id/likes", requireAuth, async (req, res) => {
   try {
-    const { noteCommentId } = req.body;
+    //const { noteCommentId } = req.body;
+    const noteCommentId = req.params.id;
 
     if (!req.userId || !noteCommentId) {
       return res.status(400).json({
@@ -382,9 +393,9 @@ router.delete("/api/notes/:id", requireAuth, async (req, res) => {
 });
 
 //endpoint for deleting a like on a note
-router.delete("/api/notes/:noteId/note-likes", requireAuth, async (req, res) => {
+router.delete("/api/notes/:id/likes", requireAuth, async (req, res) => {
   try {
-    const noteId = req.params.noteId;
+    const noteId = req.params.id;
 
     const result = await sql`
     DELETE FROM note_likes 
@@ -436,7 +447,10 @@ router.delete("/api/note-comments/:id", requireAuth, async (req, res) => {
 });
 
 //endpoint for deleting a like on a comment
-router.delete("/api/note-comments/:commentId/likes", requireAuth, async (req, res) => {
+router.delete(
+  "/api/note-comments/:commentId/likes",
+  requireAuth,
+  async (req, res) => {
     try {
       const noteCommentId = req.params.commentId;
 

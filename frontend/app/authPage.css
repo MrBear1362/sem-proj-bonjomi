@@ -1,9 +1,10 @@
 .auth-page {
   margin: 0 auto;
   max-width: 70vw;
+  color: var(--greyscale-500);
 
   .auth-header {
-    gap: 2rem;
+    gap: 1rem;
 
     .auth-title,
     .auth-subtitle {
@@ -12,7 +13,7 @@
   }
 
   .auth-form {
-    padding: 1rem 0;
+    padding-block: 1rem 0;
     gap: 1rem;
   }
 }

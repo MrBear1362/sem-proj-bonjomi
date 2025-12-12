@@ -1,0 +1,25 @@
+button {
+  border-radius: 2rem;
+  width: fit-content;
+  padding: 0.3rem 0.6rem;
+}
+
+.btn-primary {
+  background-color: var(--primary-yellow);
+  border: 0;
+}
+
+.btn-white {
+  background: none;
+  border: 1px solid var(--greyscale-900);
+}
+
+.btn-link {
+  text-decoration: none;
+  color: var(--greyscale-900);
+  cursor: pointer;
+}
+
+.blue {
+  color: #007aff;
+}
