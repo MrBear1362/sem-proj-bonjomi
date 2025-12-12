@@ -9,6 +9,10 @@ import {
 
 import appStylesHref from "./app.css?url";
 import testStylesHref from "./test.css?url";
+// import styles
+import "./app.css";
+import "./layout.css";
+import "./authPage.css";
 
 // Ensure styles load via <link> tags for stable SSR/CSR hydration
 export const links = () => [
@@ -22,7 +26,6 @@ export function Layout({ children }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>LineUp - Find your place in the LineUp</title>
         <Meta />
         <Links />
       </head>

@@ -1,5 +1,6 @@
 import express from "express";
 import sql from "../db.js";
+import { requireAuth } from "../auth.js";
 
 const router = express.Router();
 
@@ -17,15 +18,13 @@ router.get("/api/notes", async (req, res) => {
         n.media_url, 
         n.user_id, 
         t.name AS tags,
-        (
-        SELECT COUNT(*)
-        FROM note_likes nl
-        WHERE nl.note_id = n.id
-        ) AS number_of_likes
+        COUNT(DISTINCT nl.id) AS number_of_likes
       FROM notes n
       LEFT JOIN users u ON u.auth_user_id = n.user_id 
       LEFT JOIN user_profiles up ON up.user_id = u.auth_user_id
       LEFT JOIN tags t ON t.id = n.tag_id
+      LEFT JOIN note_likes nl ON nl.note_id = n.id
+      GROUP BY n.id, u.auth_user_id, u.first_name, up.image_url, n.title, n.content, n.media_url, n.user_id, t.name
       ORDER BY n.created_at DESC
       `;
 
@@ -39,7 +38,43 @@ router.get("/api/notes", async (req, res) => {
   }
 });
 
-//endpoint to get a specifik note
+//endpoint to get all notes from followed users
+router.get("/api/notes/feed", requireAuth, async (req, res) => {
+  try {
+    const notes = await sql`
+      SELECT 
+        n.id,
+        u.auth_user_id,
+        u.first_name,
+        up.image_url,
+        n.title, 
+        n.content, 
+        n.media_url, 
+        n.user_id, 
+        t.name AS tags,
+        COUNT(DISTINCT nl.id) AS number_of_likes
+      FROM notes n
+      LEFT JOIN users u ON u.auth_user_id = n.user_id 
+      LEFT JOIN user_profiles up ON up.user_id = u.auth_user_id
+      LEFT JOIN tags t ON t.id = n.tag_id
+      LEFT JOIN user_follows uf ON uf.following_id = n.user_id AND uf.follower_id = ${req.userId}
+      LEFT JOIN note_likes nl ON nl.note_id = n.id
+      WHERE uf.following_id IS NOT NULL OR n.user_id = ${req.userId}
+      GROUP BY n.id, u.auth_user_id, u.first_name, up.image_url, n.title, n.content, n.media_url, n.user_id, t.name
+      ORDER BY n.created_at DESC
+      `;
+
+    res.json(notes);
+  } catch (error) {
+    console.log("Error fetching feed:", error);
+
+    res.status(500).json({
+      error: "Failed to fetch feed from database",
+    });
+  }
+});
+
+//endpoint to get a specific note
 router.get("/api/notes/:id", async (req, res) => {
   try {
     const noteId = req.params.id;
@@ -115,9 +150,9 @@ router.get("/api/notes/:id/note-comments", async (req, res) => {
 });
 
 //endpoint for creating a note
-router.post("/api/notes", async (req, res) => {
+router.post("/api/notes", requireAuth, async (req, res) => {
   try {
-    const { title, content, mediaUrl, userId, tagId } = req.body;
+    const { title, content, mediaUrl, tagId } = req.body;
 
     if (!title) {
       return res.status(400).json({
@@ -134,7 +169,7 @@ router.post("/api/notes", async (req, res) => {
 
     const note = await sql`
     INSERT INTO notes (title, content, media_url, user_id, tag_id)
-    VALUES (${trimmedTitle}, ${content}, ${mediaUrl}, ${userId}, ${tagId})
+    VALUES (${trimmedTitle}, ${content}, ${mediaUrl}, ${req.userId}, ${tagId})
     RETURNING id, title, content, media_url, user_id, tag_id, created_at, updated_at
     `;
 
@@ -147,12 +182,11 @@ router.post("/api/notes", async (req, res) => {
   }
 });
 
-router.post("/api/notes/:id/note-likes", async (req, res) => {
+router.post("/api/notes/:id/note-likes", requireAuth, async (req, res) => {
   try {
     const noteId = req.params.id;
-    const { userId } = req.body;
 
-    if (!userId) {
+    if (!req.userId) {
       return res.status(400).json({
         error: "'userId' is required",
       });
@@ -160,7 +194,7 @@ router.post("/api/notes/:id/note-likes", async (req, res) => {
 
     const like = await sql`
     INSERT INTO note_likes (user_id, note_id)
-    VALUES (${userId}, ${noteId})
+    VALUES (${req.userId}, ${noteId})
     ON CONFLICT (user_id, note_id) DO NOTHING
     RETURNING id, user_id, note_id, created_at
     `;
@@ -179,9 +213,9 @@ router.post("/api/notes/:id/note-likes", async (req, res) => {
 });
 
 //endpoint for creating comments
-router.post("/api/note-comments", async (req, res) => {
+router.post("/api/note-comments", requireAuth, async (req, res) => {
   try {
-    const { content, userId, noteId } = req.body;
+    const { content, noteId } = req.body;
 
     if (!content) {
       return res.status(400).json({
@@ -198,7 +232,7 @@ router.post("/api/note-comments", async (req, res) => {
 
     const comment = await sql`
     INSERT INTO note_comments (content, user_id, note_id)
-    VALUES (${trimmedContent}, ${userId}, ${noteId})
+    VALUES (${trimmedContent}, ${req.userId}, ${noteId})
     RETURNING id, content, user_id, note_id, created_at, updated_at
     `;
 
@@ -211,11 +245,11 @@ router.post("/api/note-comments", async (req, res) => {
   }
 });
 
-router.post("/api/note-comments/likes", async (req, res) => {
+router.post("/api/note-comments/likes", requireAuth, async (req, res) => {
   try {
-    const { userId, noteCommentId } = req.body;
+    const { noteCommentId } = req.body;
 
-    if (!userId || !noteCommentId) {
+    if (!req.userId || !noteCommentId) {
       return res.status(400).json({
         error: "'userId' and 'noteCommentId' are required",
       });
@@ -223,7 +257,7 @@ router.post("/api/note-comments/likes", async (req, res) => {
 
     const commentLike = await sql`
       INSERT INTO note_comment_likes (user_id, note_comment_id)
-      VALUES (${userId}, ${noteCommentId})
+      VALUES (${req.userId}, ${noteCommentId})
       ON CONFLICT (user_id, note_comment_id) DO NOTHING
       RETURNING id, user_id, note_comment_id, created_at
       `;
@@ -242,11 +276,11 @@ router.post("/api/note-comments/likes", async (req, res) => {
 });
 
 //endpoint for updating a note
-router.patch("/api/notes/:id", async (req, res) => {
+router.patch("/api/notes/:id", requireAuth, async (req, res) => {
   try {
     const noteId = req.params.id;
 
-    const { title, content, mediaUrl, tagId, userId } = req.body;
+    const { title, content, mediaUrl, tagId } = req.body;
 
     if (title !== undefined) {
       const trimmedTitle = title.trim();
@@ -262,7 +296,7 @@ router.patch("/api/notes/:id", async (req, res) => {
     media_url = COALESCE(${mediaUrl}, media_url), 
     tag_id = COALESCE(${tagId}, tag_id),
     updated_at = NOW()
-    WHERE id = ${noteId} AND user_id = ${userId}
+    WHERE id = ${noteId} AND user_id = ${req.userId}
     RETURNING id, title, content, media_url, user_id, tag_id, created_at, updated_at
     `;
 
@@ -282,10 +316,10 @@ router.patch("/api/notes/:id", async (req, res) => {
 });
 
 //endpoint for updating a comment
-router.patch("/api/note-comments/:id", async (req, res) => {
+router.patch("/api/note-comments/:id", requireAuth, async (req, res) => {
   try {
     const commentId = req.params.id;
-    const { content, userId } = req.body;
+    const { content } = req.body;
 
     if (!content) {
       return res.status(400).json({ error: "'content' is required" });
@@ -301,7 +335,7 @@ router.patch("/api/note-comments/:id", async (req, res) => {
     SET 
     content = ${trimmedContent}, 
     updated_at = NOW()
-    WHERE id = ${commentId} AND user_id = ${userId}
+    WHERE id = ${commentId} AND user_id = ${req.userId}
     RETURNING id, content, user_id, note_id, created_at, updated_at
     `;
 
@@ -321,14 +355,13 @@ router.patch("/api/note-comments/:id", async (req, res) => {
 });
 
 //endpoint for deleting a note
-router.delete("/api/notes/:id", async (req, res) => {
+router.delete("/api/notes/:id", requireAuth, async (req, res) => {
   try {
     const noteId = req.params.id;
-    const { userId } = req.body;
 
     const result = await sql`
     DELETE FROM notes
-    WHERE id = ${noteId} AND user_id = ${userId}
+    WHERE id = ${noteId} AND user_id = ${req.userId}
     RETURNING id
     `;
     if (result.length === 0) {
@@ -349,14 +382,13 @@ router.delete("/api/notes/:id", async (req, res) => {
 });
 
 //endpoint for deleting a like on a note
-router.delete("/api/notes/:noteId/note-likes/:userId", async (req, res) => {
+router.delete("/api/notes/:noteId/note-likes", requireAuth, async (req, res) => {
   try {
     const noteId = req.params.noteId;
-    const userId = req.params.userId;
 
     const result = await sql`
     DELETE FROM note_likes 
-    WHERE note_id = ${noteId} AND user_id = ${userId}
+    WHERE note_id = ${noteId} AND user_id = ${req.userId}
     RETURNING id 
     `;
     if (result.length === 0) {
@@ -377,14 +409,13 @@ router.delete("/api/notes/:noteId/note-likes/:userId", async (req, res) => {
 });
 
 //endpoint for deleting a comment
-router.delete("/api/note-comments/:id", async (req, res) => {
+router.delete("/api/note-comments/:id", requireAuth, async (req, res) => {
   try {
     const commentId = req.params.id;
-    const { userId } = req.body;
 
     const result = await sql`
     DELETE FROM note_comments
-    WHERE id = ${commentId} AND user_id = ${userId}
+    WHERE id = ${commentId} AND user_id = ${req.userId}
     RETURNING id
     `;
     if (result.length === 0) {
@@ -405,16 +436,13 @@ router.delete("/api/note-comments/:id", async (req, res) => {
 });
 
 //endpoint for deleting a like on a comment
-router.delete(
-  "/api/note-comments/:commentId/likes/:userId",
-  async (req, res) => {
+router.delete("/api/note-comments/:commentId/likes", requireAuth, async (req, res) => {
     try {
       const noteCommentId = req.params.commentId;
-      const userId = req.params.userId;
 
       const result = await sql`
     DELETE FROM note_comment_likes 
-    WHERE note_comment_id = ${noteCommentId} AND user_id = ${userId}
+    WHERE note_comment_id = ${noteCommentId} AND user_id = ${req.userId}
     RETURNING id 
     `;
       if (result.length === 0) {
