@@ -1,5 +1,3 @@
-import "./input.css";
-
 export default function InputField({
   type = "text",
   id,
@@ -16,7 +14,7 @@ export default function InputField({
     <>
       {label && (
         <label
-          htmlFor="{id}"
+          htmlFor={id}
           className={showLabel ? "" : "sr-only"}
         >
           {label}
