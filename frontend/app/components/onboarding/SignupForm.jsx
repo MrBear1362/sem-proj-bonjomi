@@ -95,6 +95,9 @@ export default function SignupForm() {
 
   return (
     <section className="auth-container">
+      <div className="progress-container">
+        <div className="progress-bar"></div>
+      </div>
       <article className="auth-card">
         <header className="auth-header flex-clm">
           <h1 className="auth-title xxl-heading">Sign up</h1>
@@ -165,18 +168,14 @@ export default function SignupForm() {
         <p className="justify-center spacing-1">or</p>
 
         <div className="signup-providers justify-center flex-clm gap-1">
-          <button className="signup-providers-btn btn-white">
-            Sign up with Google
-          </button>
-          <button className="signup-providers-btn btn-white">
-            Sign up with AppleID
-          </button>
+          <button className="btn-outline">Sign up with Google</button>
+          <button className="btn-outline">Sign up with AppleID</button>
         </div>
 
         <ButtonLink
           to="/auth"
           query={{ step: "login" }}
-          className="btn-link spacing-1 flex gap-025"
+          className="btn-text spacing-1 flex gap-025"
         >
           Already have an account? <span className="blue">Log in</span>
         </ButtonLink>

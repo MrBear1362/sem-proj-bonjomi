@@ -64,8 +64,8 @@ export default function LoginForm() {
   };
 
   return (
-    <section className="auth-container spacing-8">
-      <article className="auth-card">
+    <section className="auth-container">
+      <article className="auth-card login">
         <header className="auth-header">
           <h1 className="auth-title xxl-heading">Login</h1>
         </header>
@@ -92,7 +92,7 @@ export default function LoginForm() {
             required
             placeholder="Enter your password"
             minLength={6}
-            autoComplete="new-password"
+            autoComplete="password"
             className="input__form"
           />
 
@@ -119,20 +119,16 @@ export default function LoginForm() {
         <p className="justify-center spacing-1">or</p>
 
         <div className="signup-providers justify-center flex-clm gap-1">
-          <button className="signup-providers-btn btn-white">
-            Login with Google
-          </button>
-          <button className="signup-providers-btn btn-white">
-            Login with AppleID
-          </button>
+          <button className="btn-outline">Login with Google</button>
+          <button className="btn-outline">Login with AppleID</button>
         </div>
 
         <ButtonLink
           to="/auth"
           query={{ step: "signup" }}
-          className="btn-link spacing-1 flex gap-025"
+          className="btn-text spacing-1 flex gap-025"
         >
-          Don't have an account? <span className="blue">Sign up</span>
+          Don't have an account? <span>Sign up</span>
         </ButtonLink>
       </article>
     </section>

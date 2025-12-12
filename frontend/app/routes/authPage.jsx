@@ -13,6 +13,9 @@ export default function AuthPage() {
       <ProtectedRoute>
         <div className="app-layout">
           <main className="main-content">
+            <div className="progress-container">
+              <div className="progress-bar progress-40"></div>
+            </div>
             <OnboardingSteps />
           </main>
         </div>
