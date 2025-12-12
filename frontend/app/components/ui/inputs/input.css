@@ -1,8 +1,10 @@
 /* general shared styling */
-input {
+input,
+textarea {
+  font-family: var(--font-body);
   border: 1px solid var(--outline);
-  border-radius: .25rem;
-  padding: .25rem .5rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
 }
 
 /* regular search input */
@@ -10,5 +12,11 @@ input {
 /* tag search input */
 
 /* textarea and text input */
+input.text-input,
+.text-input {
+  background: var(--input-bg);
+  border: none;
+  padding: 0.5rem 0.7rem;
+}
 
 /* form */
