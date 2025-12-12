@@ -1,3 +1,7 @@
+/* Global imports - must be first */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://db.onlinewebfonts.com/c/0976a2619014c5855690b7509fab4c6e?family=Helvetica+Now+Display");
+
 /* Messages List Page */
 .messages-page {
   display: flex;
@@ -324,10 +328,6 @@
 .conversations-list::-webkit-scrollbar-thumb:hover {
   background: #aaa;
 }
-
-/* Global imports and setup */
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
-@import url("https://db.onlinewebfonts.com/c/0976a2619014c5855690b7509fab4c6e?family=Helvetica+Now+Display");
 
 /* Global styles */
 :root {
@@ -844,10 +844,8 @@ h6 {
 .messages-container::-webkit-scrollbar-thumb:hover,
 .conversations-list::-webkit-scrollbar-thumb:hover {
   background: #aaa;
-  /* imports */
-  @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
-  @import url("https://db.onlinewebfonts.com/c/0976a2619014c5855690b7509fab4c6e?family=Helvetica+Now+Display");
 }
+
 /* global */
 
 *,
