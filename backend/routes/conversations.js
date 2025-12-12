@@ -6,10 +6,9 @@ const router = express.Router();
 
 // List all conversations
 // Requires authentication - only returns conversations user participates in
-router.get("/api/conversations", async (req, res) => {
+router.get("/api/conversations", requireAuth, async (req, res) => {
   try {
-    //const userId = req.userId;
-    const userId = "17f55570-6bfe-44d4-9578-c22e181ba387";
+    const userId = req.userId;
 
     const rows = await sql`
       SELECT

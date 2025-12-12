@@ -48,6 +48,7 @@ export const requireAuth = async (req, res, next) => {
     // Attach user to request object for use in route handlers
     // user object contains: id, email, and other Supabase user fields
     req.user = user;
+    req.userId = user.id;
 
     // Continue to next middleware/route handler
     next();
