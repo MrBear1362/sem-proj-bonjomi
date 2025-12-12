@@ -14,7 +14,6 @@ export default function ToggleSwitch({ label, onChange }) {
 
 	return (
 		<div className={styles.switchContainer}>
-			<label className={styles.switchLabel}>{label}</label>
 			<button
 				className={`${styles.toggle} ${isToggled ? styles.toggleActive : ""}`}
 				onClick={handleToggle}
@@ -24,6 +23,7 @@ export default function ToggleSwitch({ label, onChange }) {
 			>
 				<span className={styles.toggleCircle} />
 			</button>
+			<label className={styles.switchLabel}>{label}</label>
 		</div>
 	);
 }

@@ -559,7 +559,7 @@ export function BusinessDetails({ onContinue }) {
 				type="text"
 				id="name"
 				name="name"
-				label="Business name"
+				label="Name of your business"
 				showLabel={true}
 				required
 				placeholder="Enter the name of your business"
@@ -586,7 +586,7 @@ export function BusinessDetails({ onContinue }) {
 				type="text"
 				id="location"
 				name="location"
-				label="Location"
+				label="Where are you located"
 				showLabel={true}
 				required
 				placeholder="Enter your location"
