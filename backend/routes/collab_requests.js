@@ -88,7 +88,7 @@ router.post("/api/collab-requests", requireAuth, async (req, res) => {
     const trimmedTitle = title?.trim();
     const trimmedContent = content?.trim();
     const trimmedLocation = location?.trim();
-    
+
     // validate after trim
     if (!trimmedTitle) return res.status(400).json({ error: "Title cannot be empty" });
     if (!trimmedContent) return res.status(400).json({ error: "Description cannot be empty" });
@@ -104,7 +104,7 @@ router.post("/api/collab-requests", requireAuth, async (req, res) => {
     // create collab request | RETURNING gets genId for next insert
     const collabRequests = await sql`
     INSERT INTO collab_requests (title, content, due_date, location, tag_id, is_paid, user_id, media_url)
-    VALUES (${trimmedTitle}, ${trimmedContent}, ${due_date}, ${trimmedLocation}, ${tag_id}, ${is_paid}, ${userId}, ${media_url || null})
+    VALUES (${trimmedTitle}, ${trimmedContent}, ${due_date}, ${trimmedLocation}, ${tag_id}, ${is_paid}, ${req.userId}, ${media_url || null})
     RETURNING id, title, user_id, created_at, content, due_date, location, tag_id, is_paid, media_url
     `;
 
@@ -132,19 +132,19 @@ router.patch("/api/collab-requests/:id", requireAuth, async (req, res) => {
     // validate provided fields (partial update)
     if (title !== undefined) {
       const trimmed = title.trim();
-      if(!trimmed) return res.status(400).json({error: "Title cannot be empty"});
+      if (!trimmed) return res.status(400).json({ error: "Title cannot be empty" });
       updates.title = trimmed;
     }
 
     if (content !== undefined) {
       const trimmed = content.trim();
-      if (!trimmed) return res.status(400).json({error: "Description cannot be empty"});
+      if (!trimmed) return res.status(400).json({ error: "Description cannot be empty" });
       updates.content = trimmed;
     }
 
     if (location !== undefined) {
       const trimmed = location.trim();
-      if (!trimmed) return res.status(400).json({error: "Location cannot be empty"});
+      if (!trimmed) return res.status(400).json({ error: "Location cannot be empty" });
       updates.location = trimmed;
     }
 
@@ -162,7 +162,7 @@ router.patch("/api/collab-requests/:id", requireAuth, async (req, res) => {
 
     // ensure at least one field is provided
     if (Object.keys(updates).length === 0) {
-      return res.status(400).json({error: "No fields provided for update"});
+      return res.status(400).json({ error: "No fields provided for update" });
     }
 
     // add updated_at timestamp automatically
