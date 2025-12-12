@@ -1,0 +1,38 @@
+.user-identifier {
+  /* shared user identifier styling */
+  align-items: center;
+  gap: 0.25rem;
+  /* users with an active story - yellow border */
+  &.active-story {
+    .user-image {
+      border-color: var(--primary-yellow);
+    }
+  }
+
+  /* shared general image styling */
+  .user-image {
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid transparent;
+  }
+
+  /* user-identifier default */
+  &.default {
+    .user-image {
+      height: 2.25rem;
+      width: 2.25rem;
+    }
+
+    p {
+      margin-bottom: 0.2rem;
+    }
+  }
+
+  /* user-identifier preview */
+  &.preview {
+    .user-image {
+      height: 2.75rem;
+      width: 2.75rem;
+    }
+  }
+}
