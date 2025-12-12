@@ -110,9 +110,9 @@ router.post("/api/conversations", requireAuth, async (req, res) => {
     if (participantId) {
       // Fetch participant's name
       const targetUser = await sql`
-        SELECT id, first_name, last_name
+        SELECT auth_user_id as id, first_name, last_name
         FROM users
-        WHERE id = ${participantId}
+        WHERE auth_user_id = ${participantId}
       `;
 
       if (!targetUser || targetUser.length === 0) {
