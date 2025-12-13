@@ -1,4 +1,5 @@
 import { Form, useActionData, useLoaderData } from "react-router";
+import InputField from "./ui/inputs/InputField.jsx";
 //import "./UpdateServiceForm.css";
 
 /**
@@ -8,6 +9,7 @@ import { Form, useActionData, useLoaderData } from "react-router";
  * - Uses React Router Form component for form submission
  * - Pre-populates fields with current service data from loaderData
  * - Handles server-side submission via action function (PATCH request)
+ * - Uses custom InputField component for form inputs
  * - Displays error messages from actionData
  * - All fields are optional (only send changed values)
  */
@@ -28,15 +30,14 @@ export default function UpdateServiceForm() {
 			)}
 
 			{/* Title field - optional, pre-populated */}
-			<div className="form-group">
-				<label htmlFor="title">Title</label>
-				<input
-					type="text"
-					id="title"
-					name="title"
-					defaultValue={service.title || ""}
-				/>
-			</div>
+			<InputField
+				type="text"
+				id="title"
+				name="title"
+				label="Title"
+				showLabel={true}
+				defaultValue={service.title || ""}
+			/>
 
 			{/* Description/Content field - optional, pre-populated */}
 			<div className="form-group">
@@ -49,50 +50,46 @@ export default function UpdateServiceForm() {
 			</div>
 
 			{/* Location field - optional, pre-populated */}
-			<div className="form-group">
-				<label htmlFor="location">Location</label>
-				<input
-					type="text"
-					id="location"
-					name="location"
-					defaultValue={service.location || ""}
-				/>
-			</div>
+			<InputField
+				type="text"
+				id="location"
+				name="location"
+				label="Location"
+				showLabel={true}
+				defaultValue={service.location || ""}
+			/>
 
 			{/* Price field - optional, pre-populated */}
-			<div className="form-group">
-				<label htmlFor="price">Price</label>
-				<input
-					type="text"
-					id="price"
-					name="price"
-					placeholder="e.g., 100, 100-200, Contact for pricing"
-					defaultValue={service.price || ""}
-				/>
-			</div>
+			<InputField
+				type="text"
+				id="price"
+				name="price"
+				label="Price"
+				showLabel={true}
+				placeholder="e.g., 100, 100-200, Contact for pricing"
+				defaultValue={service.price || ""}
+			/>
 
 			{/* Tags field - optional, pre-populated */}
-			<div className="form-group">
-				<label htmlFor="tags">Tags</label>
-				<input
-					type="text"
-					id="tags"
-					name="tags"
-					placeholder="Comma separated"
-					defaultValue={service.tags || ""}
-				/>
-			</div>
+			<InputField
+				type="text"
+				id="tags"
+				name="tags"
+				label="Tags"
+				showLabel={true}
+				placeholder="Comma separated"
+				defaultValue={service.tags || ""}
+			/>
 
 			{/* Image URL field - optional, pre-populated */}
-			<div className="form-group">
-				<label htmlFor="img_url">Image URL</label>
-				<input
-					type="url"
-					id="img_url"
-					name="img_url"
-					defaultValue={service.img_url || ""}
-				/>
-			</div>
+			<InputField
+				type="url"
+				id="img_url"
+				name="img_url"
+				label="Image URL"
+				showLabel={true}
+				defaultValue={service.img_url || ""}
+			/>
 
 			{/* Submit button */}
 			<button type="submit">Update Service</button>

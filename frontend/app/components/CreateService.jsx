@@ -1,4 +1,5 @@
 import { Form, useActionData } from "react-router";
+import InputField from "./ui/inputs/InputField.jsx";
 //import "./CreateServiceForm.css";
 
 /**
@@ -7,6 +8,7 @@ import { Form, useActionData } from "react-router";
  * A form for creating new services for a business.
  * - Uses React Router Form component for form submission
  * - Handles server-side submission via action function
+ * - Uses custom InputField component for form inputs
  * - Displays error messages from actionData
  * - Renders form fields with required validation
  */
@@ -24,10 +26,14 @@ export default function CreateServiceForm() {
 			)}
 
 			{/* Title field */}
-			<div className="form-group">
-				<label htmlFor="title">Title</label>
-				<input type="text" id="title" name="title" required />
-			</div>
+			<InputField
+				type="text"
+				id="title"
+				name="title"
+				label="Title"
+				showLabel={true}
+				required
+			/>
 
 			{/* Description/Content field */}
 			<div className="form-group">
@@ -36,39 +42,44 @@ export default function CreateServiceForm() {
 			</div>
 
 			{/* Location field */}
-			<div className="form-group">
-				<label htmlFor="location">Location</label>
-				<input type="text" id="location" name="location" required />
-			</div>
+			<InputField
+				type="text"
+				id="location"
+				name="location"
+				label="Location"
+				showLabel={true}
+				required
+			/>
 
 			{/* Price field - accepts any text format */}
-			<div className="form-group">
-				<label htmlFor="price">Price</label>
-				<input
-					type="text"
-					id="price"
-					name="price"
-					placeholder="e.g., 100, 100-200, Contact for pricing"
-					required
-				/>
-			</div>
+			<InputField
+				type="text"
+				id="price"
+				name="price"
+				label="Price"
+				showLabel={true}
+				placeholder="e.g., 100, 100-200, Contact for pricing"
+				required
+			/>
 
 			{/* Tags field - optional */}
-			<div className="form-group">
-				<label htmlFor="tags">Tags</label>
-				<input
-					type="text"
-					id="tags"
-					name="tags"
-					placeholder="Comma separated"
-				/>
-			</div>
+			<InputField
+				type="text"
+				id="tags"
+				name="tags"
+				label="Tags"
+				showLabel={true}
+				placeholder="Comma separated"
+			/>
 
 			{/* Image URL field - optional */}
-			<div className="form-group">
-				<label htmlFor="img_url">Image URL</label>
-				<input type="url" id="img_url" name="img_url" />
-			</div>
+			<InputField
+				type="url"
+				id="img_url"
+				name="img_url"
+				label="Image URL"
+				showLabel={true}
+			/>
 
 			{/* Submit button - automatically handles loading state via Form */}
 			<button type="submit">Create Service</button>
