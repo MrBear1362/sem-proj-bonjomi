@@ -8,7 +8,10 @@ import RadioCard from "../ui/inputs/RadioCard.jsx";
 import InputField from "../ui/inputs/InputField.jsx";
 import Button from "../ui/buttons/Button.jsx";
 import LineUpSubscription from "../LineUpSubscription.jsx";
-import ToggleSwitch from "../ui/buttons/ToggleSwitch.jsx";
+
+/* import "../UI/inputs/input.css"; */
+import "../UI/buttons/button.css";
+import "../../app.css";
 
 export default function OnboardingSteps() {
 	// start step at user details after initial signup
@@ -130,7 +133,6 @@ export default function OnboardingSteps() {
 			{step === ONBOARDING_STEPS.USER_DETAILS && (
 				<UserDetails onContinue={(data) => nextStep(data)} />
 			)}
-
 			{step === ONBOARDING_STEPS.USER_SELECTION && (
 				<UserSelection
 					onContinue={(manage_business) =>
@@ -138,16 +140,13 @@ export default function OnboardingSteps() {
 					}
 				/>
 			)}
-
 			{step === ONBOARDING_STEPS.BUSINESS_DETAILS &&
 				userType === "business" && (
 					<BusinessDetails onContinue={finishOnboarding} />
 				)}
-
 			{step === ONBOARDING_STEPS.LOOKING_FOR && userType === "musician" && (
 				<LookingFor onContinue={nextStep} onSkip={skip} />
 			)}
-
 			{step === ONBOARDING_STEPS.LINE_UP_PRO && (
 				<LineUpPro onContinue={finishOnboarding} onSkip={finishOnboarding} />
 			)}
@@ -231,7 +230,6 @@ export function UserDetails({ onContinue }) {
 				placeholder="Enter your first name"
 				minLength={2}
 			/>
-
 			{/* input field for last name */}
 			<InputField
 				type="text"
@@ -243,7 +241,6 @@ export function UserDetails({ onContinue }) {
 				placeholder="Enter your last name"
 				minLength={2}
 			/>
-
 			{/* input field for phone number */}
 			<InputField
 				type="tel"
@@ -255,7 +252,6 @@ export function UserDetails({ onContinue }) {
 				placeholder="Phone number"
 				minLength={8}
 			/>
-
 			{/* input field for year of birth */}
 			<InputField
 				type="number"
@@ -268,7 +264,6 @@ export function UserDetails({ onContinue }) {
 				minLength={4}
 				maxLength={4}
 			/>
-
 			{/* input field for location */}
 			<InputField
 				type="text"
@@ -279,17 +274,17 @@ export function UserDetails({ onContinue }) {
 				required
 				placeholder="Enter your city"
 			/>
-
 			{/* // TODO: design error message */}
 			{error && <div className="error-message">{error}</div>}
-
-			<button className="btn-primary" type="submit" disabled={isSubmitting}>
-				{isSubmitting ?
-					<>
-						Continue <LoadingSpinner />
-					</>
-				:	"Continue"}
-			</button>
+			<div className="flex justify-center">
+				<button className="btn-primary" type="submit" disabled={isSubmitting}>
+					{isSubmitting ?
+						<>
+							Continue <LoadingSpinner />
+						</>
+					:	"Continue"}
+				</button>
+			</div>
 		</form>
 	);
 }
@@ -343,37 +338,43 @@ export function UserSelection({ onContinue }) {
 
 	return (
 		<div className="auth-form">
-			<RadioCard
-				value="musician"
-				selected={choice}
-				onChange={setChoice}
-				variant="vertical"
-				title="I am a musician"
-				subtitle="I am a musician looking for collaborations and services"
+			<img
+				src="https://plus.unsplash.com/premium_photo-1758836220128-533dcee38fa2?q=80&w=1211&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+				alt="LineUp Logo"
+				className="element-xs flex justify-center"
 			/>
-
-			<RadioCard
-				value="business"
-				selected={choice}
-				onChange={setChoice}
-				variant="vertical"
-				title="Not a musician"
-				subtitle="I want to provide services for musicians"
-			/>
-
+			<div className="choice flex-clm justify-center">
+				<RadioCard
+					value="musician"
+					selected={choice}
+					onChange={setChoice}
+					variant="vertical"
+					title="I am a musician"
+					subtitle="I am a musician looking for collaborations and services"
+				/>
+				<RadioCard
+					value="business"
+					selected={choice}
+					onChange={setChoice}
+					variant="vertical"
+					title="Not a musician"
+					subtitle="I want to provide services for musicians"
+				/>
+			</div>
 			{error && <div className="error-message">{error}</div>}
-
-			<Button
-				className="btn-primary"
-				onClick={handleSubmit}
-				disabled={isSubmitting || !choice}
-			>
-				{isSubmitting ?
-					<>
-						Continue <LoadingSpinner />
-					</>
-				:	"Continue"}
-			</Button>
+			<div className="flex justify-center">
+				<Button
+					className="btn-primary"
+					onClick={handleSubmit}
+					disabled={isSubmitting || !choice}
+				>
+					{isSubmitting ?
+						<>
+							Continue <LoadingSpinner />
+						</>
+					:	"Continue"}
+				</Button>
+			</div>
 		</div>
 	);
 }
@@ -459,37 +460,39 @@ export function LookingFor({ onContinue, onSkip }) {
 	};
 
 	return (
-		<div className="auth-form">
-			<h2>I am looking to</h2>
-
-			<div className="options-group">
+		<div className="auth-form spacing-4">
+			<h2 className="l-heading looking-for">I am looking to</h2>
+			<div className="spacing-2 flex-clm justify-center gap-1">
 				{options.map((option) => (
 					<RadioCard
 						key={option.id}
 						value={option.id}
 						selected={selectedOption}
 						onChange={setSelectedOption}
-						variant="vertical"
+						variant="horizontal"
 						title={option.label}
 					/>
 				))}
 			</div>
-
 			{error && <div className="error-message">{error}</div>}
-
-			<Button
-				className="btn-primary"
-				onClick={handleSubmit}
-				disabled={isSubmitting || !selectedOption}
+			<div className="flex justify-center">
+				<Button
+					className="btn-primary"
+					onClick={handleSubmit}
+					disabled={isSubmitting || !selectedOption}
+				>
+					{isSubmitting ?
+						<>
+							Continue <LoadingSpinner />
+						</>
+					:	"Continue"}
+				</Button>
+			</div>
+			<button
+				className="btn-skip flex justify-center spacing-1"
+				onClick={handleSkip}
+				disabled={isSubmitting}
 			>
-				{isSubmitting ?
-					<>
-						Continue <LoadingSpinner />
-					</>
-				:	"Continue"}
-			</Button>
-
-			<button className="skip-btn" onClick={handleSkip} disabled={isSubmitting}>
 				Skip for now
 			</button>
 		</div>
@@ -620,7 +623,7 @@ export function LineUpPro({ onContinue, onSkip }) {
 				Finish
 			</Button>
 
-			<button className="skip-btn" onClick={onSkip}>
+			<button className="btn-skip" onClick={onSkip}>
 				Skip
 			</button>
 		</div>
