@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate, NavLink } from "react-router";
 import { useEffect } from "react";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { supabase } from "../library/supabase";
@@ -9,85 +9,105 @@ import Feed from "../components/Feed";
 import Navigation from "../components/Navigation";
 
 export async function clientLoader() {
-  const response = await apiFetch("/api/notes/feed");
+	const response = await apiFetch("/api/notes/feed");
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch notes: ${response.status}`);
-  }
+	if (!response.ok) {
+		throw new Error(`Failed to fetch notes: ${response.status}`);
+	}
 
-  const notes = await response.json();
+	const notes = await response.json();
 
-  return { notes };
+	return { notes };
 }
 
 export async function clientAction({ params, request }) {
-  const formData = await request.formData();
-  const type = formData.get("type");
-  const noteId = formData.get("noteId");
-  const commentId = formData.get("commentId");
-  const isLiked = formData.get("isLiked") === "true";
+	const formData = await request.formData();
+	const type = formData.get("type");
+	const noteId = formData.get("noteId");
+	const commentId = formData.get("commentId");
+	const isLiked = formData.get("isLiked") === "true";
 
-  try {
-    let response;
+	try {
+		let response;
 
-    if (type === "note") {
-      response = await apiFetch(`/api/notes/${noteId}/likes`, {
-        method: isLiked ? "DELETE" : "POST",
-      });
-    } else if (type === "comment") {
-      response = await apiFetch(`/api/note-comments/${commentId}/likes`, {
-        method: isLiked ? "DELETE" : "POST",
-      });
-    } else {
-      return { error: "Unknown type" };
-    }
+		if (type === "note") {
+			response = await apiFetch(`/api/notes/${noteId}/likes`, {
+				method: isLiked ? "DELETE" : "POST",
+			});
+		} else if (type === "comment") {
+			response = await apiFetch(`/api/note-comments/${commentId}/likes`, {
+				method: isLiked ? "DELETE" : "POST",
+			});
+		} else {
+			return { error: "Unknown type" };
+		}
 
-    if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      return { error: err.error || `Request failed: ${response.status}` };
-    }
+		if (!response.ok) {
+			const err = await response.json().catch(() => ({}));
+			return { error: err.error || `Request failed: ${response.status}` };
+		}
 
-    return { success: true };
-  } catch (error) {
-    return { error: error.message };
-  }
+		return { success: true };
+	} catch (error) {
+		return { error: error.message };
+	}
 }
 
 export function meta({}) {
-  return [
-    { title: "LineUp - Find your place in the LineUp" },
-    { name: "description", content: "Welcome to LineUp!" },
-  ];
+	return [
+		{ title: "LineUp - Find your place in the LineUp" },
+		{ name: "description", content: "Welcome to LineUp!" },
+	];
 }
 
 export default function DashboardPage() {
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  const { notes } = useLoaderData();
+	const { notes } = useLoaderData();
 
-  const actionData = useActionData();
+	const actionData = useActionData();
 
-  useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((e) => {
-      if (e === "SIGNED_OUT") {
-        navigate("/auth?step=login");
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+	useEffect(() => {
+		const {
+			data: { subscription },
+		} = supabase.auth.onAuthStateChange((e) => {
+			if (e === "SIGNED_OUT") {
+				navigate("/auth?step=login");
+			}
+		});
+		return () => subscription.unsubscribe();
+	}, [navigate]);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-  };
+	const handleLogout = async () => {
+		await supabase.auth.signOut();
+	};
 
-  return (
-    <ProtectedRoute>
-      <Navigation />
-      <h1>This is das Board 👍</h1>
-      <Feed notes={notes} />
-      <Button onClick={handleLogout}>Logout</Button>
-    </ProtectedRoute>
-  );
+	return (
+		<ProtectedRoute>
+			<header className="dashboard-header">
+				Linup [search icon] | [search icon] | [notification icon] | [burgermenu
+				icon]
+			</header>
+
+			<div>
+				<h1>This is das Board 👍</h1>
+				<Button onClick={handleLogout}>Logout</Button>
+			</div>
+
+			<section className="stories-container">There are stories here</section>
+
+			<section className="collab-requests-container">
+				<h5>Collaboration requests</h5>
+				<section className="collab-feed"></section>
+			</section>
+
+			<section className="notes-feed-container">
+				<h3>Notes feed is here</h3>
+			</section>
+
+			<button>
+				<NavLink to="create-posts">Create +</NavLink>
+			</button>
+		</ProtectedRoute>
+	);
 }

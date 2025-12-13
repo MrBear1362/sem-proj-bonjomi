@@ -1,35 +1,32 @@
-export default function InputField({
-  type = "text",
+export default function TextareaField({
   id,
   name,
   label,
   showLabel = false,
   required = false,
   placeholder = "",
-  minLength,
-  autoComplete,
-  ...rest // allows extra props
+  minLenght,
+  rows = 4,
+  ...rest
 }) {
   return (
     <>
       {label && (
-        <label
-          htmlFor={id}
+        <label htmlFor={id}
           className={showLabel ? "" : "sr-only"}
         >
           {label}
         </label>
       )}
-      <input
-        type={type}
+      <textarea
         id={id}
         name={name}
         required={required}
         placeholder={placeholder}
-        minLength={minLength}
-        autoComplete={autoComplete}
+        minLength={minLenght}
+        rows={rows}
         {...rest}
       />
     </>
-  )
+  );
 }

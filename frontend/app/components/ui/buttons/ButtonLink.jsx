@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import "./button.css";
 
 export default function ButtonLink({ to, query, icon: Icon, children, className }) {
   // construct URL with query params
