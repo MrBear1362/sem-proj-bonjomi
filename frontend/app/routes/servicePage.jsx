@@ -1,7 +1,7 @@
 import { useLoaderData } from "react-router";
 import { ServiceCard } from "../components/Service.jsx";
 import { apiFetch } from "../library/apiFetch.js";
-import styles from "../components/Service.module.css";
+import "../components/Service.css";
 
 /**
  * ServicePage Route
@@ -33,7 +33,7 @@ export default function ServicePage() {
 	const services = useLoaderData();
 
 	return (
-		<div className={styles.servicesGrid}>
+		<div className="servicesGrid">
 			{services.map((service) => (
 				<ServiceCard key={service.id} service={service} mode="preview" />
 			))}

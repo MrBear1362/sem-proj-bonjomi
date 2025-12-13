@@ -1,5 +1,5 @@
 import { redirect, useLoaderData } from "react-router";
-import UpdateServiceForm from "../components/UpdateService.jsx";
+import UpdateServiceForm from "../components/EditService.jsx";
 import { apiFetch } from "../library/apiFetch.js";
 
 /**

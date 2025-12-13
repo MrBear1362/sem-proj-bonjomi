@@ -1,6 +1,6 @@
 import { Form, useActionData } from "react-router";
 import InputField from "./ui/inputs/InputField.jsx";
-//import "./CreateServiceForm.css";
+import Button from "./ui/buttons/Button.jsx";
 
 /**
  * CreateServiceForm Component
@@ -82,7 +82,9 @@ export default function CreateServiceForm() {
 			/>
 
 			{/* Submit button - automatically handles loading state via Form */}
-			<button type="submit">Create Service</button>
+			<Button className="btn-primary" type="submit">
+				Create Service
+			</Button>
 		</Form>
 	);
 }

@@ -1,7 +1,9 @@
 import { Link } from "react-router";
+import { useCurrentUser } from "../library/utils.js";
 import Bookmark from "../components/ui/buttons/Bookmark.jsx";
 import Tag from "../components/ui/buttons/Tag.jsx";
-import styles from "./Service.module.css";
+import Button from "../components/ui/buttons/Button.jsx";
+import "./Service.css";
 
 /**
  * ServiceCard Component
@@ -9,15 +11,18 @@ import styles from "./Service.module.css";
  * A flexible component that displays a service in either preview or detail mode.
  * - Preview mode: Shows compact card with limited content and "Read more" link
  * - Detail mode: Shows full card with all information and action buttons
- * - Uses the same styling with CSS classes that adapt to the mode
+ * - Only shows edit button if current user is the service owner
  */
 export function ServiceCard({ service, mode = "preview" }) {
+	const currentUserId = useCurrentUser();
+
 	const {
 		id,
 		title,
 		content,
 		user_profile_img,
 		business_name,
+		business_id,
 		img_url,
 		location,
 		price,
@@ -26,49 +31,53 @@ export function ServiceCard({ service, mode = "preview" }) {
 	} = service;
 
 	const isDetailMode = mode === "detail";
+	const isOwner = currentUserId && business_id === currentUserId;
 
 	return (
 		<section
-			className={`${styles.serviceCardContainer} ${
-				isDetailMode ? styles.serviceCardFull : ""
+			className={`serviceCardContainer ${
+				isDetailMode ? "serviceCardFull" : ""
 			}`}
 		>
 			<header>
-				<div className={styles.profileContainer}>
+				<div className="profileContainer">
 					<img src={user_profile_img} alt="Business profile" />
 					<p>{business_name}</p>
 					<p>offers</p>
 					<Tag type="static" label={tags} />
 				</div>
-				<div className={styles.bookmarkContainer}>
+				<div className="bookmarkContainer">
 					<Bookmark />
 				</div>
 			</header>
 
-			{!isDetailMode && <div className={styles.divider}></div>}
+			{!isDetailMode && <div className="divider"></div>}
 
-			<h3 className={styles.serviceTitle}>{title}</h3>
-			<img className={styles.serviceMedia} src={img_url} alt={title} />
-			<p className={styles.serviceDescription}>{content}</p>
+			<h3 className="serviceTitle">{title}</h3>
+			<img className="serviceMedia" src={img_url} alt={title} />
+			<p className="serviceDescription">{content}</p>
 			{
 				isDetailMode ?
 					// Detail mode: Show all info and action buttons
-					<div className={styles.serviceDetails}>
-						<div className={styles.actionButtons}>
-							<button className={styles.contactButton}>Start a chat</button>
-							<Link to={`/services/${id}/edit`} className={styles.editButton}>
-								Edit Service
-							</Link>
+					<div className="serviceDetails">
+						<div className="actionButtons">
+							<Button className="btn-primary">Start a chat</Button>
+							{isOwner && (
+								<Link to={`/services/${id}/edit`} className="editButton">
+									Edit Service
+								</Link>
+							)}
 						</div>
-						<div className={styles.infoContainer}>
-							<p className={styles.location}>
+						<div className="infoContainer">
+							<p className="location">
 								<strong>Location:</strong> {location}
 							</p>
-							<p className={styles.price}>
-								<strong>Price:</strong> {price}
+							<p className="price">
+								<strong>Pricing:</strong>
+								<br /> {price}
 							</p>
 						</div>
-						<div className={styles.reviewContainer}>
+						<div className="reviewContainer">
 							<p>
 								<strong>Previous reviews:</strong>
 							</p>
@@ -76,13 +85,13 @@ export function ServiceCard({ service, mode = "preview" }) {
 						</div>
 					</div>
 					// Preview mode: Show link and basic info
-				:	<div className={styles.bottomContainer}>
-						<div className={styles.linkContainer}>
-							<Link to={`/services/${id}`} className={styles.readMore}>
+				:	<div className="bottomContainer">
+						<div className="linkContainer">
+							<Link to={`/services/${id}`} className="readMore">
 								Read more
 							</Link>
 						</div>
-						<div className={styles.infoContainer}>
+						<div className="infoContainer">
 							<p>{location} - posted at</p>
 						</div>
 					</div>

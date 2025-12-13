@@ -514,15 +514,21 @@ export function BusinessDetails({ onContinue }) {
 		const payload = {
 			name: formData.get("name"),
 			phone: formData.get("phone"),
-			location: formData.get("location"),
+			location: isRemote ? null : formData.get("location"),
 			is_remote: isRemote,
 		};
 
 		// validation
 		const { name, phone, location } = payload;
 
-		if (!name || !phone || !location) {
-			setError("All fields are required");
+		if (!name || !phone) {
+			setError("Name and phone are required");
+			setIsSubmitting(false);
+			return;
+		}
+
+		if (!isRemote && !location) {
+			setError("Location is required if not remote");
 			setIsSubmitting(false);
 			return;
 		}
@@ -589,16 +595,18 @@ export function BusinessDetails({ onContinue }) {
 			{/* toggle switch for remote option */}
 			<ToggleSwitch label="Remote" onChange={setIsRemote} />
 
-			{/* input field for location */}
-			<InputField
-				type="text"
-				id="location"
-				name="location"
-				label="Where are you located"
-				showLabel={false}
-				required
-				placeholder="Enter your location"
-			/>
+			{/* input field for location - only show when not remote */}
+			{!isRemote && (
+				<InputField
+					type="text"
+					id="location"
+					name="location"
+					label="Where are you located"
+					showLabel={false}
+					required
+					placeholder="Enter your location"
+				/>
+			)}
 
 			{/* error message */}
 			{error && <div className="error-message">{error}</div>}

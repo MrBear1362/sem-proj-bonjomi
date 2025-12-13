@@ -11,8 +11,8 @@ export default function Bookmark() {
 			aria-label="Toggle bookmark"
 		>
 			<svg
-				width="24"
-				height="32"
+				width="14"
+				height="18"
 				viewBox="0 0 24 32"
 				fill="none"
 				xmlns="http://www.w3.org/2000/svg"

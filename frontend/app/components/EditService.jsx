@@ -1,6 +1,6 @@
 import { Form, useActionData, useLoaderData } from "react-router";
 import InputField from "./ui/inputs/InputField.jsx";
-//import "./UpdateServiceForm.css";
+import Button from "./ui/buttons/Button.jsx";
 
 /**
  * UpdateServiceForm Component
@@ -92,7 +92,9 @@ export default function UpdateServiceForm() {
 			/>
 
 			{/* Submit button */}
-			<button type="submit">Update Service</button>
+			<Button className="btn-primary" type="submit">
+				Update Service
+			</Button>
 		</Form>
 	);
 }
