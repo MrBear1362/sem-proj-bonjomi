@@ -553,7 +553,7 @@ export function BusinessDetails({ onContinue }) {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="auth-form">
+		<form onSubmit={handleSubmit} className="auth-form auth-form-business">
 			{/* input field for business name */}
 			<InputField
 				type="text"
@@ -567,17 +567,22 @@ export function BusinessDetails({ onContinue }) {
 			/>
 
 			{/* input field for phone number */}
-			<InputField
-				type="tel"
-				id="phone"
-				name="phone"
-				label="Phone number"
-				showLabel={true}
-				required
-				placeholder="Phone number"
-				minLength={8}
-			/>
+			<label htmlFor="phone">Phone number</label>
+			<div className="phone-container">
+				<p className="country">🇩🇰</p>
+				<InputField
+					type="tel"
+					id="phone"
+					name="phone"
+					label="Phone number"
+					showLabel={false}
+					required
+					placeholder="Phone number"
+					minLength={8}
+				/>
+			</div>
 
+			<label htmlFor="location">Where are you located</label>
 			{/* toggle switch for remote option */}
 			<ToggleSwitch label="Remote" onChange={setIsRemote} />
 
@@ -587,7 +592,7 @@ export function BusinessDetails({ onContinue }) {
 				id="location"
 				name="location"
 				label="Where are you located"
-				showLabel={true}
+				showLabel={false}
 				required
 				placeholder="Enter your location"
 			/>

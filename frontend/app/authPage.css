@@ -1,19 +1,69 @@
 .auth-page {
-  margin: 0 auto;
-  max-width: 70vw;
-  color: var(--greyscale-500);
+	margin: 0 auto;
+	max-width: 70vw;
+	color: var(--greyscale-500);
 
-  .auth-header {
-    gap: 1rem;
+	.auth-header {
+		gap: 1rem;
 
-    .auth-title,
-    .auth-subtitle {
-      text-align: center;
-    }
-  }
+		.auth-title,
+		.auth-subtitle {
+			text-align: center;
+		}
+	}
 
-  .auth-form {
-    padding-block: 1rem 0;
-    gap: 1rem;
-  }
+	.auth-form {
+		padding-block: 1rem 0;
+		gap: 1rem;
+	}
+}
+
+/* Business-detail styling */
+.auth-form-business {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 260px;
+	height: 90dvh;
+	margin: auto;
+	input {
+		font-size: 16px;
+		margin-bottom: 30px;
+		border-radius: 8px;
+		padding: 10px;
+	}
+	label {
+		font-size: 18px;
+		font-weight: 700;
+		margin-bottom: 16px;
+	}
+
+	.phone-container {
+		display: flex;
+		gap: 10px;
+	}
+
+	.country {
+		height: 40px;
+		border: 1px solid rgba(156, 156, 156, 0.25);
+		border-radius: 8px;
+		padding: 10px;
+	}
+
+	.switchContainer {
+		margin-bottom: 16px;
+	}
+
+	.switchLabel {
+		font-size: 16px;
+		font-weight: 100;
+		margin: 0;
+	}
+
+	.btn-primary {
+		margin: 120px auto 0 auto;
+		font-size: 16px;
+		height: 34px;
+		padding: 4px 20px;
+	}
 }

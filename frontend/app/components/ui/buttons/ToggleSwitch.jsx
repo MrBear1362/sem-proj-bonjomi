@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./ToggleSwitch.module.css";
+import "./ToggleSwitch.css";
 
 export default function ToggleSwitch({ label, onChange }) {
 	const [isToggled, setIsToggled] = useState(false);
@@ -13,17 +13,17 @@ export default function ToggleSwitch({ label, onChange }) {
 	};
 
 	return (
-		<div className={styles.switchContainer}>
+		<div className="switchContainer">
 			<button
-				className={`${styles.toggle} ${isToggled ? styles.toggleActive : ""}`}
+				className={`toggle ${isToggled ? "toggleActive" : ""}`}
 				onClick={handleToggle}
 				role="switch"
 				aria-checked={isToggled}
 				aria-label={label}
 			>
-				<span className={styles.toggleCircle} />
+				<span className="toggleCircle" />
 			</button>
-			<label className={styles.switchLabel}>{label}</label>
+			<label className="switchLabel">{label}</label>
 		</div>
 	);
 }
