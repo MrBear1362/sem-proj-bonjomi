@@ -7,6 +7,7 @@ import LoadingSpinner from "../ui/bits/LoadingSpinner.jsx";
 import RadioCard from "../ui/inputs/RadioCard.jsx";
 import InputField from "../ui/inputs/InputField.jsx";
 import Button from "../ui/buttons/Button.jsx";
+import ToggleSwitch from "../ui/buttons/ToggleSwitch.jsx";
 import LineUpSubscription from "../LineUpSubscription.jsx";
 
 /* import "../UI/inputs/input.css"; */

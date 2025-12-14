@@ -1,6 +1,7 @@
 import { Form, useActionData } from "react-router";
 import InputField from "./ui/inputs/InputField.jsx";
 import Button from "./ui/buttons/Button.jsx";
+import "./Service.css";
 
 /**
  * CreateServiceForm Component
@@ -17,7 +18,7 @@ export default function CreateServiceForm() {
 	const actionData = useActionData();
 
 	return (
-		<Form method="post" className="create-service-form">
+		<Form method="post" className="update-service-form">
 			<h2>Create New Service</h2>
 
 			{/* Display error message if submission failed */}
@@ -32,13 +33,19 @@ export default function CreateServiceForm() {
 				name="title"
 				label="Title"
 				showLabel={true}
+				placeholder="Service title"
 				required
 			/>
 
 			{/* Description/Content field */}
 			<div className="form-group">
 				<label htmlFor="content">Description</label>
-				<textarea id="content" name="content" required />
+				<textarea
+					id="content"
+					name="content"
+					placeholder="Service description"
+					required
+				/>
 			</div>
 
 			{/* Location field */}
@@ -48,6 +55,7 @@ export default function CreateServiceForm() {
 				name="location"
 				label="Location"
 				showLabel={true}
+				placeholder="City or location"
 				required
 			/>
 
@@ -79,6 +87,7 @@ export default function CreateServiceForm() {
 				name="img_url"
 				label="Image URL"
 				showLabel={true}
+				placeholder="https://example.com/image.jpg"
 			/>
 
 			{/* Submit button - automatically handles loading state via Form */}

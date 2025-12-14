@@ -1,6 +1,7 @@
 import { Form, useActionData, useLoaderData } from "react-router";
 import InputField from "./ui/inputs/InputField.jsx";
 import Button from "./ui/buttons/Button.jsx";
+import "./Service.css";
 
 /**
  * UpdateServiceForm Component
