@@ -1,7 +1,7 @@
 import { Link, useLoaderData, Form, useActionData } from "react-router";
 import { apiFetch } from "../lib/apiFetch.js";
 import { supabase } from "../lib/supabase.js";
-import React from "react";
+import React, { useState } from "react";
 
 // ===== CLIENTLOADER =====
 // This runs BEFORE the component renders
@@ -128,6 +128,7 @@ function Message({ message, conversationAvatar }) {
 }
 
 function MessageInput({ shouldReset = false }) {
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const formRef = React.useRef(null);
   React.useEffect(() => {
     if (shouldReset && formRef.current) {
@@ -154,23 +155,44 @@ function MessageInput({ shouldReset = false }) {
           type="text"
           name="message"
           placeholder="Aa"
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={() => {
+            setTimeout(() => setIsInputFocused(false), 200);
+          }}
           className="message-input"
           required
         />
-        <button type="button" className="voice-btn" aria-label="Voice message">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <circle cx="12" cy="12" r="10" fill="#4A5568" />
-            <path
-              d="M12 14a3 3 0 0 0 3-3V7a3 3 0 0 0-6 0v4a3 3 0 0 0 3 3z"
-              fill="white"
-            />
-            <path
-              d="M8 11a4 4 0 0 0 8 0M12 14v3"
-              stroke="white"
-              strokeWidth="2"
-            />
-          </svg>
-        </button>
+        {isInputFocused ? (
+          <button
+            type="submit"
+            className="send-btn"
+            aria-label="Send message"
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+              <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H.75a.75.75 0 000 1.5h4.232l-2.432 7.905a.75.75 0 00.926.94l15.55-12.35a.75.75 0 000-1.18L3.478 2.405z" />
+            </svg>
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="voice-btn"
+            aria-label="Voice message"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="10" fill="#4A5568" />
+              <path
+                d="M12 14a3 3 0 0 0 3-3V7a3 3 0 0 0-6 0v4a3 3 0 0 0 3 3z"
+                fill="white"
+              />
+              <path
+                d="M8 11a4 4 0 0 0 8 0M12 14v3"
+                stroke="white"
+                strokeWidth="2"
+              />
+            </svg>
+          </button>
+        )}
       </Form>
     </div>
   );

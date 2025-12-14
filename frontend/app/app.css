@@ -786,3 +786,20 @@ body {
 .user-results::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
+.send-btn {
+  background: #0ea5e9;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.send-btn:hover {
+  opacity: 0.7;
+}
