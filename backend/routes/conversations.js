@@ -12,22 +12,34 @@ router.get("/api/conversations", requireAuth, async (req, res) => {
 
     const rows = await sql`
       SELECT
-        c.id,
-        c.title,
-        c.created_at,
-        m.content as last_message_content,
-        m.created_at as last_message_time
-      FROM conversations c
-      INNER JOIN conversation_participants cpa ON c.id = cpa.conversation_id
-      LEFT JOIN LATERAL (
-        SELECT content, created_at
-        FROM messages
-        WHERE conversation_id = c.id
-        ORDER BY created_at DESC
-        LIMIT 1
-      ) m on true
-      WHERE cpa.user_id = ${userId}
-      ORDER BY COALESCE(m.created_at, c.created_at) DESC`;
+      c.id,
+      CASE
+        WHEN c.title IS NULL OR c.title = '' THEN
+          (
+            SELECT u.first_name || ' ' || u.last_name
+            FROM conversation_participants cpa2
+            JOIN users u ON u.auth_user_id = cpa2.user_id
+            WHERE cpa2.conversation_id = c.id
+              AND cpa2.user_id != ${userId}
+            LIMIT 1
+          )
+        ELSE c.title
+      END as title,
+      c.created_at,
+      m.content as last_message_content,
+      m.created_at as last_message_time
+    FROM conversations c
+    JOIN conversation_participants cpa ON cpa.conversation_id = c.id
+    LEFT JOIN LATERAL (
+      SELECT content, created_at
+      FROM messages
+      WHERE conversation_id = c.id
+      ORDER BY created_at DESC
+      LIMIT 1
+    ) m ON true
+    WHERE cpa.user_id = ${userId}
+    ORDER BY COALESCE(m.created_at, c.created_at) DESC
+    `;
 
     res.json(rows);
   } catch (error) {
@@ -52,9 +64,24 @@ router.get("/api/conversations/:id", requireAuth, async (req, res) => {
     }
 
     const rows = await sql`
-      SELECT id, title, created_at
-      FROM conversations
-      WHERE id = ${id}`;
+      SELECT
+        c.id,
+        CASE
+          WHEN c.title IS NULL OR c.title = '' THEN
+            (
+              SELECT u.first_name || ' ' || u.last_name
+              FROM conversation_participants cpa2
+              JOIN users u ON u.auth_user_id = cpa2.user_id
+              WHERE cpa2.conversation_id = c.id
+                AND cpa2.user_id != ${userId}
+              LIMIT 1
+            )
+          ELSE c.title
+        END as title,
+        c.created_at
+      FROM conversations c
+      WHERE c.id = ${id}
+      `;
 
     if (rows.length === 0) {
       return res.status(404).json({ error: "Conversation not found" });
@@ -120,9 +147,8 @@ router.post("/api/conversations", requireAuth, async (req, res) => {
       }
 
       const { first_name, last_name } = targetUser[0];
-      // Combine first and last name for title
-      finalTitle =
-        [first_name, last_name].filter(Boolean).join(" ") || "New Conversation";
+      // For 1-on-1 conversations, leave title NULL (will be dynamic per user)
+      finalTitle = null;
 
       // Check if a 1:1 conversation already exists with exactly these 2 users
       const existing = await sql`

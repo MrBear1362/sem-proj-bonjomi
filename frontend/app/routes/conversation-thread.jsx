@@ -1,6 +1,7 @@
 import { Link, useLoaderData, Form, useActionData } from "react-router";
 import { apiFetch } from "../lib/apiFetch.js";
 import { supabase } from "../lib/supabase.js";
+import React from "react";
 
 // ===== CLIENTLOADER =====
 // This runs BEFORE the component renders
@@ -126,10 +127,18 @@ function Message({ message, conversationAvatar }) {
   );
 }
 
-function MessageInput() {
+function MessageInput({ shouldReset = false }) {
+  const formRef = React.useRef(null);
+  React.useEffect(() => {
+    if (shouldReset && formRef.current) {
+      formRef.current.reset();
+      const input = formRef.current.querySelector('[name="message"]');
+      if (input) input.focus();
+    }
+  }, [shouldReset]);
   return (
     <div className="message-input-container">
-      <Form method="post" className="message-input-form">
+      <Form method="post" className="message-input-form" ref={formRef}>
         <button type="button" className="add-btn" aria-label="Add attachment">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
             <circle cx="12" cy="12" r="10" fill="#4A5568" />
@@ -183,7 +192,7 @@ export default function ConversationThread() {
           />
         ))}
       </div>
-      <MessageInput />
+      <MessageInput shouldReset={Boolean(actionData?.success)} />
 
       {actionData?.error && (
         <div
