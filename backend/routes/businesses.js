@@ -142,7 +142,7 @@ router.patch("/api/businesses/:id", requireAuth, async (req, res) => {
 									is_remote !== undefined ? is_remote : sql`is_remote`
 								},
                 location = ${location || sql`location`}
-            WHERE ${req.userId} = ${businessId}
+            WHERE auth_user_id = ${req.userId}
             RETURNING auth_user_id, name, phone, is_remote, location
         `;
 
