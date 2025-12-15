@@ -1,4 +1,5 @@
 import { useSubmit, useNavigation, redirect, useRouteLoaderData } from "react-router";
+import { use, useState } from "react";
 import { apiFetch } from "../../library/apiFetch";
 
 // component import
@@ -81,6 +82,9 @@ export default function CreateRequest() {
   const submit = useSubmit();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+  const [isRemote, setIsRemote] = useState(false);
+  const [location, setLocation] = useState("");
+  const [savedLocation, setSavedLocation] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -88,6 +92,15 @@ export default function CreateRequest() {
     // submit to this route's clientAction
     submit(formData, { method: "post" });
   };
+
+  function onRemoteToggle(checked) {
+    if (checked) {
+      setSavedLocation(location);
+      setLocation("Remote");
+    } else {
+      setLocation(savedLocation);
+    }
+  }
 
   return (
     <section className="post-content">
@@ -132,13 +145,27 @@ export default function CreateRequest() {
           label="Location"
           placeholder="Add location"
           autoComplete="address-level2"
-          className="text-input"
+          className={`text-input ${isRemote ? "input-disabled" : ""}`}
+          value={location}
+          disabled={isRemote}
+          onChange={(e) => setLocation(e.target.value)}
         />
-
 
         <div className="toggle flex-clm">
           <div className="container">
-            <input type="checkbox" className="checkbox" id="remote" name="remote" value="true" />
+            <input
+              type="checkbox"
+              className="checkbox"
+              id="remote"
+              name="remote"
+              value="true"
+              checked={isRemote}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                setIsRemote(checked);
+                onRemoteToggle(checked);
+              }}
+            />
             <label className="switch" htmlFor="remote">
               <span className="slider"></span>
             </label>
