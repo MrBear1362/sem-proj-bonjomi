@@ -105,7 +105,9 @@ export default function DashboardPage() {
       </section>
 
       <button>
-        <NavLink to="create-posts">Create +</NavLink>
+        <NavLink to="create-posts" className={button}>
+          Create +
+        </NavLink>
       </button>
       <Footer />
     </ProtectedRoute>
