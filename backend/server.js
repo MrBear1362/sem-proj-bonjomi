@@ -38,12 +38,12 @@ app.use(
 
 // root endpoint - verify server status
 app.get("/", (req, res) => {
-  res.json({
-    message: "Welcome to lineUp API server! 🎶",
-    version: "0.0.1",
-  });
+	res.json({
+		message: "Welcome to lineUp API server! 🎶",
+		version: "0.0.1",
+	});
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+	console.log(`Server is running on http://localhost:${PORT}`);
 });

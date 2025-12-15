@@ -1,5 +1,5 @@
 import { redirect } from "react-router";
-import CreateServiceForm from "../components/CreateServiceForm.jsx";
+import CreateServiceForm from "../components/CreateService.jsx";
 import { apiFetch } from "../library/apiFetch.js";
 
 /**

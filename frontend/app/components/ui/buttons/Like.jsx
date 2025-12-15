@@ -3,34 +3,34 @@ import { useState, useEffect } from "react";
 import "./Like.css";
 
 export default function Like({ type, noteId, commentId, likeCount, isLiked }) {
-  const fetcher = useFetcher();
-  const [optimisticLiked, setOptimisticLiked] = useState(isLiked);
-  const [optimisticCount, setOptimisticCount] = useState(likeCount);
+	const fetcher = useFetcher();
+	const [optimisticLiked, setOptimisticLiked] = useState(isLiked);
+	const [optimisticCount, setOptimisticCount] = useState(likeCount);
 
-  useEffect(() => {
-    setOptimisticLiked(isLiked);
-    setOptimisticCount(likeCount);
-  }, [isLiked, likeCount]);
+	useEffect(() => {
+		setOptimisticLiked(isLiked);
+		setOptimisticCount(likeCount);
+	}, [isLiked, likeCount]);
 
-  const handleLike = () => {
-    setOptimisticLiked(!optimisticLiked);
-    setOptimisticCount((prev) => (optimisticLiked ? prev - 1 : prev + 1));
+	const handleLike = () => {
+		setOptimisticLiked(!optimisticLiked);
+		setOptimisticCount((prev) => (optimisticLiked ? prev - 1 : prev + 1));
 
-    if (type === "note") {
-      fetcher.submit(
-        { type: "note", noteId, isLiked: optimisticLiked.toString() },
-        { method: "post" }
-      );
-    } else if (type === "comment") {
-      fetcher.submit(
-        { type: "comment", commentId, isLiked: optimisticLiked.toString() },
-        { method: "post" }
-      );
-    }
-  };
+		if (type === "note") {
+			fetcher.submit(
+				{ type: "note", noteId, isLiked: optimisticLiked.toString() },
+				{ method: "post" }
+			);
+		} else if (type === "comment") {
+			fetcher.submit(
+				{ type: "comment", commentId, isLiked: optimisticLiked.toString() },
+				{ method: "post" }
+			);
+		}
+	};
 
-  const isComment = type === "comment";
-  const size = isComment ? 16 : 20;
+	const isComment = type === "comment";
+	const size = isComment ? 16 : 20;
 
   return (
     <div className={`container ${isComment ? "container--comment" : ""}`}>

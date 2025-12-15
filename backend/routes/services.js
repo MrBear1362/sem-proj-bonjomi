@@ -225,7 +225,7 @@ router.patch("/api/services/:id", requireAuth, async (req, res) => {
                 price = ${price || sql`price`}, 
                 tags = ${tags || null}, 
                 img_url = ${img_url || null}
-            WHERE id = ${serviceId} AND business_id = ${req.user.id}
+            WHERE id = ${serviceId} AND business_id = ${req.userId}
             RETURNING id, title, content, location, price, tags, img_url, business_id, tag_id
         `;
 
@@ -259,7 +259,7 @@ router.delete("/api/services/:id", requireAuth, async (req, res) => {
     // This ensures users can only delete services owned by their business
     const result = await sql`
             DELETE FROM services
-            WHERE id = ${serviceId} AND business_id = ${req.user.id}
+            WHERE id = ${serviceId} AND business_id = ${req.userId}
             RETURNING id
         `;
 

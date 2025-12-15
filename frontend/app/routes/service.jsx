@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router";
-import { ServiceDetailCard } from "../components/Service.jsx";
+import { ServiceCard } from "../components/Service.jsx";
 import { apiFetch } from "../library/apiFetch.js";
 
 /**
@@ -34,5 +34,5 @@ export async function clientLoader({ params }) {
 
 export default function ServiceDetail() {
 	const service = useLoaderData();
-	return <ServiceDetailCard service={service} />;
+	return <ServiceCard service={service} mode="detail" />;
 }
