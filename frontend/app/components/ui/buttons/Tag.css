@@ -1,5 +1,3 @@
-@import "../../../app.css";
-
 .tag {
   padding: 0.2rem 0.5rem;
   background: transparent;
@@ -13,8 +11,8 @@
 }
 
 .tagActive {
-  background: #000;
-  color: #fff;
+  background: var(--greyscale-900);
+  color: var(--greyscale-100);
 }
 
 .with--border {

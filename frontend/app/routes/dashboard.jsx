@@ -7,6 +7,7 @@ import { useLoaderData, useActionData } from "react-router";
 import Button from "../components/ui/buttons/Button";
 import Feed from "../components/Feed";
 import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
 
 export async function clientLoader() {
 	const response = await apiFetch("/api/notes/feed");
@@ -61,53 +62,50 @@ export function meta({}) {
 }
 
 export default function DashboardPage() {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	const { notes } = useLoaderData();
+  const { notes } = useLoaderData();
 
-	const actionData = useActionData();
+  const actionData = useActionData();
 
-	useEffect(() => {
-		const {
-			data: { subscription },
-		} = supabase.auth.onAuthStateChange((e) => {
-			if (e === "SIGNED_OUT") {
-				navigate("/auth?step=login");
-			}
-		});
-		return () => subscription.unsubscribe();
-	}, [navigate]);
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((e) => {
+      if (e === "SIGNED_OUT") {
+        navigate("/auth?step=login");
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
-	const handleLogout = async () => {
-		await supabase.auth.signOut();
-	};
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
 
-	return (
-		<ProtectedRoute>
-			<header className="dashboard-header">
-				Linup [search icon] | [search icon] | [notification icon] | [burgermenu
-				icon]
-			</header>
+  return (
+    <ProtectedRoute>
+      <Navigation />
+      <div>
+        <h1>This is das Board 👍</h1>
+        <Button onClick={handleLogout}>Logout</Button>
+      </div>
 
-			<div>
-				<h1>This is das Board 👍</h1>
-				<Button onClick={handleLogout}>Logout</Button>
-			</div>
+      <section className="stories-container">There are stories here</section>
 
-			<section className="stories-container">There are stories here</section>
+      <section className="collab-requests-container">
+        <h5>Collaboration requests</h5>
+        <section className="collab-feed"></section>
+      </section>
 
-			<section className="collab-requests-container">
-				<h5>Collaboration requests</h5>
-				<section className="collab-feed"></section>
-			</section>
+      <Feed notes={notes} />
 
-			<section className="notes-feed-container">
-				<h3>Notes feed is here</h3>
-			</section>
-
-			<button>
-				<NavLink to="create-posts">Create +</NavLink>
-			</button>
-		</ProtectedRoute>
-	);
+      <button>
+        <NavLink to="create-posts" className="button">
+          Create +
+        </NavLink>
+      </button>
+      <Footer />
+    </ProtectedRoute>
+  );
 }

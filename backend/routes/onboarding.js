@@ -13,7 +13,9 @@ router.post("/api/signup", requireAuth, async (req, res) => {
     // set initial next step after signup
     const defaultStep = "user-selection";
     if (!ONBOARDING_STEPS.includes(defaultStep)) {
-      return res.status(500).json({ error: "Invalid onboarding configuration" });
+      return res
+        .status(500)
+        .json({ error: "Invalid onboarding configuration" });
     }
 
     const existing = await sql`
@@ -44,7 +46,9 @@ router.patch("/api/signup/user-details", requireAuth, async (req, res) => {
 
     const nextStep = "user-selection";
     if (!ONBOARDING_STEPS.includes(nextStep)) {
-      return res.status(500).json({ error: "Invalid onboarding configuration" });
+      return res
+        .status(500)
+        .json({ error: "Invalid onboarding configuration" });
     }
 
     const updated = await sql`
@@ -90,7 +94,9 @@ router.patch("/api/signup/user-selection", requireAuth, async (req, res) => {
     const nextStep = manage_business ? "business-details" : "looking-for";
 
     if (!ONBOARDING_STEPS.includes(nextStep)) {
-      return res.status(400).json({ error: "Invalid onboarding step transition" });
+      return res
+        .status(400)
+        .json({ error: "Invalid onboarding step transition" });
     }
 
     const selection = await sql`
@@ -117,6 +123,7 @@ router.get("/api/onboarding-state", requireAuth, async (req, res) => {
   try {
     const user = await sql`
     SELECT
+      manage_business,
       onboarding_step
     FROM users
     WHERE auth_user_id = ${req.userId}

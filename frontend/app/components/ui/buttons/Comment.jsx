@@ -1,4 +1,3 @@
-import { useFetcher } from "react-router";
 import "./comment.css";
 
 export default function Comment({ commentCount = 0, isOpen, onClick }) {

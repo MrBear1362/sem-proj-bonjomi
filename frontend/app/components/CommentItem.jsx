@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-import Like from "./UI/buttons/Like";
-import InputField from "./UI/inputs/InputField";
-
-import "../app.css";
-import "./commentSection.css";
-import "./UI/buttons/comment.css";
+import Like from "./ui/buttons/Like";
+import InputField from "./ui/inputs/InputField";
 
 export default function CommentItem({
   comment,
@@ -12,7 +8,7 @@ export default function CommentItem({
   repliesMap,
   isNested = false,
 }) {
-  const [replyTo, setReplyto] = useState(null);
+  const [replyTo, setReplyTo] = useState(null);
   const replies = repliesMap[comment.id] || [];
 
   return (

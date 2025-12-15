@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { apiFetch } from "../library/apiFetch";
 import CommentItem from "./CommentItem";
-import InputField from "./UI/inputs/InputField";
-
-import "../app.css";
-import "./commentSection.css";
+import InputField from "./ui/inputs/InputField";
 
 export default function CommentSection({ noteId }) {
   const [comments, setComments] = useState([]);

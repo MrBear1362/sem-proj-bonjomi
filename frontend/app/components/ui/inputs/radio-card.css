@@ -43,6 +43,19 @@
   }
 }
 
+.pricing-wrap {
+  border: 1px solid var(--greyscale-900);
+  padding: 0.5rem 1rem;
+  gap: 1rem;
+}
+
+.checklist-item::before {
+  content: "✓ ";
+  color: var(--primary-yellow);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
 .vertical-wrap {
   border: 1px solid var(--greyscale-500);
   border-radius: 2rem;
