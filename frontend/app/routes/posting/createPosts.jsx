@@ -1,6 +1,6 @@
-import { Outlet, NavLink, redirect, useActionData } from "react-router";
+import { Outlet, NavLink } from "react-router";
 
-export default function createPostsLayout() {
+export default function CreatePostsLayout() {
   return (
     <div className="posting-container">
       <nav className="posting-tab-nav flex-row">
@@ -30,7 +30,6 @@ export default function createPostsLayout() {
       <section className="tab-content">
         <Outlet />
       </section>
-
     </div>
   );
 }

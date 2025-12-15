@@ -9,6 +9,8 @@ import Feed from "../components/Feed";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
+import "../app.css";
+
 export async function clientLoader() {
   const response = await apiFetch("/api/notes/feed");
 
@@ -69,7 +71,9 @@ export default function DashboardPage() {
   const actionData = useActionData();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((e) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((e) => {
       if (e === "SIGNED_OUT") {
         navigate("/auth?step=login");
       }
@@ -83,8 +87,7 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute>
-      <header className="dashboard-header">Linup [search icon] | [search icon] | [notification icon] | [burgermenu icon]</header>
-
+      <Navigation />
       <div>
         <h1>This is das Board 👍</h1>
         <Button onClick={handleLogout}>Logout</Button>
@@ -101,8 +104,8 @@ export default function DashboardPage() {
         <Feed notes={notes} />
       </section>
 
-      <button >
-        <NavLink to="create-posts">
+      <button>
+        <NavLink to="create-posts" className={button}>
           Create +
         </NavLink>
       </button>

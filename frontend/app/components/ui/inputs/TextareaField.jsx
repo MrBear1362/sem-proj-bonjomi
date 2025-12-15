@@ -5,16 +5,14 @@ export default function TextareaField({
   showLabel = false,
   required = false,
   placeholder = "",
-  minLenght,
+  minLength,
   rows = 4,
   ...rest
 }) {
   return (
     <>
       {label && (
-        <label htmlFor={id}
-          className={showLabel ? "" : "sr-only"}
-        >
+        <label htmlFor={id} className={showLabel ? "" : "sr-only"}>
           {label}
         </label>
       )}
@@ -23,7 +21,7 @@ export default function TextareaField({
         name={name}
         required={required}
         placeholder={placeholder}
-        minLength={minLenght}
+        minLength={minLength}
         rows={rows}
         {...rest}
       />
