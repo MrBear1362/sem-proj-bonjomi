@@ -27,7 +27,8 @@ router.get("/api/conversations", requireAuth, async (req, res) => {
       END as title,
       c.created_at,
       m.content as last_message_content,
-      m.created_at as last_message_time
+      m.created_at as last_message_time,
+      (SELECT COUNT(*) FROM conversation_participants WHERE conversation_id = c.id) as participant_count
     FROM conversations c
     JOIN conversation_participants cpa ON cpa.conversation_id = c.id
     LEFT JOIN LATERAL (

@@ -19,6 +19,7 @@ export async function clientLoader() {
           conv.last_message_time || conv.created_at
         ).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
         unread: false,
+        participantCount: Number(conv.participant_count),
       })),
     };
   } catch (error) {
@@ -144,13 +145,22 @@ export default function MessagesList() {
       <MessagesHeader />
       <MessagesTabs activeTab={activeTab} onTabChange={setActiveTab} />
       <div className="conversations-list">
-        {conversations.map((conversation) => (
-          <ConversationItem
-            key={conversation.id}
-            conversation={conversation}
-            onDelete={handleDeleteConversation}
-          />
-        ))}
+        {conversations
+          .filter((conversation) => {
+            if (activeTab === "chats") {
+              return conversation.participantCount === 2;
+            } else if (activeTab === "groups") {
+              return conversation.participantCount > 2;
+            }
+            return true;
+          })
+          .map((conversation) => (
+            <ConversationItem
+              key={conversation.id}
+              conversation={conversation}
+              onDelete={handleDeleteConversation}
+            />
+          ))}
       </div>
     </div>
   );
