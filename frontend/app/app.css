@@ -5,10 +5,19 @@
 @import "./layout.css";
 @import "./authPage.css";
 @import "./components/ui/bits/loading-spinner.css";
+@import "./components/ui/bits/user-identifier.css";
+@import "./components/ui/buttons/Bookmark.css";
 @import "./components/ui/buttons/button.css";
+@import "./components/ui/buttons/Comment.css";
+@import "./components/ui/buttons/Like.css";
+@import "./components/ui/buttons/Tag.css";
+@import "./components/ui/buttons/ToggleSwitch.css";
 @import "./components/ui/inputs/input.css";
 @import "./components/ui/inputs/radio-card.css";
-@import "./components/ui/bits/user-identifier.css";
+@import "./components/CommentSection.css";
+@import "./components/Footer.css";
+@import "./components/NoteCard.css";
+@import "./components/Service.css";
 @import "./routes/posting/posting.css";
 
 /* global */
