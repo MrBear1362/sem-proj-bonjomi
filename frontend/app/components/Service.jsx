@@ -31,7 +31,7 @@ export function ServiceCard({ service, mode = "preview" }) {
 	} = service;
 
 	const isDetailMode = mode === "detail";
-	const isOwner = currentUserId && business_id === currentUserId;
+	const isOwner = currentUserId != null && business_id === currentUserId;
 
 	return (
 		<section
