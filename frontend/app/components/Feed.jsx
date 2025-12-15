@@ -3,7 +3,7 @@ import NoteCard from "../components/NoteCard.jsx";
 import { useLoaderData } from "react-router";
 
 import "../app.css";
-import "../components/NoteCard.css";
+import "../components/noteCard.css";
 
 export default function Feed({ notes: notesProp }) {
   const loaderData = useLoaderData();

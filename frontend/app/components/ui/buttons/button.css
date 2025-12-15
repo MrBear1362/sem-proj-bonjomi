@@ -19,7 +19,7 @@ button {
   color: var(--greyscale-900);
   cursor: pointer;
   & span {
-    color: #007aff;
+    color: var(--accent-blue);
   }
 }
 .btn-skip {

@@ -14,7 +14,7 @@ export default function CreateNote() {
           rows="1"
           required
         />
-        <input type="image" name="mediaUrl" placeholder=" + Add Media"></input>
+        <input type="url" name="mediaUrl" placeholder=" + Add Media" />
         <textarea
           name="content"
           placeholder="Write a description..."

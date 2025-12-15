@@ -33,7 +33,11 @@ export default function NotificationFeed() {
       <Section title="Collaboration requests" items={grouped.collab ?? []} />
       <Section
         title="Profile interactions"
-        items={grouped.like ?? grouped.comment ?? grouped.repost ?? []}
+        items={[
+          ...(grouped.like ?? []),
+          ...(grouped.comment ?? []),
+          ...(grouped.repost ?? []),
+        ]}
       />
     </>
   );
