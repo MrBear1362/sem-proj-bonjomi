@@ -5,7 +5,7 @@ import InputField from "./ui/inputs/InputField";
 import Button from "./ui/buttons/Button";
 
 import "../app.css";
-import "./noteCard.css";
+import "./NoteCard.css";
 import "./ui/buttons/button.css";
 
 export default function Navigation() {

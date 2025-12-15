@@ -4,7 +4,7 @@ import CommentItem from "./CommentItem";
 import InputField from "./ui/inputs/InputField";
 
 import "../app.css";
-import "./commentSection.css";
+import "./CommentSection.css";
 
 export default function CommentSection({ noteId }) {
   const [comments, setComments] = useState([]);

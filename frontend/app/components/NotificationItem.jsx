@@ -1,8 +1,8 @@
 import React from "react";
-import Like from "./Like";
-import Repost from "./Repost";
+import Like from "./ui/buttons/Like";
+import Repost from "./ui/buttons/Repost";
 import Time from "./Time";
-import Preview from "./Preview";
+import Preview from "./ui/Preview";
 
 export default function NotificationItem({ notification }) {
   const name =

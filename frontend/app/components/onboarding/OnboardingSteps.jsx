@@ -118,8 +118,6 @@ export default function OnboardingSteps() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ step: "finished" }),
       });
-      // is apifetch throwing before catch?
-      console.log("after fetch");
       window.location.href = "/";
     } catch (error) {
       console.error(error);

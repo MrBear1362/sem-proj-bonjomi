@@ -3,7 +3,7 @@ import CreateNote from "../components/CreateNote.jsx";
 import { apiFetch } from "../library/apiFetch.js";
 
 import "../app.css";
-import "../components/noteCard.css";
+import "../components/NoteCard.css";
 
 export async function clientAction({ request }) {
   const formData = await request.formData();
@@ -49,7 +49,7 @@ export async function clientAction({ request }) {
   }
 }
 
-export default function createNote() {
+export default function CreateNote() {
   const actionData = useActionData();
 
   return (
