@@ -27,3 +27,13 @@ button {
   background: none;
   text-decoration: underline;
 }
+
+.btn-nav {
+  background: none;
+  color: var(--greyscale-900);
+  border: none;
+  & svg {
+    height: 2rem;
+    width: 2rem;
+  }
+}

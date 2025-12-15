@@ -7,6 +7,7 @@ import { useLoaderData, useActionData } from "react-router";
 import Button from "../components/ui/buttons/Button";
 import Feed from "../components/Feed";
 import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
 
 export async function clientLoader() {
   const response = await apiFetch("/api/notes/feed");
@@ -88,6 +89,7 @@ export default function DashboardPage() {
       <h1>This is das Board 👍</h1>
       <Feed notes={notes} />
       <Button onClick={handleLogout}>Logout</Button>
+      <Footer />
     </ProtectedRoute>
   );
 }

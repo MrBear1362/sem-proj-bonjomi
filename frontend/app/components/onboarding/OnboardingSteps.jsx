@@ -23,6 +23,10 @@ export default function OnboardingSteps() {
   const [userType, setUserType] = useState(null);
 
   useEffect(() => {
+    localStorage.setItem("onboardingStep", step);
+  }, [step]);
+
+  useEffect(() => {
     let cancelled = false;
 
     async function init() {
@@ -517,16 +521,48 @@ export function BusinessDetails({ onContinue }) {
 }
 
 export function LineUpPro({ onContinue, onSkip }) {
+  const [selectedPlan, setSelectedPlan] = useState(null);
   return (
-    <div className="auth-form">
-      <h1>Hello from lineup pro</h1>
+    <div className="auth-form flex-clm justify-center">
+      <img src="" alt="LineUp logo" className="element-xl" />
+      <h1>Get full access to LineUp</h1>
+      <p className="checklist-item">Unlimited collabs</p>
+      <p className="checklist-item">unlimited connections</p>
+      <p className="checklist-item">Advanced insights</p>
+      <p className="checklist-item">See detailed reviews</p>
+
+      <RadioCard
+        value="Monthly"
+        selected={selectedPlan}
+        onChange={setSelectedPlan}
+        variant="pricing"
+        title="Monthly"
+        subtitle="58 kr. / month"
+        price="58 kr."
+      />
+      <RadioCard
+        value="Yearly"
+        selected={selectedPlan}
+        onChange={setSelectedPlan}
+        variant="pricing"
+        title="Yearly"
+        subtitle="29 kr. / month"
+        price="348 kr."
+        discount="save 50%"
+      />
       {/* <LineUpSubscription /> */}
-      <Button className="btn-primary" onClick={onContinue}>
-        Finish
+      <Button
+        className="btn-primary"
+        onClick={onContinue}
+        disabled={!selectedPlan}
+      >
+        Start my 7-day trial
       </Button>
 
+      <p className="xs-text">Terms of use and Privacy Policy</p>
+
       <button className="btn-skip" onClick={onSkip}>
-        Skip
+        Skip for now
       </button>
     </div>
   );
