@@ -3,9 +3,6 @@ import { apiFetch } from "../library/apiFetch";
 import CommentItem from "./CommentItem";
 import InputField from "./ui/inputs/InputField";
 
-import "../app.css";
-import "./CommentSection.css";
-
 export default function CommentSection({ noteId }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);

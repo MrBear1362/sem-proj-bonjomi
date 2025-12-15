@@ -9,8 +9,6 @@ import Feed from "../components/Feed";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
-import "../app.css";
-
 export async function clientLoader() {
 	const response = await apiFetch("/api/notes/feed");
 
@@ -100,12 +98,10 @@ export default function DashboardPage() {
         <section className="collab-feed"></section>
       </section>
 
-      <section className="notes-feed-container">
-        <Feed notes={notes} />
-      </section>
+      <Feed notes={notes} />
 
       <button>
-        <NavLink to="create-posts" className={button}>
+        <NavLink to="create-posts" className="button">
           Create +
         </NavLink>
       </button>

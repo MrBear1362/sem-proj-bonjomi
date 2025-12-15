@@ -10,10 +10,6 @@ import Button from "../ui/buttons/Button.jsx";
 import ToggleSwitch from "../ui/buttons/ToggleSwitch.jsx";
 import LineUpSubscription from "../LineUpSubscription.jsx";
 
-/* import "../UI/inputs/input.css"; */
-import "../ui/buttons/button.css";
-import "../../app.css";
-
 export default function OnboardingSteps() {
 	// start step at user details after initial signup
 	// const [step, setStep] = useState(ONBOARDING_STEPS.USER_DETAILS);

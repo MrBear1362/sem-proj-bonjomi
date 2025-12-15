@@ -7,10 +7,6 @@ import ButtonLink from "../ui/buttons/ButtonLink.jsx";
 import InputField from "../ui/inputs/InputField.jsx";
 // TODO: find icon library and IMPORT here pls
 
-import "../ui/inputs/input.css";
-import "../ui/buttons/button.css";
-import "../../app.css";
-
 export default function LoginForm() {
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
