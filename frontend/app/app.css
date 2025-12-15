@@ -54,6 +54,10 @@
   padding: 0 20px 12px 20px;
 }
 
+.new-convo-title-input {
+  padding: 0 20px 12px 20px;
+}
+
 .new-convo-search-input {
   flex: 1;
   height: 40px;
@@ -85,6 +89,10 @@
 
 .new-convo-result-item:hover {
   background: rgba(255, 255, 255, 0.06);
+}
+
+.new-convo-result-item.is-selected {
+  background: rgba(14, 165, 233, 0.12);
 }
 
 .new-convo-avatar {
@@ -309,6 +317,26 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   font-style: italic;
+}
+
+.conversation-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 12px;
+  min-width: 48px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #ef4444;
+  margin-left: auto;
+}
+
+.conversation-delete-btn:active {
+  opacity: 0.7;
 }
 
 /* Conversation Thread Page */

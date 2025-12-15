@@ -90,7 +90,7 @@ function MessagesTabs({ activeTab, onTabChange }) {
   );
 }
 
-function ConversationItem({ conversation }) {
+function ConversationItem({ conversation, onDelete }) {
   return (
     <Link to={`/messages/${conversation.id}`} className="conversation-item">
       <img
@@ -105,13 +105,39 @@ function ConversationItem({ conversation }) {
         </div>
         <div className="conversation-preview">{conversation.lastMessage}</div>
       </div>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (confirm("Delete this conversation?")) {
+            onDelete(conversation.id);
+          }
+        }}
+        className="conversation-delete-btn"
+        aria-label="Delete conversation"
+      >
+        🗑️
+      </button>
     </Link>
   );
 }
 
 export default function MessagesList() {
-  const { conversations } = useLoaderData();
+  const data = useLoaderData();
+  const [conversations, setConversations] = useState(data.conversations);
   const [activeTab, setActiveTab] = useState("chats");
+
+  const handleDeleteConversation = async (conversationId) => {
+    try {
+      await apiFetch(`/api/conversations/${conversationId}`, {
+        method: "DELETE",
+      });
+      setConversations(conversations.filter((c) => c.id !== conversationId));
+    } catch (error) {
+      console.error("Failed to delete conversations:", error);
+    }
+  };
 
   return (
     <div className="messages-page">
@@ -119,7 +145,11 @@ export default function MessagesList() {
       <MessagesTabs activeTab={activeTab} onTabChange={setActiveTab} />
       <div className="conversations-list">
         {conversations.map((conversation) => (
-          <ConversationItem key={conversation.id} conversation={conversation} />
+          <ConversationItem
+            key={conversation.id}
+            conversation={conversation}
+            onDelete={handleDeleteConversation}
+          />
         ))}
       </div>
     </div>

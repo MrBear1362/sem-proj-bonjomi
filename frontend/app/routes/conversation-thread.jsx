@@ -130,6 +130,7 @@ function Message({ message, conversationAvatar }) {
 function MessageInput({ shouldReset = false }) {
   const [isInputFocused, setIsInputFocused] = useState(false);
   const formRef = React.useRef(null);
+
   React.useEffect(() => {
     if (shouldReset && formRef.current) {
       formRef.current.reset();

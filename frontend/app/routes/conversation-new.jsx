@@ -4,15 +4,18 @@ import { useEffect, useState } from "react";
 
 export async function clientAction({ request }) {
   const formData = await request.formData();
-  const participantId = formData.get("participantId");
+  const participantIds = formData.getAll("participantIds");
+  const title = formData.get("title");
 
-  if (!participantId) return { error: "Please select a user" };
+  if (participantIds.length === 0)
+    return { error: "Please select at least one user" };
 
   try {
     const conversation = await apiFetch("/api/conversations", {
       method: "POST",
       body: JSON.stringify({
-        participantId,
+        participantIds,
+        title: title || undefined,
       }),
     });
 
@@ -25,10 +28,17 @@ export async function clientAction({ request }) {
 export default function ConversationNew() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchError, setSearchError] = useState(null);
   const actionData = useActionData();
+
+  const toggleUser = (user) => {
+    setSelectedUsers((prev) => {
+      const exists = prev.some((u) => u.id === user.id);
+      return exists ? prev.filter((u) => u.id !== user.id) : [...prev, user];
+    });
+  };
 
   useEffect(() => {
     if (query.trim().length < 2) {
@@ -62,100 +72,111 @@ export default function ConversationNew() {
         </Link>
       </div>
       <Form method="post">
-        <input
-          type="hidden"
-          name="participantId"
-          value={selectedUser?.id || ""}
-        />
+        {selectedUsers.map((u) => (
+          <input key={u.id} type="hidden" name="participantIds" value={u.id} />
+        ))}
 
         {searchError && <div className="error-message">{searchError}</div>}
         {actionData?.error && (
           <div className="error-message">{actionData.error}</div>
         )}
 
-        {selectedUser ? (
+        {selectedUsers.length > 0 && (
           <div className="new-convo-selected">
-            <div className="new-convo-chip">
-              {selectedUser.image_url && (
-                <img
-                  src={selectedUser.image_url}
-                  alt=""
-                  className="new-convo-avatar"
-                />
-              )}
-              <div className="new-convo-result-text">
-                <span className="new-convo-result-name">
-                  {selectedUser.first_name} {selectedUser.last_name}
-                </span>
-                {selectedUser.alias && (
-                  <span className="new-convo-result-alias">
-                    @{selectedUser.alias}
-                  </span>
+            {selectedUsers.map((user) => (
+              <div key={user.id} className="new-convo-chip">
+                {user.image_url && (
+                  <img
+                    src={user.image_url}
+                    alt=""
+                    className="new-convo-avatar"
+                  />
                 )}
+                <div className="new-convo-result-text">
+                  <span className="new-convo-result-name">
+                    {user.first_name} {user.last_name}
+                  </span>
+                  {user.alias && (
+                    <span className="new-convo-result-alias">
+                      @{user.alias}
+                    </span>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  className="new-convo-chip-remove"
+                  aria-label="Remove user"
+                  onClick={() => toggleUser(user)}
+                >
+                  ✕
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => setSelectedUser(null)}
-                className="new-convo-chip-remove"
-                aria-label="Remove selected user"
-              >
-                ✕
-              </button>
-            </div>
+            ))}
           </div>
-        ) : (
-          <>
-            <div className="new-convo-search">
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search users..."
-                className="new-convo-search-input"
-                aria-label="Search users"
-              />
-            </div>
-            {loading && <div>Searching...</div>}
-            {results.length > 0 && (
-              <ul className="new-convo-results">
-                {results.map((user) => (
-                  <li key={user.id}>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedUser(user)}
-                      className="new-convo-result-item"
-                    >
-                      {user.image_url && (
-                        <img
-                          src={user.image_url}
-                          alt=""
-                          className="new-convo-avatar"
-                        />
-                      )}
-                      <div className="new-convo-result-text">
-                        <div className="new-convo-result-name">
-                          {user.first_name} {user.last_name}
-                        </div>
-                        {user.alias && (
-                          <div className="new-convo-result-alias">
-                            @{user.alias}
-                          </div>
-                        )}
+        )}
+        {selectedUsers.length > 1 && (
+          <div className="new-convo-title-input">
+            <input
+              type="text"
+              name="title"
+              placeholder="Group chat name..."
+              className="new-convo-search-input"
+              required
+            />
+          </div>
+        )}
+        <div className="new-convo-search">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search users..."
+            className="new-convo-search-input"
+            aria-label="Search users"
+          />
+        </div>
+        {loading && <div>Searching...</div>}
+        {results.length > 0 && (
+          <ul className="new-convo-results">
+            {results.map((user) => {
+              const isSelected = selectedUsers.some((u) => u.id === user.id);
+              return (
+                <li key={user.id}>
+                  <button
+                    type="button"
+                    onClick={() => toggleUser(user)}
+                    className={`new-convo-result-item ${isSelected ? "is-selected" : ""}`}
+                  >
+                    {user.image_url && (
+                      <img
+                        src={user.image_url}
+                        alt=""
+                        className="new-convo-avatar"
+                      />
+                    )}
+                    <div className="new-convo-result-text">
+                      <div className="new-convo-result-name">
+                        {user.first_name} {user.last_name}
                       </div>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-            {query.trim().length >= 2 && results.length === 0 && !loading && (
-              <div className="no-results">No users found</div>
-            )}
-          </>
+                      {user.alias && (
+                        <div className="new-convo-result-alias">
+                          @{user.alias}
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {query.trim().length >= 2 && results.length === 0 && !loading && (
+          <div className="no-results">No users found</div>
         )}
         <div className="new-convo-actions">
           <button
             type="submit"
-            disabled={!selectedUser}
+            disabled={selectedUsers.length === 0}
             className="new-convo-create-btn"
           >
             Start Chat

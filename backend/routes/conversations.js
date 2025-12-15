@@ -128,27 +128,18 @@ router.get("/api/conversations/:id/messages", requireAuth, async (req, res) => {
 // Requires authentication - creator is automatically added as participant
 router.post("/api/conversations", requireAuth, async (req, res) => {
   try {
-    const { title, participantId } = req.body;
+    const { title, participantIds } = req.body;
     const userId = req.userId;
+
+    if (!participantIds || participantIds.length === 0) {
+      return res.status(400).json({ error: "participantIds required" });
+    }
 
     let finalTitle = title;
 
-    // If participantId provided, derive title and check for duplicates
-    if (participantId) {
-      // Fetch participant's name
-      const targetUser = await sql`
-        SELECT auth_user_id as id, first_name, last_name
-        FROM users
-        WHERE auth_user_id = ${participantId}
-      `;
-
-      if (!targetUser || targetUser.length === 0) {
-        return res.status(404).json({ error: "User not found" });
-      }
-
-      const { first_name, last_name } = targetUser[0];
-      // For 1-on-1 conversations, leave title NULL (will be dynamic per user)
-      finalTitle = null;
+    // For 1:1 conversations, leave title NULL (will be dynamic per user)
+    if (participantIds.length === 1) {
+      const participantId = participantIds[0];
 
       // Check if a 1:1 conversation already exists with exactly these 2 users
       const existing = await sql`
@@ -164,12 +155,14 @@ router.post("/api/conversations", requireAuth, async (req, res) => {
         // Return existing conversation instead of creating new one
         return res.status(200).json(existing[0]);
       }
+
+      finalTitle = null; // Dynamic title for 1:1
     } else {
-      // title-only mode: require a title
+      // Group chat: require a title
       if (!finalTitle || !finalTitle.trim()) {
         return res
           .status(400)
-          .json({ error: "title or participantId required" });
+          .json({ error: "title required for group chats" });
       }
       finalTitle = finalTitle.trim();
     }
@@ -187,8 +180,8 @@ router.post("/api/conversations", requireAuth, async (req, res) => {
       INSERT INTO conversation_participants (conversation_id, user_id)
       VALUES (${conversation.id}, ${userId})`;
 
-    // If participantId provided, add them as participant too
-    if (participantId) {
+    // Add all other participants
+    for (const participantId of participantIds) {
       await sql`
         INSERT INTO conversation_participants (conversation_id, user_id)
         VALUES (${conversation.id}, ${participantId})`;
@@ -253,7 +246,10 @@ router.delete("/api/conversations/:id", requireAuth, async (req, res) => {
         .json({ error: "You are not a participant in this conversation" });
     }
 
-    // Delete conversation (participants will cascade if ON DELETE CASCADE is set)
+    // Delete in correct order: messages first, then participants, then conversation
+    await sql`DELETE FROM messages WHERE conversation_id = ${id}`;
+    await sql`DELETE FROM conversation_participants WHERE conversation_id = ${id}`;
+
     const rows = await sql`
       DELETE FROM conversations
       WHERE id = ${id}
