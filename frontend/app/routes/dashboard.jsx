@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate, NavLink } from "react-router";
 import { useEffect } from "react";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { supabase } from "../library/supabase";
@@ -8,6 +8,8 @@ import Button from "../components/ui/buttons/Button";
 import Feed from "../components/Feed";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
+
+import "../app.css";
 
 export async function clientLoader() {
   const response = await apiFetch("/api/notes/feed");
@@ -86,9 +88,27 @@ export default function DashboardPage() {
   return (
     <ProtectedRoute>
       <Navigation />
-      <h1>This is das Board 👍</h1>
-      <Feed notes={notes} />
-      <Button onClick={handleLogout}>Logout</Button>
+      <div>
+        <h1>This is das Board 👍</h1>
+        <Button onClick={handleLogout}>Logout</Button>
+      </div>
+
+      <section className="stories-container">There are stories here</section>
+
+      <section className="collab-requests-container">
+        <h5>Collaboration requests</h5>
+        <section className="collab-feed"></section>
+      </section>
+
+      <section className="notes-feed-container">
+        <Feed notes={notes} />
+      </section>
+
+      <button>
+        <NavLink to="create-posts" className={button}>
+          Create +
+        </NavLink>
+      </button>
       <Footer />
     </ProtectedRoute>
   );

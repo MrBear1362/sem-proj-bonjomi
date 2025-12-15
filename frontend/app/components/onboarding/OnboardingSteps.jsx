@@ -15,8 +15,8 @@ import "../../app.css";
 
 export default function OnboardingSteps() {
   // start step at user details after initial signup
-  // const [step, setStep] = useState(ONBOARDING_STEPS.USER_DETAILS);
-  const [step, setStep] = useState(null);
+  // trying to ensure user-details aren't skipped...
+  const [step, setStep] = useState(ONBOARDING_STEPS.USER_DETAILS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // stores "musician" or "business"
@@ -113,6 +113,13 @@ export default function OnboardingSteps() {
   const finishOnboarding = async () => {
     setLoading(true);
     try {
+      // create empty shell user profile
+      await apiFetch("/api/user-profiles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      // set onboarding as finished
       await apiFetch("/api/onboarding-step", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

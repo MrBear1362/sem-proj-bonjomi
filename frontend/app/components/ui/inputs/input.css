@@ -1,5 +1,7 @@
 /* general shared styling */
-input {
+input,
+textarea {
+  font-family: var(--font-body);
   border: 1px solid var(--outline);
   border-radius: 0.25rem;
   padding: 0.25rem 0.5rem;
@@ -17,14 +19,15 @@ input {
 }
 
 /* textarea and text input */
+input.text-input,
+.text-input {
+  background: var(--input-bg);
+  border: none;
+  padding: 0.5rem 0.7rem;
+}
 
 /* form */
-.input__form {
-  justify-self: center;
-  border: 1px solid var(--greyscale-300);
-  padding-block: 0.5rem;
-
-  &::placeholder {
-    text-align: center;
-  }
+.input-disabled {
+  color: var(--greyscale-400);
+  font-style: italic;
 }

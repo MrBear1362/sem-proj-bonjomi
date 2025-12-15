@@ -1,5 +1,4 @@
-export default function InputField({
-  type = "text",
+export default function TextareaField({
   id,
   name,
   label,
@@ -7,29 +6,25 @@ export default function InputField({
   required = false,
   placeholder = "",
   minLength,
-  autoComplete,
-  ...rest // allows extra props
+  rows = 4,
+  ...rest
 }) {
   return (
     <>
       {label && (
-        <label
-          htmlFor={id}
-          className={showLabel ? "" : "sr-only"}
-        >
+        <label htmlFor={id} className={showLabel ? "" : "sr-only"}>
           {label}
         </label>
       )}
-      <input
-        type={type}
+      <textarea
         id={id}
         name={name}
         required={required}
         placeholder={placeholder}
         minLength={minLength}
-        autoComplete={autoComplete}
+        rows={rows}
         {...rest}
       />
     </>
-  )
+  );
 }

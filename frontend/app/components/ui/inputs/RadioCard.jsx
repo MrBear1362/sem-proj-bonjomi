@@ -1,5 +1,3 @@
-import "./radio-card.css";
-
 export default function RadioCard({
   value,
   selected,

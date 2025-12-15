@@ -2,6 +2,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import url("https://db.onlinewebfonts.com/c/0976a2619014c5855690b7509fab4c6e?family=Helvetica+Now+Display");
 
+@import "./layout.css";
+@import "./authPage.css";
+@import "./components/ui/bits/loading-spinner.css";
+@import "./components/ui/bits/user-identifier.css";
+@import "./components/ui/buttons/Bookmark.css";
+@import "./components/ui/buttons/button.css";
+@import "./components/ui/buttons/Comment.css";
+@import "./components/ui/buttons/Like.css";
+@import "./components/ui/buttons/Tag.css";
+@import "./components/ui/buttons/ToggleSwitch.css";
+@import "./components/ui/inputs/input.css";
+@import "./components/ui/inputs/radio-card.css";
+@import "./components/CommentSection.css";
+@import "./components/Footer.css";
+@import "./components/NoteCard.css";
+@import "./components/Service.css";
+@import "./routes/posting/posting.css";
+
 /* global */
 
 *,
@@ -23,7 +41,10 @@
   --theme-brown: #5d4c43;
   /*neutral colours*/
   --greyscale-900: #1e1e1e;
+  /* Bjørn - greyscale 600 skal bruges til beskeder */
+  --greyscale-600: hsla(0, 0%, 52%, 0.2);
   --greyscale-500: #555;
+  --greyscale-400: #969696;
   --greyscale-300: #ededed;
   --greyscale-200: #f7f6f6;
   --greyscale-100: #fff;
@@ -36,6 +57,8 @@
   /*fonts*/
   --font-body: "Helvetica Now Display", "sans-serif";
   --font-header: "Inter", "sans-serif";
+  /* inputs */
+  --input-bg: #f1f1f1;
 }
 
 body {
