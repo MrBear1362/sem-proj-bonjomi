@@ -1,11 +1,30 @@
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+/* general shared styling */
+input {
+  border: 1px solid var(--outline);
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* regular search input */
+.input--search {
+  background-color: var(--greyscale-500);
+}
+
+/* tag search input */
+.input__search--tag {
+  background: none;
+  border-radius: 50%;
+}
+
+/* textarea and text input */
+
+/* form */
+.input__form {
+  justify-self: center;
+  border: 1px solid var(--greyscale-300);
+  padding-block: 0.5rem;
+
+  &::placeholder {
+    text-align: center;
+  }
 }

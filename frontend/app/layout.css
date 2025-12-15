@@ -1,0 +1,9 @@
+/* overall layout for the app */
+.app-layout {
+  padding: 1rem;
+
+  /* make grid content fill grid by default */
+  & > * {
+    grid-column: 1 / -1;
+  }
+}

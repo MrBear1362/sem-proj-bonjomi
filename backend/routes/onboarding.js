@@ -13,7 +13,9 @@ router.post("/api/signup", requireAuth, async (req, res) => {
     // set initial next step after signup
     const defaultStep = "user-selection";
     if (!ONBOARDING_STEPS.includes(defaultStep)) {
-      return res.status(500).json({ error: "Invalid onboarding configuration" });
+      return res
+        .status(500)
+        .json({ error: "Invalid onboarding configuration" });
     }
 
     const existing = await sql`
@@ -44,7 +46,9 @@ router.patch("/api/signup/user-details", requireAuth, async (req, res) => {
 
     const nextStep = "user-selection";
     if (!ONBOARDING_STEPS.includes(nextStep)) {
-      return res.status(500).json({ error: "Invalid onboarding configuration" });
+      return res
+        .status(500)
+        .json({ error: "Invalid onboarding configuration" });
     }
 
     const updated = await sql`
@@ -60,8 +64,20 @@ router.patch("/api/signup/user-details", requireAuth, async (req, res) => {
     RETURNING auth_user_id, first_name, last_name, phone, city, birth_year, onboarding_step
     `;
 
+    // old error handling
+    // if (updated.length === 0) {
+    //   return res.status(404).json({ error: "User not found" });
+    // }
+
+    // new attempt at failsafe
     if (updated.length === 0) {
-      return res.status(404).json({ error: "User not found" });
+      // user row doesnt exist, create with provided data from user details
+      const created = await sql`
+      INSERT INTO users (auth_user_id, first_name, last_name, phone, city, birth_year, onboarding_step)
+      VALUES (${req.userId}, ${first_name}, ${last_name}, ${phone}, ${city}, ${birth_year}, ${nextStep})
+      RETURNING auth_user_id, first_name, last_name, phone, city, birth_year, onboarding_step
+      `;
+      return res.json(created[0]);
     }
 
     res.json(updated[0]);
@@ -78,7 +94,9 @@ router.patch("/api/signup/user-selection", requireAuth, async (req, res) => {
     const nextStep = manage_business ? "business-details" : "looking-for";
 
     if (!ONBOARDING_STEPS.includes(nextStep)) {
-      return res.status(400).json({ error: "Invalid onboarding step transition" });
+      return res
+        .status(400)
+        .json({ error: "Invalid onboarding step transition" });
     }
 
     const selection = await sql`
@@ -105,12 +123,6 @@ router.get("/api/onboarding-state", requireAuth, async (req, res) => {
   try {
     const user = await sql`
     SELECT
-      auth_user_id,
-      first_name,
-      last_name,
-      phone,
-      city,
-      birth_year,
       manage_business,
       onboarding_step
     FROM users

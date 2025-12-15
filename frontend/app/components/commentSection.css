@@ -1,0 +1,33 @@
+.comment-section {
+  transition: all 2000ms ease-in-out;
+  line-height: 1rem;
+}
+
+.align-right {
+  justify-content: flex-end;
+}
+
+.comment__user {
+  align-items: center;
+  & img {
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 50%;
+  }
+}
+
+.btn--reply {
+  background: none;
+  align-items: center;
+  cursor: pointer;
+  color: var(--greyscale-500);
+  border: 0;
+  & span {
+    margin-left: 0.3rem;
+  }
+}
+
+.replies {
+  border-left: 2px solid var(--greyscale-300);
+  padding-left: 2rem;
+}

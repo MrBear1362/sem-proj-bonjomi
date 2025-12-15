@@ -7,31 +7,31 @@ import LoadingSpinner from "../ui/bits/LoadingSpinner.jsx";
 import ButtonLink from "../ui/buttons/ButtonLink.jsx";
 import InputField from "../ui/inputs/InputField.jsx";
 
-async function createUser() {
-  const response = await apiFetch("/api/signup", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      first_name: "",
-      last_name: "",
-      phone: "",
-      city: "",
-      birth_year: null,
-    }),
-  });
-
-  if (response.ok) {
-    const data = await response.json();
-    setStep(data.onboarding_step || ONBOARDING_STEPS.USER_DETAILS);
-  } else {
-    setError("Could not create user");
-  }
-}
-
 export default function SignupForm() {
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  const createUser = async () => {
+    const response = await apiFetch("/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        first_name: "",
+        last_name: "",
+        phone: "",
+        city: "",
+        birth_year: null,
+      }),
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.error || "Could not create user");
+    }
+
+    return response.json();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,15 +63,27 @@ export default function SignupForm() {
 
     try {
       // create supabase auth user only
-      const { error: authError } = await supabase.auth.signUp({ email, password });
+      const { error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+      });
       if (authError) {
         setError(authError.message);
         setIsSubmitting(false);
         return;
       }
 
-      createUser();
+      try {
+        // if throws, navigation stops
+        await createUser();
+      } catch (error) {
+        setError(error.message);
+        setIsSubmitting(false);
+        // prevent redirect
+        return;
+      }
 
+      // only navigate if db row was created
       // send user to onboarding flow
       window.location.href = "/auth?step=onboarding";
     } catch (error) {
@@ -83,12 +95,18 @@ export default function SignupForm() {
 
   return (
     <section className="auth-container">
+      <div className="progress-container">
+        <div className="progress-bar"></div>
+      </div>
       <article className="auth-card">
-        <h1>Sign up</h1>
-        <p className="auth-subtitle">By continuing you agree to LineUp! Terms of use and Privacy Policy</p>
+        <header className="auth-header flex-clm">
+          <h1 className="auth-title xxl-heading">Sign up</h1>
+          <p className="auth-subtitle m-text">
+            By continuing you agree to LineUp! Terms of use and Privacy Policy
+          </p>
+        </header>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-
+        <form onSubmit={handleSubmit} className="auth-form flex-clm">
           {/* input field for email */}
           <InputField
             type="email"
@@ -98,6 +116,7 @@ export default function SignupForm() {
             required
             placeholder="Enter your email"
             autoComplete="email"
+            className="input__form"
           />
 
           {/* input field for password */}
@@ -110,6 +129,7 @@ export default function SignupForm() {
             placeholder="Enter your password"
             minLength={6}
             autoComplete="new-password"
+            className="input__form"
           />
 
           {/* input field for password confirm */}
@@ -122,40 +142,44 @@ export default function SignupForm() {
             placeholder="Repeat your password"
             minLength={6}
             autoComplete="new-password"
+            className="input__form"
           />
-
 
           {/* // TODO: design error message */}
           {error && <div className="error-message">{error}</div>}
 
-          <button
-            className="btn-primary"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <>
-                Continue <LoadingSpinner />
-              </>
-            ) : (
-              "Continue"
-            )}
-          </button>
+          <div className="flex justify-center">
+            <button
+              className="btn-primary"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  Continue <LoadingSpinner />
+                </>
+              ) : (
+                "Continue"
+              )}
+            </button>
+          </div>
         </form>
 
-        <p>or</p>
+        <p className="justify-center spacing-1">or</p>
 
-        <div className="signup-providers">
-          <button className="signup-providers-btn">Sign up with Google</button>
-          <button className="signup-providers-btn">Sign up with AppleID</button>
+        <div className="signup-providers justify-center flex-clm gap-1">
+          <button className="btn-outline">Sign up with Google</button>
+          <button className="btn-outline">Sign up with AppleID</button>
         </div>
 
-        <ButtonLink to="/auth" query={{ step: "login" }}>
+        <ButtonLink
+          to="/auth"
+          query={{ step: "login" }}
+          className="btn-text spacing-1 flex gap-025"
+        >
           Already have an account? <span>Log in</span>
         </ButtonLink>
       </article>
     </section>
-  )
+  );
 }
-
-

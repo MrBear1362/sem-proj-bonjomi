@@ -23,14 +23,14 @@ import messagesRoutes from "./routes/messages.js";
 import notesRoutes from "./routes/notes.js";
 
 app.use(
-  collab_requestsRoutes, 
-  user_profilesRoutes, 
-  notesRoutes, 
-  servicesRoutes, 
-  businessesRoutes, 
-  onboardingRoutes, 
-  participantsRoutes, 
-  messagesRoutes, 
+  collab_requestsRoutes,
+  user_profilesRoutes,
+  notesRoutes,
+  servicesRoutes,
+  businessesRoutes,
+  onboardingRoutes,
+  participantsRoutes,
+  messagesRoutes,
   conversationsRoutes
 );
 

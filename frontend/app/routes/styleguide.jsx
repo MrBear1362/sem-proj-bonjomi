@@ -7,6 +7,8 @@ import LoadingSpinner from "../components/ui/bits/LoadingSpinner";
 
 export default function StyleGuide() {
   const [verticalChoice, setVerticalChoice] = useState("musician");
+  const [horizontalChoice, setHorizontalChoice] = useState("option1");
+  const [pricingChoice, setPricingChoice] = useState("free");
   const [lookingForChoice, setLookingForChoice] = useState("connect");
 
   return (
@@ -83,6 +85,67 @@ export default function StyleGuide() {
           onChange={setLookingForChoice}
           variant="vertical"
           title="Find a band to play with"
+        />
+      </section>
+
+      <section>
+        <h2>Radio Cards - Horizontal</h2>
+        <RadioCard
+          value="option1"
+          selected={horizontalChoice}
+          onChange={setHorizontalChoice}
+          variant="horizontal"
+          title="Option 1"
+        />
+
+        <RadioCard
+          value="option2"
+          selected={horizontalChoice}
+          onChange={setHorizontalChoice}
+          variant="horizontal"
+          title="Option 2"
+        />
+
+        <RadioCard
+          value="option3"
+          selected={horizontalChoice}
+          onChange={setHorizontalChoice}
+          variant="horizontal"
+          title="Option 3"
+        />
+      </section>
+
+      <section>
+        <h2>Radio Cards - Pricing</h2>
+        <RadioCard
+          value="free"
+          selected={pricingChoice}
+          onChange={setPricingChoice}
+          variant="pricing"
+          title="Free Plan"
+          subtitle="Basic features for getting started"
+          price="$0/month"
+        />
+
+        <RadioCard
+          value="pro"
+          selected={pricingChoice}
+          onChange={setPricingChoice}
+          variant="pricing"
+          title="Pro Plan"
+          subtitle="Advanced features for professionals"
+          price="$29/month"
+          discount="Save 20%"
+        />
+
+        <RadioCard
+          value="business"
+          selected={pricingChoice}
+          onChange={setPricingChoice}
+          variant="pricing"
+          title="Business Plan"
+          subtitle="Complete solution for businesses"
+          price="$99/month"
         />
       </section>
 

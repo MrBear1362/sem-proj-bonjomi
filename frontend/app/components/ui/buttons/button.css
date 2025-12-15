@@ -1,0 +1,39 @@
+button {
+  border-radius: 2rem;
+  width: fit-content;
+  padding: 0.3rem 0.6rem;
+}
+
+.btn-primary {
+  background-color: var(--primary-yellow);
+  border: 0;
+}
+
+.btn-outline {
+  background: none;
+  border: 1px solid var(--greyscale-900);
+}
+
+.btn-text {
+  text-decoration: none;
+  color: var(--greyscale-900);
+  cursor: pointer;
+  & span {
+    color: var(--accent-blue);
+  }
+}
+.btn-skip {
+  border: 0;
+  background: none;
+  text-decoration: underline;
+}
+
+.btn-nav {
+  background: none;
+  color: var(--greyscale-900);
+  border: none;
+  & svg {
+    height: 2rem;
+    width: 2rem;
+  }
+}
