@@ -9,10 +9,10 @@ export default function RadioCard({
   discount,
   children,
 }) {
-
   return (
-    <label className={`radio-card radio-${variant} ${selected === value ? "selected" : ""}`}>
-
+    <label
+      className={`radio-card radio-${variant} ${selected === value ? "selected" : ""}`}
+    >
       <input
         type="radio"
         hidden
@@ -39,7 +39,7 @@ export default function RadioCard({
       )}
 
       {variant === "pricing" && (
-        <div className="pricing-wrap">
+        <div className="pricing-wrap flex">
           <div className="col-radio">
             <span className="radio-dot" />
           </div>

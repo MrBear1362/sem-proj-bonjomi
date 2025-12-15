@@ -7,6 +7,10 @@ import ButtonLink from "../ui/buttons/ButtonLink.jsx";
 import InputField from "../ui/inputs/InputField.jsx";
 // TODO: find icon library and IMPORT here pls
 
+import "../ui/inputs/input.css";
+import "../ui/buttons/button.css";
+import "../../app.css";
+
 export default function LoginForm() {
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,7 +29,10 @@ export default function LoginForm() {
       return;
     }
 
-    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
     if (authError) {
       setError(authError.message);
@@ -41,7 +48,7 @@ export default function LoginForm() {
         const step = userData.onboarding_step;
 
         // if onboarding not finished, redirect to onboarding
-        if (step && step !== 'finished') {
+        if (step && step !== "finished") {
           window.location.href = "/auth?step=onboarding";
           return;
         }
@@ -58,13 +65,12 @@ export default function LoginForm() {
 
   return (
     <section className="auth-container">
-      <article className="auth-card">
+      <article className="auth-card login">
         <header className="auth-header">
           <h1 className="auth-title xxl-heading">Login</h1>
         </header>
 
         <form onSubmit={handleSubmit} className="auth-form flex-clm">
-
           {/* input field for email */}
           <InputField
             type="email"
@@ -74,6 +80,7 @@ export default function LoginForm() {
             required
             placeholder="Enter your email"
             autoComplete="email"
+            className="input__form"
           />
 
           {/* input field for password */}
@@ -85,35 +92,42 @@ export default function LoginForm() {
             required
             placeholder="Enter your password"
             minLength={6}
-            autoComplete="new-password"
+            autoComplete="password"
+            className="input__form"
           />
 
           {/* // TODO: design error message */}
           {error && <div className="error-message">{error}</div>}
 
-          <button
-            className="btn-primary"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <>
-                Continue <LoadingSpinner />
-              </>
-            ) : (
-              "Continue"
-            )}
-          </button>
+          <div className="flex justify-center">
+            <button
+              className="btn-primary"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  Continue <LoadingSpinner />
+                </>
+              ) : (
+                "Continue"
+              )}
+            </button>
+          </div>
         </form>
 
-        <p>or</p>
+        <p className="justify-center spacing-1">or</p>
 
-        <div className="signup-providers">
-          <button className="signup-providers-btn">Login with Google</button>
-          <button className="signup-providers-btn">Login with AppleID</button>
+        <div className="signup-providers justify-center flex-clm gap-1">
+          <button className="btn-outline">Login with Google</button>
+          <button className="btn-outline">Login with AppleID</button>
         </div>
 
-        <ButtonLink to="/auth" query={{ step: "signup" }}>
+        <ButtonLink
+          to="/auth"
+          query={{ step: "signup" }}
+          className="btn-text spacing-1 flex gap-025"
+        >
           Don't have an account? <span>Sign up</span>
         </ButtonLink>
       </article>

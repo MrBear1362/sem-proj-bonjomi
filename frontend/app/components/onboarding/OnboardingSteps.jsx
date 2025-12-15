@@ -9,6 +9,10 @@ import InputField from "../ui/inputs/InputField.jsx";
 import Button from "../ui/buttons/Button.jsx";
 import LineUpSubscription from "../LineUpSubscription.jsx";
 
+/* import "../UI/inputs/input.css"; */
+import "../ui/buttons/button.css";
+import "../../app.css";
+
 export default function OnboardingSteps() {
   // start step at user details after initial signup
   // const [step, setStep] = useState(ONBOARDING_STEPS.USER_DETAILS);
@@ -19,10 +23,17 @@ export default function OnboardingSteps() {
   const [userType, setUserType] = useState(null);
 
   useEffect(() => {
+    localStorage.setItem("onboardingStep", step);
+  }, [step]);
+
+  useEffect(() => {
     let cancelled = false;
 
     async function init() {
-      const { data: { session }, error } = await supabase.auth.getSession();
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
       if (cancelled) return;
 
       // no session - send to signup
@@ -54,7 +65,9 @@ export default function OnboardingSteps() {
     }
 
     init();
-    return () => { cancelled = true };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const nextStep = async (payload = {}) => {
@@ -80,7 +93,10 @@ export default function OnboardingSteps() {
       return;
     }
 
-    if (step === ONBOARDING_STEPS.BUSINESS_DETAILS || step === ONBOARDING_STEPS.LINE_UP_PRO) {
+    if (
+      step === ONBOARDING_STEPS.BUSINESS_DETAILS ||
+      step === ONBOARDING_STEPS.LINE_UP_PRO
+    ) {
       await finishOnboarding();
     }
   };
@@ -92,7 +108,7 @@ export default function OnboardingSteps() {
     }
     // generic skip advances
     nextStep();
-  }
+  };
 
   const finishOnboarding = async () => {
     setLoading(true);
@@ -102,8 +118,6 @@ export default function OnboardingSteps() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ step: "finished" }),
       });
-      // is apifetch throwing before catch?
-      console.log("after fetch");
       window.location.href = "/";
     } catch (error) {
       console.error(error);
@@ -121,19 +135,20 @@ export default function OnboardingSteps() {
       {step === ONBOARDING_STEPS.USER_DETAILS && (
         <UserDetails onContinue={(data) => nextStep(data)} />
       )}
-
       {step === ONBOARDING_STEPS.USER_SELECTION && (
-        <UserSelection onContinue={(manage_business) => nextStep({ manage_business: manage_business })} />
+        <UserSelection
+          onContinue={(manage_business) =>
+            nextStep({ manage_business: manage_business })
+          }
+        />
       )}
-
-      {step === ONBOARDING_STEPS.BUSINESS_DETAILS && userType === "business" && (
-        <BusinessDetails onContinue={finishOnboarding} />
-      )}
-
+      {step === ONBOARDING_STEPS.BUSINESS_DETAILS &&
+        userType === "business" && (
+          <BusinessDetails onContinue={finishOnboarding} />
+        )}
       {step === ONBOARDING_STEPS.LOOKING_FOR && userType === "musician" && (
         <LookingFor onContinue={nextStep} onSkip={skip} />
       )}
-
       {step === ONBOARDING_STEPS.LINE_UP_PRO && (
         <LineUpPro onContinue={finishOnboarding} onSkip={finishOnboarding} />
       )}
@@ -206,7 +221,6 @@ export function UserDetails({ onContinue }) {
 
   return (
     <form onSubmit={handleSubmit} className="auth-form">
-
       {/* input field for first name */}
       <InputField
         type="text"
@@ -218,7 +232,6 @@ export function UserDetails({ onContinue }) {
         placeholder="Enter your first name"
         minLength={2}
       />
-
       {/* input field for last name */}
       <InputField
         type="text"
@@ -230,7 +243,6 @@ export function UserDetails({ onContinue }) {
         placeholder="Enter your last name"
         minLength={2}
       />
-
       {/* input field for phone number */}
       <InputField
         type="tel"
@@ -242,7 +254,6 @@ export function UserDetails({ onContinue }) {
         placeholder="Phone number"
         minLength={8}
       />
-
       {/* input field for year of birth */}
       <InputField
         type="number"
@@ -255,7 +266,6 @@ export function UserDetails({ onContinue }) {
         minLength={4}
         maxLength={4}
       />
-
       {/* input field for location */}
       <InputField
         type="text"
@@ -266,23 +276,19 @@ export function UserDetails({ onContinue }) {
         required
         placeholder="Enter your city"
       />
-
       {/* // TODO: design error message */}
       {error && <div className="error-message">{error}</div>}
-
-      <button
-        className="btn-primary"
-        type="submit"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? (
-          <>
-            Continue <LoadingSpinner />
-          </>
-        ) : (
-          "Continue"
-        )}
-      </button>
+      <div className="flex justify-center">
+        <button className="btn-primary" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <>
+              Continue <LoadingSpinner />
+            </>
+          ) : (
+            "Continue"
+          )}
+        </button>
+      </div>
     </form>
   );
 }
@@ -336,35 +342,45 @@ export function UserSelection({ onContinue }) {
 
   return (
     <div className="auth-form">
-      <RadioCard
-        value="musician"
-        selected={choice}
-        onChange={setChoice}
-        variant="vertical"
-        title="I am a musician"
-        subtitle="I am a musician looking for collaborations and services"
+      <img
+        src="https://plus.unsplash.com/premium_photo-1758836220128-533dcee38fa2?q=80&w=1211&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="LineUp Logo"
+        className="element-xs flex justify-center"
       />
-
-      <RadioCard
-        value="business"
-        selected={choice}
-        onChange={setChoice}
-        variant="vertical"
-        title="Not a musician"
-        subtitle="I want to provide services for musicians"
-      />
-
+      <div className="choice flex-clm justify-center">
+        <RadioCard
+          value="musician"
+          selected={choice}
+          onChange={setChoice}
+          variant="vertical"
+          title="I am a musician"
+          subtitle="I am a musician looking for collaborations and services"
+        />
+        <RadioCard
+          value="business"
+          selected={choice}
+          onChange={setChoice}
+          variant="vertical"
+          title="Not a musician"
+          subtitle="I want to provide services for musicians"
+        />
+      </div>
       {error && <div className="error-message">{error}</div>}
-
-      <Button className="btn-primary" onClick={handleSubmit} disabled={isSubmitting || !choice}>
-        {isSubmitting ? (
-          <>
-            Continue <LoadingSpinner />
-          </>
-        ) : (
-          "Continue"
-        )}
-      </Button>
+      <div className="flex justify-center">
+        <Button
+          className="btn-primary"
+          onClick={handleSubmit}
+          disabled={isSubmitting || !choice}
+        >
+          {isSubmitting ? (
+            <>
+              Continue <LoadingSpinner />
+            </>
+          ) : (
+            "Continue"
+          )}
+        </Button>
+      </div>
     </div>
   );
 }
@@ -450,40 +466,38 @@ export function LookingFor({ onContinue, onSkip }) {
   };
 
   return (
-    <div className="auth-form">
-      <h2>I am looking to</h2>
-
-      <div className="options-group">
+    <div className="auth-form spacing-4">
+      <h2 className="l-heading looking-for">I am looking to</h2>
+      <div className="spacing-2 flex-clm justify-center gap-1">
         {options.map((option) => (
           <RadioCard
             key={option.id}
             value={option.id}
             selected={selectedOption}
             onChange={setSelectedOption}
-            variant="vertical"
+            variant="horizontal"
             title={option.label}
           />
         ))}
       </div>
-
       {error && <div className="error-message">{error}</div>}
-
-      <Button
-        className="btn-primary"
-        onClick={handleSubmit}
-        disabled={isSubmitting || !selectedOption}
-      >
-        {isSubmitting ? (
-          <>
-            Continue <LoadingSpinner />
-          </>
-        ) : (
-          "Continue"
-        )}
-      </Button>
-
+      <div className="flex justify-center">
+        <Button
+          className="btn-primary"
+          onClick={handleSubmit}
+          disabled={isSubmitting || !selectedOption}
+        >
+          {isSubmitting ? (
+            <>
+              Continue <LoadingSpinner />
+            </>
+          ) : (
+            "Continue"
+          )}
+        </Button>
+      </div>
       <button
-        className="skip-btn"
+        className="btn-skip flex justify-center spacing-1"
         onClick={handleSkip}
         disabled={isSubmitting}
       >
@@ -505,16 +519,48 @@ export function BusinessDetails({ onContinue }) {
 }
 
 export function LineUpPro({ onContinue, onSkip }) {
+  const [selectedPlan, setSelectedPlan] = useState(null);
   return (
-    <div className="auth-form">
-      <h1>Hello from lineup pro</h1>
+    <div className="auth-form flex-clm justify-center">
+      <img src="" alt="LineUp logo" className="element-xl" />
+      <h1>Get full access to LineUp</h1>
+      <p className="checklist-item">Unlimited collabs</p>
+      <p className="checklist-item">unlimited connections</p>
+      <p className="checklist-item">Advanced insights</p>
+      <p className="checklist-item">See detailed reviews</p>
+
+      <RadioCard
+        value="Monthly"
+        selected={selectedPlan}
+        onChange={setSelectedPlan}
+        variant="pricing"
+        title="Monthly"
+        subtitle="58 kr. / month"
+        price="58 kr."
+      />
+      <RadioCard
+        value="Yearly"
+        selected={selectedPlan}
+        onChange={setSelectedPlan}
+        variant="pricing"
+        title="Yearly"
+        subtitle="29 kr. / month"
+        price="348 kr."
+        discount="save 50%"
+      />
       {/* <LineUpSubscription /> */}
-      <Button className="btn-primary" onClick={onContinue} >
-        Finish
+      <Button
+        className="btn-primary"
+        onClick={onContinue}
+        disabled={!selectedPlan}
+      >
+        Start my 7-day trial
       </Button>
 
-      <button className="skip-btn" onClick={onSkip}>
-        Skip
+      <p className="xs-text">Terms of use and Privacy Policy</p>
+
+      <button className="btn-skip" onClick={onSkip}>
+        Skip for now
       </button>
     </div>
   );

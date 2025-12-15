@@ -21,17 +21,19 @@ import onboardingRoutes from "./routes/onboarding.js";
 import servicesRoutes from "./routes/services.js";
 import messagesRoutes from "./routes/messages.js";
 import notesRoutes from "./routes/notes.js";
+import usersRoutes from "./routes/users.js";
 
 app.use(
-  collab_requestsRoutes, 
-  user_profilesRoutes, 
-  notesRoutes, 
-  servicesRoutes, 
-  businessesRoutes, 
-  onboardingRoutes, 
-  participantsRoutes, 
-  messagesRoutes, 
-  conversationsRoutes
+  collab_requestsRoutes,
+  user_profilesRoutes,
+  notesRoutes,
+  servicesRoutes,
+  businessesRoutes,
+  onboardingRoutes,
+  participantsRoutes,
+  messagesRoutes,
+  conversationsRoutes,
+  usersRoutes
 );
 
 // root endpoint - verify server status
