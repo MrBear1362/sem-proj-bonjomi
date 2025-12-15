@@ -1,12 +1,12 @@
 import React from "react";
 /* import Logo from "./Logo"; */
-import InputField from "./UI/inputs/InputField";
+import InputField from "./ui/inputs/InputField";
 /* import Notifications from "./NotificationFeed"; */
-import Button from "./UI/buttons/Button";
+import Button from "./ui/buttons/Button";
 
 import "../app.css";
 import "./noteCard.css";
-import "./UI/buttons/button.css";
+import "./ui/buttons/button.css";
 
 export default function Navigation() {
   return (
@@ -60,7 +60,7 @@ export default function Navigation() {
             strokeLinejoin="round"
             width="20"
             height="20"
-            className="elelemt-m"
+            className="element-m"
           >
             <line x1="3" y1="6" x2="21" y2="6" />
             <line x1="3" y1="12" x2="21" y2="12" />

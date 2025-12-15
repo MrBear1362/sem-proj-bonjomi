@@ -177,7 +177,7 @@ export default function SignupForm() {
           query={{ step: "login" }}
           className="btn-text spacing-1 flex gap-025"
         >
-          Already have an account? <span className="blue">Log in</span>
+          Already have an account? <span>Log in</span>
         </ButtonLink>
       </article>
     </section>

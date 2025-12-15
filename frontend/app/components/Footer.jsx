@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "./UI/buttons/Button";
+import Button from "./ui/buttons/Button";
 
 import "./footer.css";
 import "../app.css";

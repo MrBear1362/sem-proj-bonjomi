@@ -1,6 +1,5 @@
 import React from "react";
-import { apiFetch } from "../lib/apiFetch.js";
-import { supabase } from "../lib/supabase.js";
+import { apiFetch } from "../library/apiFetch.js";
 import { useLoaderData } from "react-router";
 import NotificationItem from "./NotificationItem.jsx";
 
@@ -16,7 +15,7 @@ export async function clientLoader() {
   return { notifications };
 }
 
-export default function NotificationFeed({ notifications }) {
+export default function NotificationFeed() {
   const { notifications } = useLoaderData();
 
   const grouped = notifications.reduce((acc, n) => {

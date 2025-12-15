@@ -1,6 +1,6 @@
 import { useActionData, redirect } from "react-router";
 import CreateNote from "../components/CreateNote.jsx";
-import { apiFetch } from "../lib/apiFetch.js";
+import { apiFetch } from "../library/apiFetch.js";
 
 import "../app.css";
 import "../components/noteCard.css";

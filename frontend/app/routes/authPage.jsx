@@ -12,7 +12,7 @@ export default function AuthPage() {
 
   useEffect(() => {
     const handleStorageChange = () => {
-      conststored = localStorage.getItem("onboardingStep");
+      const stored = localStorage.getItem("onboardingStep");
       setOnboardingStep(stored);
     };
     window.addEventListener("storage", handleStorageChange);

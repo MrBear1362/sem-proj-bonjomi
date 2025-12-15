@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Tag from "./UI/buttons/Tag";
+import Tag from "./ui/buttons/Tag";
 /* import Menu from "./UI/Menu"; */
-import Like from "./UI/buttons/Like";
-import Comment from "./UI/buttons/Comment";
+import Like from "./ui/buttons/Like";
+import Comment from "./ui/buttons/Comment";
 import CommentSection from "./CommentSection";
-/* import Repost from "./UI/Repost"; */
+/* import Repost from "./ui/Repost"; */
 
 import "../app.css";
 import "./noteCard.css";

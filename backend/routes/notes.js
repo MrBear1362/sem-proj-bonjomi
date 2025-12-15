@@ -242,7 +242,7 @@ router.post("/api/note-comments", requireAuth, async (req, res) => {
 
     const comment = await sql`
     INSERT INTO note_comments (content, user_id, note_id, parent_comment_id)
-    VALUES (${trimmedContent}, ${req.userId}, ${noteId})
+    VALUES (${trimmedContent}, ${req.userId}, ${noteId}, ${parentCommentId})
     RETURNING id, content, user_id, note_id, parent_comment_id, created_at, updated_at
     `;
 

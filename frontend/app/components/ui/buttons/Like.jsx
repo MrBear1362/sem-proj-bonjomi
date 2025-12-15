@@ -33,7 +33,7 @@ export default function Like({ type, noteId, commentId, likeCount, isLiked }) {
   const size = isComment ? 16 : 20;
 
   return (
-    <div className={`container ? ${isComment ? "container--comment" : ""}`}>
+    <div className={`container ${isComment ? "container--comment" : ""}`}>
       <button
         onClick={handleLike}
         className={`heart ${isComment ? "heart--comment" : ""} ${optimisticLiked ? "active" : ""}`}
@@ -48,8 +48,6 @@ export default function Like({ type, noteId, commentId, likeCount, isLiked }) {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          width="20"
-          height="20"
           width={size}
           height={size}
         >
