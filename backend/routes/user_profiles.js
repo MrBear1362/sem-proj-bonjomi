@@ -71,6 +71,36 @@ router.get("/api/user-profiles/:id", async (req, res) => {
   }
 });
 
+// POST create empty placeholder profile
+router.post("/api/user-profiles", requireAuth, async (req, res) => {
+  try {
+    // check if profile exists
+    const existing = await sql`
+    SELECT user_id FROM user_profiles
+    WHERE user_id = ${req.userId}
+    `;
+
+    if (existing.length > 0) {
+      return res.status(200).json({
+        message: "Profile already exists",
+        profile: existing[0]
+      });
+    }
+
+    // create empty profile
+    const profile = await sql`
+    INSERT INTO user_profiles (user_id)
+    VALUES (${req.userId})
+    RETURNING user_id, created_at, updated_at
+    `;
+
+    res.status(201).json(profile[0]);
+  } catch (error) {
+    console.error("Error creating user profile:", error);
+    res.status(500).json({ error: "Failed to create user profile" });
+  }
+});
+
 // PATCH (update) specific user profile from id
 router.patch("/api/user-profiles/:id", requireAuth, async (req, res) => {
   // extract profile id from url

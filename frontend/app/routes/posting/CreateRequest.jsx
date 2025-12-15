@@ -1,4 +1,5 @@
-import { useSubmit, useNavigation, redirect, useRouteLoaderData } from "react-router";
+import { useSubmit, useNavigation, redirect } from "react-router";
+import { useState } from "react";
 import { apiFetch } from "../../library/apiFetch";
 
 // component import
@@ -6,14 +7,17 @@ import Button from "../../components/ui/buttons/Button";
 import InputField from "../../components/ui/inputs/InputField";
 import LoadingSpinner from "../../components/ui/bits/LoadingSpinner";
 import TextareaField from "../../components/ui/inputs/TextareaField";
-import { UserPreview, UserIdentifier } from "../../components/ui/bits/UserIdentifier";
+import {
+  UserPreview,
+  UserIdentifier,
+} from "../../components/ui/bits/UserIdentifier";
 
 const user = {
   img: "https://plus.unsplash.com/premium_photo-1739581523378-e77ed23dc10e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   firstName: "Brandy",
   lastName: "Hellrider",
-  skills: "Violinist"
-}
+  skills: "Violinist",
+};
 
 export async function clientAction({ request }) {
   const formData = await request.formData();
@@ -40,9 +44,9 @@ export async function clientAction({ request }) {
 
   try {
     const response = await apiFetch("/api/collab-requests", {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         title: title.trim(),
@@ -71,7 +75,9 @@ export async function clientAction({ request }) {
     const requestData = await response.json();
 
     // redirect to new post
-    return redirect(`/posts/${requestData.id || requestData.collab_request?.id}`);
+    return redirect(
+      `/posts/${requestData.id || requestData.collab_request?.id}`
+    );
   } catch (error) {
     return { error: error.message || "Failed to create request" };
   }
@@ -81,6 +87,9 @@ export default function CreateRequest() {
   const submit = useSubmit();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+  const [isRemote, setIsRemote] = useState(false);
+  const [location, setLocation] = useState("");
+  const [savedLocation, setSavedLocation] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -88,6 +97,15 @@ export default function CreateRequest() {
     // submit to this route's clientAction
     submit(formData, { method: "post" });
   };
+
+  function onRemoteToggle(checked) {
+    if (checked) {
+      setSavedLocation(location);
+      setLocation("Remote");
+    } else {
+      setLocation(savedLocation);
+    }
+  }
 
   return (
     <section className="post-content">
@@ -98,7 +116,11 @@ export default function CreateRequest() {
 
       <form onSubmit={handleSubmit} className="post-form flex-clm">
         {/* hidden field for due_date */}
-        <input type="hidden" name="due_date" value={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()} />
+        <input
+          type="hidden"
+          name="due_date"
+          value={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()}
+        />
 
         <InputField
           type="text"
@@ -111,7 +133,9 @@ export default function CreateRequest() {
           className="text-input"
         />
 
-        <button type="button" className="btn-outline">+ Add Media</button>
+        <button type="button" className="btn-outline">
+          + Add Media
+        </button>
 
         <TextareaField
           id="description"
@@ -123,7 +147,9 @@ export default function CreateRequest() {
 
         {/* hidden field for tag_id */}
         <input type="hidden" name="tag_id" value="1" />
-        <button type="button" className="btn-text">+ Add genres</button>
+        <button type="button" className="btn-text">
+          + Add genres
+        </button>
 
         <InputField
           type="text"
@@ -132,13 +158,27 @@ export default function CreateRequest() {
           label="Location"
           placeholder="Add location"
           autoComplete="address-level2"
-          className="text-input"
+          className={`text-input ${isRemote ? "input-disabled" : ""}`}
+          value={location}
+          disabled={isRemote}
+          onChange={(e) => setLocation(e.target.value)}
         />
-
 
         <div className="toggle flex-clm">
           <div className="container">
-            <input type="checkbox" className="checkbox" id="remote" name="remote" value="true" />
+            <input
+              type="checkbox"
+              className="checkbox"
+              id="remote"
+              name="remote"
+              value="true"
+              checked={isRemote}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                setIsRemote(checked);
+                onRemoteToggle(checked);
+              }}
+            />
             <label className="switch" htmlFor="remote">
               <span className="slider"></span>
             </label>
@@ -148,7 +188,13 @@ export default function CreateRequest() {
 
         <div className="toggle flex-clm">
           <div className="container">
-            <input type="checkbox" className="checkbox" id="paid" name="paid" value="true" />
+            <input
+              type="checkbox"
+              className="checkbox"
+              id="paid"
+              name="paid"
+              value="true"
+            />
             <label className="switch" htmlFor="paid">
               <span className="slider"></span>
             </label>
@@ -166,7 +212,6 @@ export default function CreateRequest() {
           )}
         </Button>
       </form>
-
     </section>
   );
 }

@@ -27,12 +27,7 @@ input.text-input,
 }
 
 /* form */
-.input__form {
-  justify-self: center;
-  border: 1px solid var(--greyscale-300);
-  padding-block: 0.5rem;
-
-  &::placeholder {
-    text-align: center;
-  }
+.input-disabled {
+  color: var(--greyscale-400);
+  font-style: italic;
 }

@@ -7,8 +7,8 @@ import ButtonLink from "../ui/buttons/ButtonLink.jsx";
 import InputField from "../ui/inputs/InputField.jsx";
 // TODO: find icon library and IMPORT here pls
 
-import "../UI/inputs/input.css";
-import "../UI/buttons/button.css";
+import "../ui/inputs/input.css";
+import "../ui/buttons/button.css";
 import "../../app.css";
 
 export default function LoginForm() {
@@ -29,7 +29,7 @@ export default function LoginForm() {
       return;
     }
 
-    const { data, error: authError } = await supabase.auth.signInWithPassword({
+    const { error: authError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });

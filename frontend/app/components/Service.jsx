@@ -3,6 +3,8 @@ import { useCurrentUser } from "../library/utils.js";
 import Bookmark from "../components/ui/buttons/Bookmark.jsx";
 import Tag from "../components/ui/buttons/Tag.jsx";
 import Button from "../components/ui/buttons/Button.jsx";
+import Bookmark from "./ui/Bookmark.jsx";
+import Tag from "./ui/Tag.jsx";
 import "./Service.css";
 
 /**
