@@ -1,9 +1,6 @@
 import React from "react";
 import Button from "./ui/buttons/Button";
 
-import "./footer.css";
-import "../app.css";
-
 export default function Footer() {
   return (
     <footer className="footer__nav flex">

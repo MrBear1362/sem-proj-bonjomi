@@ -2,10 +2,6 @@ import React, { useState } from "react";
 import Like from "./ui/buttons/Like";
 import InputField from "./ui/inputs/InputField";
 
-import "../app.css";
-import "./commentSection.css";
-import "./ui/buttons/comment.css";
-
 export default function CommentItem({
   comment,
   noteId,

@@ -6,9 +6,6 @@ import Comment from "./ui/buttons/Comment";
 import CommentSection from "./CommentSection";
 /* import Repost from "./ui/Repost"; */
 
-import "../app.css";
-import "./noteCard.css";
-
 export default function NoteCard({ note }) {
   const [isOpen, setIsOpen] = useState(false);
   return (

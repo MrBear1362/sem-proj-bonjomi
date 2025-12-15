@@ -1,7 +1,6 @@
 /* imports */
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import url("https://db.onlinewebfonts.com/c/0976a2619014c5855690b7509fab4c6e?family=Helvetica+Now+Display");
-
 @import "./layout.css";
 @import "./authPage.css";
 @import "./components/ui/bits/loading-spinner.css";
@@ -186,7 +185,7 @@ h6 {
 }
 
 .wrapper {
-  max-width: 80vw;
+  max-width: 85vw;
   margin-inline: auto;
 }
 

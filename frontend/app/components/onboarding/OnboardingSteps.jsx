@@ -9,10 +9,6 @@ import InputField from "../ui/inputs/InputField.jsx";
 import Button from "../ui/buttons/Button.jsx";
 import LineUpSubscription from "../LineUpSubscription.jsx";
 
-/* import "../UI/inputs/input.css"; */
-import "../ui/buttons/button.css";
-import "../../app.css";
-
 export default function OnboardingSteps() {
   // start step at user details after initial signup
   // trying to ensure user-details aren't skipped...

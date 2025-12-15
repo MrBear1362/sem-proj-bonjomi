@@ -4,10 +4,6 @@ import InputField from "./ui/inputs/InputField";
 /* import Notifications from "./NotificationFeed"; */
 import Button from "./ui/buttons/Button";
 
-import "../app.css";
-import "./NoteCard.css";
-import "./ui/buttons/button.css";
-
 export default function Navigation() {
   return (
     <header className="flex-space" role="banner">
