@@ -170,8 +170,17 @@ function MessageInput({ shouldReset = false }) {
             aria-label="Send message"
             onMouseDown={(e) => e.preventDefault()}
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-              <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H.75a.75.75 0 000 1.5h4.232l-2.432 7.905a.75.75 0 00.926.94l15.55-12.35a.75.75 0 000-1.18L3.478 2.405z" />
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 32 26"
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M22 2L11 13m11-11L2 14h7v7h8v-7h7z" />
             </svg>
           </button>
         ) : (
