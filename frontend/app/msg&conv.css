@@ -165,21 +165,6 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
-/* Reset and base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-    "Cantarell", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  background-color: #f5f5f5;
-}
-
 /* Messages List Page */
 .messages-page {
   display: flex;
@@ -191,12 +176,20 @@ body {
 }
 
 .messages-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
   background-color: #4a5568;
   color: white;
+  z-index: 101;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .messages-title {
@@ -228,25 +221,33 @@ body {
 
 /* Tabs */
 .messages-tabs {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
   display: flex;
   background-color: white;
   border-bottom: 1px solid #e5e7eb;
+  z-index: 100;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .tab {
   flex: 1;
-  padding: 16px;
+  padding: 12px 20px;
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
   font-size: 15px;
   font-weight: 500;
-  color: #9ca3af;
+  color: #6b7280;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.tab-active {
+.tab-active,
+.tab.active {
   color: #1f2937;
   border-bottom-color: #1f2937;
 }
@@ -256,6 +257,8 @@ body {
   flex: 1;
   overflow-y: auto;
   background-color: white;
+  margin-top: 120px;
+  margin-top: 120px;
 }
 
 .conversation-item {
@@ -283,6 +286,7 @@ body {
   object-fit: cover;
   flex-shrink: 0;
   margin-right: 14px;
+  background-color: #0ea5e9;
 }
 
 .conversation-content {
@@ -290,7 +294,7 @@ body {
   min-width: 0;
 }
 
-.conversation-header {
+.conversation-item-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -450,6 +454,23 @@ body {
   border-bottom-right-radius: 6px;
 }
 
+/* Standardize avatars for message section */
+.message-avatar {
+  background-color: #0ea5e9;
+}
+
+.result-avatar {
+  background-color: #0ea5e9;
+}
+
+.new-convo-avatar {
+  background-color: #0ea5e9;
+}
+
+.conversation-header-avatar {
+  background-color: #0ea5e9;
+}
+
 /* Unread Separator */
 .unread-separator {
   display: flex;
@@ -539,42 +560,6 @@ body {
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #374151;
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 15px;
-  box-sizing: border-box;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.form-group small {
-  display: block;
-  margin-top: 0.5rem;
-  color: #6b7280;
-  font-size: 0.875rem;
 }
 
 /* Search Results */
@@ -699,15 +684,6 @@ body {
   font-style: italic;
 }
 
-.error-message {
-  padding: 0.75rem 1rem;
-  background: #fee2e2;
-  color: #991b1b;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  font-size: 14px;
-}
-
 .no-results {
   padding: 2rem 1rem;
   text-align: center;
@@ -723,50 +699,6 @@ body {
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
-}
-
-.btn-primary {
-  flex: 1;
-  padding: 0.75rem 1.5rem;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 15px;
-  transition: background-color 0.2s;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #2563eb;
-}
-
-.btn-primary:disabled {
-  background-color: #d1d5db;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.btn-secondary {
-  flex: 1;
-  padding: 0.75rem 1.5rem;
-  background-color: #f3f4f6;
-  color: #374151;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 15px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
-}
-
-.btn-secondary:hover {
-  background-color: #e5e7eb;
 }
 
 /* Mobile optimizations */

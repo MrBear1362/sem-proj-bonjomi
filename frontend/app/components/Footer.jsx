@@ -78,7 +78,7 @@ export default function Footer() {
         </NavLink>
       </Button>
       <Button className="flex-clm btn-nav">
-        <NavLink to="chats" className="flex-clm btn-nav" aria-label="Chats">
+        <NavLink to="messages" className="flex-clm btn-nav" aria-label="Chats">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
