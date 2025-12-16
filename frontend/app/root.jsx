@@ -7,12 +7,16 @@ import {
   ScrollRestoration,
 } from "react-router";
 
+import appStylesHref from "./app.css?url";
+import testStylesHref from "./test.css?url";
 // import styles
 import "./app.css";
 
-// Add links to external stylesheets, fonts, etc. here
-// https://reactrouter.com/start/framework/route-module#links
-export const links = () => [];
+// Ensure styles load via <link> tags for stable SSR/CSR hydration
+export const links = () => [
+  { rel: "stylesheet", href: appStylesHref },
+  { rel: "stylesheet", href: testStylesHref },
+];
 
 export function Layout({ children }) {
   return (
@@ -33,7 +37,7 @@ export function Layout({ children }) {
 }
 
 export function HydrateFallback() {
-  return <div>Loading...</div>
+  return <div>Loading...</div>;
 }
 
 export default function App() {
