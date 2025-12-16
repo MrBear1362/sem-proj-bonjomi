@@ -13,6 +13,7 @@
 @import "./components/ui/buttons/ToggleSwitch.css";
 @import "./components/ui/inputs/input.css";
 @import "./components/ui/inputs/radio-card.css";
+@import "./components/CollabCard.css";
 @import "./components/CommentSection.css";
 @import "./components/Footer.css";
 @import "./components/NoteCard.css";
@@ -61,67 +62,67 @@
 }
 
 body {
-	/* !setting color here might not be ideal */
-	color: var(--greyscale-900);
-	font-family: var(--font-body);
+  /* !setting color here might not be ideal */
+  color: var(--greyscale-900);
+  font-family: var(--font-body);
 }
 
 /*utility*/
 
 .flex {
-	display: flex;
+  display: flex;
 }
 
 .flex-row {
-	display: flex;
-	flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .flex-clm {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .grid,
 .app-layout {
-	display: grid;
-	grid-template-columns: repeat(6, 1fr);
-	gap: 0.625rem;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.625rem;
 }
 
 .spacing-1 {
-	padding-block: 1rem;
+  padding-block: 1rem;
 }
 .spacing-2 {
-	padding-block: 2rem;
+  padding-block: 2rem;
 }
 .spacing-4 {
-	padding-block: 4rem;
+  padding-block: 4rem;
 }
 .spacing-6 {
-	padding-block: 6rem;
+  padding-block: 6rem;
 }
 .spacing-8 {
-	padding-block: 8rem;
+  padding-block: 8rem;
 }
 
 .gap-025 {
-	gap: 0.25rem;
+  gap: 0.25rem;
 }
 .gap-1 {
-	gap: 1rem;
+  gap: 1rem;
 }
 
 /*screen reader*/
 .sr-only {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip-path: inset(1px);
-	border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(1px);
+  border: 0;
 }
 
 /* !Typography */
@@ -132,56 +133,56 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: var(--font-header);
+  font-family: var(--font-header);
 }
 
 .xs-text {
-	font-size: 0.75rem;
+  font-size: 0.75rem;
 }
 .s-text {
-	font-size: 0.875rem;
+  font-size: 0.875rem;
 }
 .m-text {
-	font-size: 1rem;
-	font-weight: 500;
+  font-size: 1rem;
+  font-weight: 500;
 }
 .l-heading {
-	font-size: 1.125rem;
+  font-size: 1.125rem;
 }
 .xl-heading {
-	font-size: 1.25rem;
+  font-size: 1.25rem;
 }
 .xxl-heading {
-	font-size: 1.5rem;
-	font-weight: 700;
-	line-height: 1.5rem;
-	letter-spacing: 0.75%;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+  letter-spacing: 0.75%;
 }
 .caps {
-	text-transform: uppercase;
+  text-transform: uppercase;
 }
 
 /*icons*/
 
 .element-xs {
-	height: 2.723rem;
-	width: 2.723rem;
+  height: 2.723rem;
+  width: 2.723rem;
 }
 .element-s {
-	height: 2.917rem;
-	width: 2.917rem;
+  height: 2.917rem;
+  width: 2.917rem;
 }
 .element-m {
-	height: 3.111rem;
-	width: 3.111rem;
+  height: 3.111rem;
+  width: 3.111rem;
 }
 .element-l {
-	height: 4.25rem;
-	width: 4.25rem;
+  height: 4.25rem;
+  width: 4.25rem;
 }
 .element-xl {
-	height: 9.688rem;
-	width: 15.313rem;
+  height: 9.688rem;
+  width: 15.313rem;
 }
 
 .wrapper {
@@ -190,10 +191,10 @@ h6 {
 }
 
 img {
-	max-width: 100%;
+  max-width: 100%;
 }
 
 .justify-center {
-	justify-self: center;
-	justify-content: center;
+  justify-self: center;
+  justify-content: center;
 }
