@@ -15,7 +15,7 @@ import "./Service.css";
 export function ServicePreviewCard({ service }) {
   return (
     <section className="service-card-container">
-      <header>
+      <header className="service-header">
         <div className="profile-container">
           <img src={service.user_profile_img} alt="Business profile" />
           <h3>{service.business_name}</h3>

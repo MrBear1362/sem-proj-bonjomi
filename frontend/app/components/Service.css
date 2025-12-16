@@ -22,7 +22,7 @@
 	border-radius: 10px;
 }
 
-header {
+.service-header {
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
