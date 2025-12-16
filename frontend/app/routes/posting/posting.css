@@ -49,9 +49,10 @@
   padding: 1rem 0;
 }
 
-.btn-primary {
-  height: fit-content;
-  background: var(--primary-yellow);
-  padding: 0.375rem 0.5rem;
-  border-radius: 50rem;
+/* collab request */
+/* .request-header {
+} */
+
+.tab-content {
+  height: 100vh;
 }

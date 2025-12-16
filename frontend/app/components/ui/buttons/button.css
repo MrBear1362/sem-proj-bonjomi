@@ -53,13 +53,20 @@
 
 button {
   border-radius: 2rem;
+  height: fit-content;
   width: fit-content;
-  padding: 0.3rem 0.6rem;
+  padding: 0.5rem 0.6rem;
 }
 
 .btn-primary {
+  cursor: pointer;
   background-color: var(--primary-yellow);
   border: 0;
+
+  &[type="submit"] {
+    padding: .5rem 2rem;
+    align-self: end;
+  }
 }
 
 .btn-outline {

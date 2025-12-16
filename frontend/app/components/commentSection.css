@@ -31,3 +31,7 @@
   border-left: 2px solid var(--greyscale-300);
   padding-left: 2rem;
 }
+
+.comment-interactions {
+  align-items: center;
+}
