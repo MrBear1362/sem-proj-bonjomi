@@ -54,7 +54,7 @@ export async function clientAction({ params, request }) {
   }
 }
 
-export function meta({}) {
+export function meta({ }) {
   return [
     { title: "LineUp - Find your place in the LineUp" },
     { name: "description", content: "Welcome to LineUp!" },
@@ -85,11 +85,6 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute>
-      <div>
-        <h1>This is das Board 👍</h1>
-        <Button onClick={handleLogout}>Logout</Button>
-      </div>
-
       <section className="stories-container">There are stories here</section>
 
       <section className="collab-requests-container">

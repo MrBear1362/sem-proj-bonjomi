@@ -1,9 +1,30 @@
 /* overall layout for the app */
 .app-layout {
-  padding: 1rem;
+  height: 100vh;
 
   /* make grid content fill grid by default */
   & > * {
     grid-column: 1 / -1;
+  }
+}
+
+.main-content {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+nav {
+  align-items: center;
+}
+
+.nav-header {
+  padding: .5rem 1rem;
+  .btn {
+    svg {
+      height: 1.2rem;
+      width: 1.2rem;
+    }
   }
 }
