@@ -36,4 +36,34 @@ router.get("/api/users/search", requireAuth, async (req, res) => {
   }
 });
 
+// GET - get user by id (public profile info)
+router.get("/api/users/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await sql`
+    SELECT
+      u.auth_user_id AS id,
+      u.first_name,
+      u.last_name,
+      u.city,
+      p.image_url,
+      p.bio,
+      p.alias
+    FROM users u
+    LEFT JOIN user_profiles p ON p.user_id = u.auth_user_id
+    WHERE u.auth_user_id = ${userId}
+    `;
+
+    if (user.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json(user[0]);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ error: "Failed to fetch user" });
+  }
+});
+
 export default router;

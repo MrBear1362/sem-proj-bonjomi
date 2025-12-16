@@ -11,8 +11,6 @@ import appStylesHref from "./app.css?url";
 import testStylesHref from "./test.css?url";
 // import styles
 import "./app.css";
-import "./layout.css";
-import "./authPage.css";
 
 // Ensure styles load via <link> tags for stable SSR/CSR hydration
 export const links = () => [

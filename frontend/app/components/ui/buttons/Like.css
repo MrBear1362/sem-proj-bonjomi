@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.heart {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.heart svg {
+  color: var(--greyscale-500);
+  transition: color 0.2s;
+}
+
+.active svg {
+  color: var(--primary-yellow);
+}
+
+.likeCount {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--greyscale-500);
+}
+.likeCount--comment {
+  font-size: 0.75rem;
+}

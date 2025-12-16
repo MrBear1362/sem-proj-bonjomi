@@ -1,0 +1,199 @@
+/* imports */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://db.onlinewebfonts.com/c/0976a2619014c5855690b7509fab4c6e?family=Helvetica+Now+Display");
+@import "./layout.css";
+@import "./authPage.css";
+@import "./components/ui/bits/loading-spinner.css";
+@import "./components/ui/bits/user-identifier.css";
+@import "./components/ui/buttons/Bookmark.css";
+@import "./components/ui/buttons/button.css";
+@import "./components/ui/buttons/Comment.css";
+@import "./components/ui/buttons/Like.css";
+@import "./components/ui/buttons/Tag.css";
+@import "./components/ui/buttons/ToggleSwitch.css";
+@import "./components/ui/inputs/input.css";
+@import "./components/ui/inputs/radio-card.css";
+@import "./components/CommentSection.css";
+@import "./components/Footer.css";
+@import "./components/NoteCard.css";
+@import "./components/Service.css";
+@import "./routes/posting/posting.css";
+
+/* global */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /*primary colours*/
+  --primary-yellow: #ffcf70;
+  /*profile header colours*/
+  --theme-grey: #575252;
+  --theme-turquoise: #3f4d54;
+  --theme-blue: #3f4254;
+  --theme-red: #543f40;
+  --theme-brown: #5d4c43;
+  /*neutral colours*/
+  --greyscale-900: #1e1e1e;
+  /* Bjørn - greyscale 600 skal bruges til beskeder */
+  --greyscale-600: hsla(0, 0%, 52%, 0.2);
+  --greyscale-500: #555;
+  --greyscale-400: #969696;
+  --greyscale-300: #ededed;
+  --greyscale-200: #f7f6f6;
+  --greyscale-100: #fff;
+  /*accent colours*/
+  --danger: #800000;
+  --success: #40826d;
+  --accent-blue: #007aff;
+  /* outline */
+  --outline: rgba(0, 0, 0, 0.1);
+  /*fonts*/
+  --font-body: "Helvetica Now Display", "sans-serif";
+  --font-header: "Inter", "sans-serif";
+  /* inputs */
+  --input-bg: #f1f1f1;
+}
+
+body {
+	/* !setting color here might not be ideal */
+	color: var(--greyscale-900);
+	font-family: var(--font-body);
+}
+
+/*utility*/
+
+.flex {
+	display: flex;
+}
+
+.flex-row {
+	display: flex;
+	flex-direction: row;
+}
+
+.flex-clm {
+	display: flex;
+	flex-direction: column;
+}
+
+.grid,
+.app-layout {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: 0.625rem;
+}
+
+.spacing-1 {
+	padding-block: 1rem;
+}
+.spacing-2 {
+	padding-block: 2rem;
+}
+.spacing-4 {
+	padding-block: 4rem;
+}
+.spacing-6 {
+	padding-block: 6rem;
+}
+.spacing-8 {
+	padding-block: 8rem;
+}
+
+.gap-025 {
+	gap: 0.25rem;
+}
+.gap-1 {
+	gap: 1rem;
+}
+
+/*screen reader*/
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(1px);
+	border: 0;
+}
+
+/* !Typography */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--font-header);
+}
+
+.xs-text {
+	font-size: 0.75rem;
+}
+.s-text {
+	font-size: 0.875rem;
+}
+.m-text {
+	font-size: 1rem;
+	font-weight: 500;
+}
+.l-heading {
+	font-size: 1.125rem;
+}
+.xl-heading {
+	font-size: 1.25rem;
+}
+.xxl-heading {
+	font-size: 1.5rem;
+	font-weight: 700;
+	line-height: 1.5rem;
+	letter-spacing: 0.75%;
+}
+.caps {
+	text-transform: uppercase;
+}
+
+/*icons*/
+
+.element-xs {
+	height: 2.723rem;
+	width: 2.723rem;
+}
+.element-s {
+	height: 2.917rem;
+	width: 2.917rem;
+}
+.element-m {
+	height: 3.111rem;
+	width: 3.111rem;
+}
+.element-l {
+	height: 4.25rem;
+	width: 4.25rem;
+}
+.element-xl {
+	height: 9.688rem;
+	width: 15.313rem;
+}
+
+.wrapper {
+  max-width: 85vw;
+  margin-inline: auto;
+}
+
+img {
+	max-width: 100%;
+}
+
+.justify-center {
+	justify-self: center;
+	justify-content: center;
+}
