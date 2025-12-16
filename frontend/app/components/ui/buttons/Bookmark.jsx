@@ -1,13 +1,16 @@
 import { useState } from "react";
-import "./Bookmark.css";
 
 export default function Bookmark() {
 	const [isBookmarked, setIsBookmarked] = useState(false);
 
+	const handleToggle = () => {
+		setIsBookmarked(!isBookmarked);
+	}
+
 	return (
 		<button
 			className={`bookmark ${isBookmarked ? "bookmarkActive" : ""}`}
-			onClick={() => setIsBookmarked(!isBookmarked)}
+			onClick={handleToggle}
 			aria-label="Toggle bookmark"
 		/>
 	);
