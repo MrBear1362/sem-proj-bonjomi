@@ -136,11 +136,28 @@ router.post("/api/conversations", requireAuth, async (req, res) => {
       return res.status(400).json({ error: "participantIds required" });
     }
 
+    const rawIds = Array.isArray(participantIds)
+      ? participantIds
+      : participantIds
+      ? [participantIds]
+      : [];
+    const filteredParticipantIds = [
+      ...new Set(
+        rawIds
+          .map((v) => String(v).trim())
+          .filter((id) => id && id !== String(userId))
+      ),
+    ];
+
+    if (filteredParticipantIds.length === 0) {
+      return res.status(400).json({ error: "participantIds required" });
+    }
+
     let finalTitle = title;
 
     // For 1:1 conversations, leave title NULL (will be dynamic per user)
-    if (participantIds.length === 1) {
-      const participantId = participantIds[0];
+    if (filteredParticipantIds.length === 1) {
+      const participantId = filteredParticipantIds[0];
 
       // Check if a 1:1 conversation already exists with exactly these 2 users
       const existing = await sql`
@@ -182,7 +199,7 @@ router.post("/api/conversations", requireAuth, async (req, res) => {
       VALUES (${conversation.id}, ${userId})`;
 
     // Add all other participants
-    for (const participantId of participantIds) {
+    for (const participantId of filteredParticipantIds) {
       await sql`
         INSERT INTO conversation_participants (conversation_id, user_id)
         VALUES (${conversation.id}, ${participantId})`;

@@ -27,7 +27,10 @@ export async function apiFetch(path, options = {}) {
   });
 
   if (response.status === 401) {
-    const currentPath = window.location.pathname + window.location.search;
+    const currentPath =
+      typeof window !== "undefined"
+        ? window.location.pathname + window.location.search
+        : "/";
     throw redirect(
       `/auth?step=login&redirect=${encodeURIComponent(currentPath)}`
     );

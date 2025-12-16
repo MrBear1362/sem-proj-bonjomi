@@ -37,7 +37,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error(
-    "Missing Supabase enviroment variablesl  " +
+    "Missing Supabase enviroment variables.  " +
       "Please create a .env file with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY"
   );
 }
