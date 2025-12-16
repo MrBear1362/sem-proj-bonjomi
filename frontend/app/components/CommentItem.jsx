@@ -22,7 +22,7 @@ export default function CommentItem({
         <p>{comment.first_name}</p>
       </div>
       <p>{comment.content}</p>
-      <div className="flex align-right">
+      <div className="comment-interactions flex align-right">
         <Like
           type="comment"
           commentId={comment.id}
