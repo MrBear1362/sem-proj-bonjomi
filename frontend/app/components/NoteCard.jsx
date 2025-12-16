@@ -12,7 +12,10 @@ export default function NoteCard({ note }) {
     <div className="note__card">
       <div className="flex note__nav">
         <img
-          src={note.image_url}
+          src={
+            note.image_url ||
+            "https://plus.unsplash.com/premium_photo-1739786996022-5ed5b56834e2?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          }
           alt={note.first_name}
           className="note__nav--pic"
         />
