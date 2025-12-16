@@ -31,7 +31,7 @@ export default function NoteCard({ note }) {
         )}
         <p className="m-text"> {note.content}</p>
       </div>
-      <div className="flex">
+      <div className="note-interactions flex">
         <Like
           type="note"
           noteId={note.id}
