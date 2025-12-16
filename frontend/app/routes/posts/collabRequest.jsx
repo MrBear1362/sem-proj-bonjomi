@@ -1,5 +1,4 @@
 import { useLoaderData } from "react-router";
-import { useState } from "react";
 import { apiFetch } from "../../library/apiFetch";
 import PostHeader from "../../components/ui/bits/PostHeader";
 
@@ -27,26 +26,11 @@ export async function clientLoader({ params }) {
 
 export default function CollabRequest() {
   const { coreq, user } = useLoaderData();
-  const [isBookmarked, setIsBookmarked] = useState(false);
 
   // validate coreq data
   if (!coreq) {
     return <div className="error">Collaboration request not found.</div>;
   }
-
-  const handleBookmark = async () => {
-    try {
-      const response = await apiFetch(`/api/collab-request/${coreq.id}/bookmark`, {
-        method: isBookmarked ? "DELETE" : "POST",
-      });
-
-      if (response.ok) {
-        setIsBookmarked(!isBookmarked);
-      }
-    } catch (error) {
-      console.error("Error toggling bookmark:", error);
-    }
-  };
 
   // get tag name from tag_id (needs fetching from db or passing from backend)
   // placeholder tag / replace with actual tag lookup later
@@ -62,20 +46,21 @@ export default function CollabRequest() {
         action="is looking for a"
         tag={tagName}
         timestamp={coreq.created_at}
-        onBookmark={handleBookmark}
-        isBookmarked={isBookmarked}
       />
 
-      <header>
-        <h2>{coreq.title || "Untitled request"}</h2>
+      <header className="request-header flex-clm">
+        <h2 className="l-heading">{coreq.title || "Untitled request"}</h2>
+      </header>
+
+      <section className="request-content">
         {coreq.media_url && (
           <img src={coreq.media_url} alt="Request media" />
         )}
-      </header>
+        {coreq.content && (
+          <section className="request-description">{coreq.content}</section>
+        )}
+      </section>
 
-      {coreq.content && (
-        <section className="description">{coreq.content}</section>
-      )}
 
       <section className="request-details">
         {/* this should just say remote if coreq.location is remote */}
@@ -88,7 +73,7 @@ export default function CollabRequest() {
         {coreq.created_at && (
           <p><strong>Posted:</strong> {new Date(coreq.created_at).toLocaleDateString()}</p>
         )}
-        {coreq.is_paid && <span className="badge">Paid</span>}  
+        {coreq.is_paid && <span className="badge">Paid</span>}
       </section>
 
 

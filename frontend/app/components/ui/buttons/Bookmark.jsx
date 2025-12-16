@@ -1,13 +1,16 @@
 import { useState } from "react";
-import "./Bookmark.css";
 
 export default function Bookmark() {
 	const [isBookmarked, setIsBookmarked] = useState(false);
 
+	const handleToggle = () => {
+		setIsBookmarked(!isBookmarked);
+	}
+
 	return (
 		<button
-			className="bookmark"
-			onClick={() => setIsBookmarked(!isBookmarked)}
+			className={`bookmark ${isBookmarked ? "bookmarkActive" : ""}`}
+			onClick={handleToggle}
 			aria-label="Toggle bookmark"
 		>
 			<svg
