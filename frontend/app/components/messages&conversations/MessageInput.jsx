@@ -1,17 +1,21 @@
-import React, { useState } from "react";
-import { Form } from "react-router";
+import React, { useState, useRef } from "react";
+import { Form, useActionData } from "react-router";
 
-export function MessageInput({ shouldReset = false }) {
+export function MessageInput() {
   const [isInputFocused, setIsInputFocused] = useState(false);
-  const formRef = React.useRef(null);
+  const formRef = useRef(null);
+  const actionData = useActionData();
+  const prevActionDataRef = useRef(actionData);
 
   React.useEffect(() => {
-    if (shouldReset && formRef.current) {
-      formRef.current.reset();
-      const input = formRef.current.querySelector('[name="message"]');
+    // Reset form when actionData changes and success is true
+    if (actionData?.success && actionData !== prevActionDataRef.current) {
+      formRef.current?.reset();
+      const input = formRef.current?.querySelector('[name="message"]');
       if (input) input.focus();
     }
-  }, [shouldReset]);
+    prevActionDataRef.current = actionData;
+  }, [actionData]);
   
   return (
     <div className="message-input-container">
