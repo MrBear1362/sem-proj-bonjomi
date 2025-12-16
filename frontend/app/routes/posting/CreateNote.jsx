@@ -5,19 +5,41 @@ import {
   UserPreview,
   UserIdentifier,
 } from "../../components/ui/bits/UserIdentifier";
+import { apiFetch } from "../../library/apiFetch";
+import { supabase } from "../../library/supabase";
+import { useLoaderData } from "react-router";
 
-const user = {
-  img: "https://plus.unsplash.com/premium_photo-1739581523378-e77ed23dc10e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  firstName: "Brandy",
-  lastName: "Hellrider",
-  skills: "Violinist",
-};
+export async function clientLoader() {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error) {
+    console.error("Error loading user:", error);
+    return { user: null, profile: null };
+  }
+
+  try {
+    // user data fetch based on collab req user id
+    const profile = await apiFetch(`/api/users/${user.id}`).then((r) =>
+      r.ok ? r.json() : null
+    );
+
+    return { profile };
+  } catch (error) {
+    console.error("Error loading user:", error);
+    throw error;
+  }
+}
 
 export default function CreateNote() {
+  const { profile } = useLoaderData();
+
   return (
     <section className="post-content">
       <header className="post-content-header flex-row">
-        <UserIdentifier user={user} />
+        <UserIdentifier user={profile} />
         <button
           className="btn-primary"
           type="button"

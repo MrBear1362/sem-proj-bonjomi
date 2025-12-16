@@ -10,55 +10,55 @@ import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
 export async function clientLoader() {
-	const response = await apiFetch("/api/notes/feed");
+  const response = await apiFetch("/api/notes/feed");
 
-	if (!response.ok) {
-		throw new Error(`Failed to fetch notes: ${response.status}`);
-	}
+  if (!response.ok) {
+    throw new Error(`Failed to fetch notes: ${response.status}`);
+  }
 
-	const notes = await response.json();
+  const notes = await response.json();
 
-	return { notes };
+  return { notes };
 }
 
 export async function clientAction({ params, request }) {
-	const formData = await request.formData();
-	const type = formData.get("type");
-	const noteId = formData.get("noteId");
-	const commentId = formData.get("commentId");
-	const isLiked = formData.get("isLiked") === "true";
+  const formData = await request.formData();
+  const type = formData.get("type");
+  const noteId = formData.get("noteId");
+  const commentId = formData.get("commentId");
+  const isLiked = formData.get("isLiked") === "true";
 
-	try {
-		let response;
+  try {
+    let response;
 
-		if (type === "note") {
-			response = await apiFetch(`/api/notes/${noteId}/likes`, {
-				method: isLiked ? "DELETE" : "POST",
-			});
-		} else if (type === "comment") {
-			response = await apiFetch(`/api/note-comments/${commentId}/likes`, {
-				method: isLiked ? "DELETE" : "POST",
-			});
-		} else {
-			return { error: "Unknown type" };
-		}
+    if (type === "note") {
+      response = await apiFetch(`/api/notes/${noteId}/likes`, {
+        method: isLiked ? "DELETE" : "POST",
+      });
+    } else if (type === "comment") {
+      response = await apiFetch(`/api/note-comments/${commentId}/likes`, {
+        method: isLiked ? "DELETE" : "POST",
+      });
+    } else {
+      return { error: "Unknown type" };
+    }
 
-		if (!response.ok) {
-			const err = await response.json().catch(() => ({}));
-			return { error: err.error || `Request failed: ${response.status}` };
-		}
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      return { error: err.error || `Request failed: ${response.status}` };
+    }
 
-		return { success: true };
-	} catch (error) {
-		return { error: error.message };
-	}
+    return { success: true };
+  } catch (error) {
+    return { error: error.message };
+  }
 }
 
 export function meta({}) {
-	return [
-		{ title: "LineUp - Find your place in the LineUp" },
-		{ name: "description", content: "Welcome to LineUp!" },
-	];
+  return [
+    { title: "LineUp - Find your place in the LineUp" },
+    { name: "description", content: "Welcome to LineUp!" },
+  ];
 }
 
 export default function DashboardPage() {
@@ -85,7 +85,6 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute>
-      <Navigation />
       <div>
         <h1>This is das Board 👍</h1>
         <Button onClick={handleLogout}>Logout</Button>
@@ -99,13 +98,6 @@ export default function DashboardPage() {
       </section>
 
       <Feed notes={notes} />
-
-      <button>
-        <NavLink to="create-posts" className="button">
-          Create +
-        </NavLink>
-      </button>
-      <Footer />
     </ProtectedRoute>
   );
 }
