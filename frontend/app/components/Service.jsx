@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 import { useCurrentUser } from "../library/utils.js";
 import Bookmark from "../components/ui/buttons/Bookmark.jsx";
 import Tag from "../components/ui/buttons/Tag.jsx";
@@ -38,9 +38,15 @@ export function ServiceCard({ service, mode = "preview" }) {
 				isDetailMode ? "serviceCardFull" : ""
 			}`}
 		>
-			<header>
-				<div className="profileContainer">
-					<img src={user_profile_img} alt="Business profile" />
+			<header className="service-header">
+				<div className="serviceProfileContainer">
+					<img
+						src={
+							user_profile_img ||
+							"https://plus.unsplash.com/premium_photo-1739786996022-5ed5b56834e2?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&brid=HTAMZ2cjoU-2uCGq_TG12w"
+						}
+						alt="Business profile"
+					/>
 					<p>{business_name}</p>
 					<p>offers</p>
 					<Tag type="static" label={tags} />
@@ -62,9 +68,12 @@ export function ServiceCard({ service, mode = "preview" }) {
 						<div className="actionButtons">
 							<Button className="btn-primary">Start a chat</Button>
 							{isOwner && (
-								<Link to={`/services/${id}/edit`} className="editButton">
+								<NavLink
+									className="btn btn-primary"
+									to={`/services/${id}/edit`}
+								>
 									Edit Service
-								</Link>
+								</NavLink>
 							)}
 						</div>
 						<div className="infoContainer">
@@ -86,9 +95,9 @@ export function ServiceCard({ service, mode = "preview" }) {
 					// Preview mode: Show link and basic info
 				:	<div className="bottomContainer">
 						<div className="linkContainer">
-							<Link to={`/services/${id}`} className="readMore">
+							<NavLink to={`/services/${id}`} className="readMore">
 								Read more
-							</Link>
+							</NavLink>
 						</div>
 						<div className="infoContainer">
 							<p>{location} - posted at</p>
