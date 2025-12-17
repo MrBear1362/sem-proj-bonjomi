@@ -24,7 +24,7 @@ import radioCardStylesHref from "./components/ui/inputs/radio-card.css?url";
 import collabCardStylesHref from "./components/CollabCard.css?url";
 import commentSectionStylesHref from "./components/commentSection.css?url";
 import footerStylesHref from "./components/Footer.css?url";
-import noteCardStylesHref from "./components/NoteCard.css?url";
+import noteCardStylesHref from "./components/noteCard.css?url";
 import serviceStylesHref from "./components/Service.css?url";
 import postingStylesHref from "./routes/posting/posting.css?url";
 import msgConvStylesHref from "./msg&conv.css?url";
