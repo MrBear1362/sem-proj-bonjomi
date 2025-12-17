@@ -11,6 +11,7 @@ import appStylesHref from "./app.css?url";
 import testStylesHref from "./msg&conv.css?url";
 // import styles
 import "./app.css";
+import LoadingSpinner from "./components/ui/bits/LoadingSpinner";
 
 // Ensure styles load via <link> tags for stable SSR/CSR hydration
 export const links = () => [
@@ -37,7 +38,7 @@ export function Layout({ children }) {
 }
 
 export function HydrateFallback() {
-  return <div>Loading...</div>;
+  return <div className="hydrate-loading">Loading <LoadingSpinner/></div>;
 }
 
 export default function App() {
