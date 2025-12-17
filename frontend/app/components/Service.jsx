@@ -65,13 +65,10 @@ export function ServiceCard({ service, mode = "preview" }) {
 				isDetailMode ?
 					// Detail mode: Show all info and action buttons
 					<div className="serviceDetails">
-						<div className="actionButtons">
+						<div className="actionButtons flex">
 							<Button className="btn-primary">Start a chat</Button>
 							{isOwner && (
-								<NavLink
-									className="btn btn-primary"
-									to={`/services/${id}/edit`}
-								>
+								<NavLink className="btn-primary" to={`/services/${id}/edit`}>
 									Edit Service
 								</NavLink>
 							)}

@@ -104,6 +104,7 @@
 	}
 	.serviceMedia {
 		width: 100%;
+		height: fit-content;
 		margin: 15px auto;
 	}
 	.serviceDescription {
@@ -116,16 +117,13 @@
 	}
 
 	.actionButtons {
-		width: 40%;
 		gap: 0.5rem;
-		display: flex;
 		justify-content: space-between;
+		& button {
+			max-width: fit-content;
+		}
 		& a {
-			padding: 0;
-			margin: 0;
-			display: flex;
-			align-items: center;
-			justify-content: center;
+			max-width: fit-content;
 			text-decoration: none;
 		}
 	}
