@@ -19,6 +19,8 @@ export default [
     route("services/create", "routes/createService.jsx"),
     route("services/:serviceId", "routes/service.jsx"),
     route("services/:serviceId/edit", "routes/editService.jsx"),
+    // profile routes
+    route("profiles/:userId", "routes/userProfile.jsx"),
   ]),
   // authentication routes outside main layout
   route("auth", "routes/authPage.jsx"),
