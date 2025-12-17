@@ -1,4 +1,6 @@
 <h2>1. Link(s) til den deployede løsning (backend og frontend)</h2>
+Frontend: https://sem-proj-bonjomi-frontend.onrender.com
+Backend: https://sem-proj-bonjomi-lineup.onrender.com
 
 <h2>2. Login-informationer til testbrugere (hvis relevant)</h2>
    Privat user:
