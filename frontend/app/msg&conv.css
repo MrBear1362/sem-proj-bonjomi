@@ -185,12 +185,20 @@ body {
 }
 
 .messages-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
   background-color: #4a5568;
   color: white;
+  z-index: 101;
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .messages-title {
@@ -222,9 +230,16 @@ body {
 
 /* Tabs */
 .messages-tabs {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
   align-items: center;
   background-color: white;
   border-bottom: 1px solid #e5e7eb;
+  z-index: 100;
+  max-width: 500px;
+  margin: 0 auto;
 
   .tab {
     flex: 1;
@@ -256,6 +271,7 @@ body {
   flex: 1;
   overflow-y: auto;
   background-color: white;
+  margin-top: 120px;
 }
 
 .conversation-item {
