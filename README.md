@@ -1,12 +1,29 @@
 1. Link(s) til den deployede løsning (backend og frontend)
 
 2. Login-informationer til testbrugere (hvis relevant)
+   mail: testest@test.test
+   pw: testtest
 
 3. En kort teknisk beskrivelse af jeres arkitektur og valg af teknologier/frameworks
 
 4. En liste og kort beskrivelse af de features, I har implementeret, med angivelse af den primære ansvarlige udvikler for hver feature, hvor det er relevant
 
+Conversations & messages: Bjørn
+Mulighed for at kunne sende beskeder mellem brugere
+
+Business & servicess: Jesper
+Business profile og mulighed for at kunen lave opslag som en business og de bliver alle vist under service fanen
+
+User profile, collab requests & sign on: Monica
+Musikker profiler med mulighed for at kunne lave collab requests som den bruger der er logget ind.
+Onboarding flowet med oprettelse af bruger
+
+Feed, notes & comments: Nicolai
+Dashboard med visning af notes af de folk man følger, samt kunne se kommentarer, like og selv lave notes
+
 5. Eventuelle kendte issues eller manglende features
+   Man kan ikke skrive kommentarer på nuværende tidspunkt eller slette dem/notes igen.
+   Ingen funktionalitet til at følge folk
 
 6. En liste og kort beskrivelse af eventuelle ekstra features eller innovationer, I har tilføjet ud over kravene
 
