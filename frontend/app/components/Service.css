@@ -27,7 +27,7 @@
 	background-color: rgba(0, 0, 0, 0.06);
 }
 
-.profileContainer {
+.serviceProfileContainer {
 	display: inherit;
 	justify-content: space-between;
 	align-items: center;
@@ -43,8 +43,7 @@
 }
 
 .serviceMedia {
-	height: 222px;
-	width: 333px;
+	width: 100%;
 	margin: 9px auto;
 	border-radius: 10px;
 }
@@ -104,8 +103,8 @@
 		}
 	}
 	.serviceMedia {
-		height: 240px;
-		width: 363px;
+		width: 100%;
+		height: fit-content;
 		margin: 15px auto;
 	}
 	.serviceDescription {
@@ -116,7 +115,19 @@
 		display: block;
 		margin-bottom: 15px;
 	}
-	.actionButtons,
+
+	.actionButtons {
+		gap: 0.5rem;
+		justify-content: space-between;
+		& button {
+			max-width: fit-content;
+		}
+		& a {
+			max-width: fit-content;
+			text-decoration: none;
+		}
+	}
+
 	.location,
 	.price {
 		margin-bottom: 15px;
