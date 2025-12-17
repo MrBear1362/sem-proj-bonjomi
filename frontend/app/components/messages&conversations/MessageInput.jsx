@@ -1,21 +1,41 @@
-import React, { useState } from "react";
-import { Form } from "react-router";
+import React, { useState, useRef } from "react";
+import { Form, useActionData, useSubmit } from "react-router";
 
-export function MessageInput({ shouldReset = false }) {
+export function MessageInput() {
   const [isInputFocused, setIsInputFocused] = useState(false);
-  const formRef = React.useRef(null);
+  const formRef = useRef(null);
+  const actionData = useActionData();
+  const prevActionDataRef = useRef(actionData);
+  const [isPending, setIsPending] = useState(false);
+  const submit = useSubmit();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    formRef.current?.reset();
+    setIsPending(true);
+    submit(formData, { method: "post" });
+  };
 
   React.useEffect(() => {
-    if (shouldReset && formRef.current) {
-      formRef.current.reset();
-      const input = formRef.current.querySelector('[name="message"]');
+    // Reset form when actionData changes and success is true
+    if (actionData?.success && actionData !== prevActionDataRef.current) {
+      setIsPending(false);
+      formRef.current?.reset();
+      const input = formRef.current?.querySelector('[name="message"]');
       if (input) input.focus();
     }
-  }, [shouldReset]);
-  
+    prevActionDataRef.current = actionData;
+  }, [actionData]);
+
   return (
     <div className="message-input-container">
-      <Form method="post" className="message-input-form" ref={formRef}>
+      <Form
+        method="post"
+        className="message-input-form"
+        ref={formRef}
+        onSubmit={handleSubmit}
+      >
         <button type="button" className="add-btn" aria-label="Add attachment">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
             <circle cx="12" cy="12" r="10" fill="#4A5568" />
@@ -42,6 +62,7 @@ export function MessageInput({ shouldReset = false }) {
           <button
             type="submit"
             className="send-btn"
+            disabled={isPending}
             aria-label="Send message"
             onMouseDown={(e) => e.preventDefault()}
           >
