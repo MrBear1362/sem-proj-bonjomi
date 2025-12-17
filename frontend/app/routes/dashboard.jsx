@@ -8,17 +8,26 @@ import Button from "../components/ui/buttons/Button";
 import Feed from "../components/Feed";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
+import CollabFeed from "../components/CollabFeed";
 
 export async function clientLoader() {
-  const response = await apiFetch("/api/notes/feed");
+  const responseNote = await apiFetch("/api/notes/feed");
 
-  if (!response.ok) {
+  if (!responseNote.ok) {
     throw new Error(`Failed to fetch notes: ${response.status}`);
   }
 
-  const notes = await response.json();
+  const notes = await responseNote.json();
 
-  return { notes };
+  const responseCollab = await apiFetch("/api/collab-requests");
+
+  if (!responseCollab.ok) {
+    throw new Error(`Failed to fetch collabs: ${response.status}`);
+  }
+
+  const collabs = await responseCollab.json();
+
+  return { notes, collabs };
 }
 
 export async function clientAction({ params, request }) {
@@ -54,7 +63,7 @@ export async function clientAction({ params, request }) {
   }
 }
 
-export function meta({ }) {
+export function meta({}) {
   return [
     { title: "LineUp - Find your place in the LineUp" },
     { name: "description", content: "Welcome to LineUp!" },
@@ -64,7 +73,7 @@ export function meta({ }) {
 export default function DashboardPage() {
   const navigate = useNavigate();
 
-  const { notes } = useLoaderData();
+  const { notes, collabs } = useLoaderData();
 
   const actionData = useActionData();
 
@@ -87,9 +96,10 @@ export default function DashboardPage() {
     <ProtectedRoute>
       <section className="stories-container">There are stories here</section>
 
-      <section className="collab-requests-container">
-        <h5>Collaboration requests</h5>
-        <section className="collab-feed"></section>
+      <section className="collab-requests-container flex">
+        {/* <h5>Collaboration requests</h5>
+        <section className="collab-feed"></section> */}
+        <CollabFeed collabs={collabs} />
       </section>
 
       <Feed notes={notes} />
