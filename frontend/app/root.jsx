@@ -8,7 +8,7 @@ import {
 } from "react-router";
 
 import appStylesHref from "./app.css?url";
-import testStylesHref from "./test.css?url";
+import testStylesHref from "./msg&conv.css?url";
 // import styles
 import "./app.css";
 
@@ -26,11 +26,11 @@ export function Layout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <Scripts />
       </head>
       <body>
         {children}
         <ScrollRestoration />
-        <Scripts />
       </body>
     </html>
   );
