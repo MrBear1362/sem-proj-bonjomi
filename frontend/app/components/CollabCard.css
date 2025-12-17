@@ -50,6 +50,7 @@
     white-space: normal;
     margin-block: 0.5rem;
     display: -webkit-box;
+    line-clamp: 4;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -63,6 +64,7 @@
     color: var(--greyscale-500);
     padding-block: 0.5rem;
     display: -webkit-box;
+    line-clamp: 4;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
