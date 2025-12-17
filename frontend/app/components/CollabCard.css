@@ -12,15 +12,17 @@
   display: flex;
 }
 
-/* .collab-feed {
+.collab-feed {
+  padding: 1rem;
+  & button {
+    margin-top: 1rem;
+  }
   & a {
-    color: var(--greyscale-500);
-    font-size: 0.75rem;
-    font-weight: 900;
+    color: var(--greyscale-900);
     text-decoration: none;
     cursor: pointer;
   }
-} */
+}
 
 .collab-feed--container::-webkit-scrollbar {
   display: none;
