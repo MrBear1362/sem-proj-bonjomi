@@ -186,7 +186,7 @@ h6 {
 }
 
 .wrapper {
-  max-width: 85vw;
+  max-width: clamp(100%, 90vw, 800px);
   margin-inline: auto;
 }
 
