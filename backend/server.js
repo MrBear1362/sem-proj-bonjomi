@@ -7,7 +7,19 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // middleware
-app.use(cors());
+// Configure CORS for production
+const allowedOrigins = [
+	"http://localhost:3000",
+	"http://localhost:5173", // if using Vite
+	process.env.FRONTEND_URL, // Add your Render frontend URL here
+];
+
+app.use(
+	cors({
+		origin: allowedOrigins,
+		credentials: true,
+	})
+);
 app.use(express.json());
 
 //routes
@@ -24,16 +36,16 @@ import notesRoutes from "./routes/notes.js";
 import usersRoutes from "./routes/users.js";
 
 app.use(
-  collab_requestsRoutes,
-  user_profilesRoutes,
-  notesRoutes,
-  servicesRoutes,
-  businessesRoutes,
-  onboardingRoutes,
-  participantsRoutes,
-  messagesRoutes,
-  conversationsRoutes,
-  usersRoutes
+	collab_requestsRoutes,
+	user_profilesRoutes,
+	notesRoutes,
+	servicesRoutes,
+	businessesRoutes,
+	onboardingRoutes,
+	participantsRoutes,
+	messagesRoutes,
+	conversationsRoutes,
+	usersRoutes
 );
 
 // root endpoint - verify server status
