@@ -7,17 +7,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // middleware
-// Configure CORS for production
-const allowedOrigins = [
-	"http://localhost:3000",
-	"http://localhost:5173", // if using Vite
-	process.env.FRONTEND_URL, // Add your Render frontend URL here
-];
 
 app.use(
 	cors({
-		origin: allowedOrigins,
-		credentials: true,
+		origin: "*",
 	})
 );
 app.use(express.json());
