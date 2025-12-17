@@ -10,19 +10,15 @@ router.post("/api/signup", requireAuth, async (req, res) => {
   try {
     const { first_name, last_name, phone, city, birth_year } = req.body;
 
-    // set initial next step after signup
-    const defaultStep = "user-selection";
-    if (!ONBOARDING_STEPS.includes(defaultStep)) {
-      return res
-        .status(500)
-        .json({ error: "Invalid onboarding configuration" });
-    }
+    // use first step from enum array
+    const initialStep = ONBOARDING_STEPS[0]; // "user-details"
 
     const existing = await sql`
     SELECT 1 FROM users WHERE auth_user_id = ${req.userId} LIMIT 1
     `;
 
     if (existing.length > 0) {
+      // status(409) - conflict with current state of server
       return res.status(409).json({ error: "User already exists" });
     }
 

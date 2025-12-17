@@ -126,7 +126,7 @@ export default function OnboardingSteps() {
 	if (step === ONBOARDING_STEPS.FINISHED) return <Navigate to="/" replace />;
 
 	return (
-		<section className="onboarding-container">
+		<section className="onboarding-container flex-clm">
 			{step === ONBOARDING_STEPS.USER_DETAILS && (
 				<UserDetails onContinue={(data) => nextStep(data)} />
 			)}
@@ -215,7 +215,7 @@ export function UserDetails({ onContinue }) {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="auth-form">
+		<form onSubmit={handleSubmit} className="auth-form flex-clm">
 			{/* input field for first name */}
 			<InputField
 				type="text"
@@ -279,7 +279,7 @@ export function UserDetails({ onContinue }) {
 						<>
 							Continue <LoadingSpinner />
 						</>
-					:	"Continue"}
+						: "Continue"}
 				</button>
 			</div>
 		</form>
@@ -369,7 +369,7 @@ export function UserSelection({ onContinue }) {
 						<>
 							Continue <LoadingSpinner />
 						</>
-					:	"Continue"}
+						: "Continue"}
 				</Button>
 			</div>
 		</div>
@@ -482,7 +482,7 @@ export function LookingFor({ onContinue, onSkip }) {
 						<>
 							Continue <LoadingSpinner />
 						</>
-					:	"Continue"}
+						: "Continue"}
 				</Button>
 			</div>
 			<button
@@ -612,7 +612,7 @@ export function BusinessDetails({ onContinue }) {
 					<>
 						Continue <LoadingSpinner />
 					</>
-				:	"Continue"}
+					: "Continue"}
 			</button>
 		</form>
 	);

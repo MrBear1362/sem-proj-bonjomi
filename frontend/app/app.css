@@ -1,27 +1,5 @@
-/* imports */
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
-@import url("https://db.onlinewebfonts.com/c/0976a2619014c5855690b7509fab4c6e?family=Helvetica+Now+Display");
-@import "./layout.css";
-@import "./authPage.css";
-@import "./components/ui/bits/loading-spinner.css";
-@import "./components/ui/bits/user-identifier.css";
-@import "./components/ui/buttons/Bookmark.css";
-@import "./components/ui/buttons/button.css";
-@import "./components/ui/buttons/Comment.css";
-@import "./components/ui/buttons/Like.css";
-@import "./components/ui/buttons/Tag.css";
-@import "./components/ui/buttons/ToggleSwitch.css";
-@import "./components/ui/inputs/input.css";
-@import "./components/ui/inputs/radio-card.css";
-@import "./components/CollabCard.css";
-@import "./components/CommentSection.css";
-@import "./components/Footer.css";
-@import "./components/NoteCard.css";
-@import "./components/Service.css";
-@import "./routes/posting/posting.css";
-
+/* imports have been moved to root.jsx in attempt to fix hydration mismatch */
 /* global */
-
 *,
 *::before,
 *::after {
@@ -81,13 +59,6 @@ body {
 .flex-clm {
   display: flex;
   flex-direction: column;
-}
-
-.grid,
-.app-layout {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 0.625rem;
 }
 
 .spacing-1 {

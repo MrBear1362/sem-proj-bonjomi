@@ -98,7 +98,7 @@ export default function SignupForm() {
       <div className="progress-container">
         <div className="progress-bar"></div>
       </div>
-      <article className="auth-card">
+      <article className="auth-card flex-clm">
         <header className="auth-header flex-clm">
           <h1 className="auth-title xxl-heading">Sign up</h1>
           <p className="auth-subtitle m-text">

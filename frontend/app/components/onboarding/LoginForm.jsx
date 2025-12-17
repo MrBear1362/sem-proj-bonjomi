@@ -61,7 +61,7 @@ export default function LoginForm() {
 
   return (
     <section className="auth-container">
-      <article className="auth-card login">
+      <article className="auth-card login flex-clm">
         <header className="auth-header">
           <h1 className="auth-title xxl-heading">Login</h1>
         </header>

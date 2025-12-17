@@ -12,11 +12,16 @@
 			text-align: center;
 		}
 	}
+}
+
+.auth-page,
+.onboarding-container {
+	align-items: center;
 
 	.auth-form {
 		padding-block: 1rem 0;
+		width: 200px;
 		margin-top: 2rem;
-		justify-items: center;
 		gap: 1rem;
 		& p {
 			margin-block: 1rem;
@@ -42,7 +47,8 @@
 	background-color: var(--greyscale-300);
 	border-radius: 0.5rem;
 	justify-self: center;
-	width: 80vw;
+	width: 100%;
+	/* max-width: 800px; */
 	overflow: hidden;
 	height: 0.3rem;
 	margin-block: 2rem 2.5rem;
@@ -78,4 +84,8 @@
 	& button:last-child {
 		margin: 0 auto;
 	}
+}
+
+.auth-card {
+	align-items: center;
 }
