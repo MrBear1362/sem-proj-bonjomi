@@ -9,7 +9,8 @@ import { ConversationItem } from "../components/messages&conversations/Conversat
 // It fetches conversation data and returns it
 export async function clientLoader() {
   try {
-    const conversations = await apiFetch("/api/conversations");
+    const response = await apiFetch("/api/conversations");
+    const conversations = await response.json();
 
     // Mapping backend fields to frontend shape
     return {
