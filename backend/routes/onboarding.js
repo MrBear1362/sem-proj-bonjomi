@@ -19,7 +19,7 @@ router.post("/api/signup", requireAuth, async (req, res) => {
 
     if (existing.length > 0) {
       // status(409) - conflict with current state of server
-      return res.status(409).json({ error: "User already exists" });
+      return res.status(409).json({ error: "User already exists, please log in" });
     }
 
     const signup = await sql`
