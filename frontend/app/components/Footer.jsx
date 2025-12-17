@@ -103,7 +103,7 @@ export default function Footer() {
         </NavLink>
       </Button>
       <Button className="flex-clm btn-nav">
-        <NavLink to="profiles/:userId" className="flex-clm btn-nav" aria-label="Profile">
+        <NavLink to="profiles/user" className="flex-clm btn-nav" aria-label="Profile">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
