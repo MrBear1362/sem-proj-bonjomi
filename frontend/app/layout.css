@@ -1,6 +1,8 @@
 /* overall layout for the app */
 .app-layout {
   height: 100vh;
+  max-width: 800px;
+  margin: 0 auto;
 
   /* make grid content fill grid by default */
   & > * {
@@ -10,8 +12,6 @@
 
 .main-content {
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
   position: relative;
 }
 
@@ -20,7 +20,7 @@ nav {
 }
 
 .nav-header {
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   .btn {
     svg {
       height: 1.2rem;
@@ -34,4 +34,3 @@ nav {
   padding: 1rem;
   height: 100%;
 }
-
