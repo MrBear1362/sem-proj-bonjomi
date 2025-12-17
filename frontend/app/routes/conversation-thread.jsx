@@ -16,10 +16,22 @@ export async function clientLoader({ params }) {
   const currentUserId = session?.user?.id;
 
   try {
-    const [conversation, messages] = await Promise.all([
+    const [resConv, resMsg] = await Promise.all([
       apiFetch(`/api/conversations/${conversationId}`),
       apiFetch(`/api/conversations/${conversationId}/messages`),
     ]);
+
+    if (!resConv.ok) {
+      const err = await resConv.json().catch(() => ({}));
+      throw new Error(err.error || "Failed to load conversation");
+    }
+    if (!resMsg.ok) {
+      const err = await resMsg.json().catch(() => ({}));
+      throw new Error(err.error || "Failed to load messages");
+    }
+
+    const conversation = await resConv.json();
+    const messages = await resMsg.json();
 
     return {
       conversation: {
@@ -27,7 +39,7 @@ export async function clientLoader({ params }) {
         name: conversation.title,
         avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(conversation.title)}&background=0D8ABC&color=fff`,
       },
-      messages: messages.map((msg) => ({
+      messages: (Array.isArray(messages) ? messages : []).map((msg) => ({
         id: msg.id,
         senderId: msg.user_id === currentUserId ? "me" : "other",
         content: msg.content,
@@ -59,13 +71,16 @@ export async function clientAction({ params, request }) {
   }
 
   try {
-    await apiFetch("/api/messages", {
+    const response = await apiFetch("/api/messages", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         content: message.trim(),
         conversationid: conversationId,
       }),
     });
+
+    await response.json();
 
     return { success: true };
   } catch (error) {

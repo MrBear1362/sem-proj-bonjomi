@@ -11,13 +11,24 @@ export async function clientAction({ request }) {
     return { error: "Please select at least one user" };
 
   try {
-    const conversation = await apiFetch("/api/conversations", {
+    const response = await apiFetch("/api/conversations", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         participantIds,
         title: title || undefined,
       }),
     });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || "Failed to create conversation");
+    }
+
+    const conversation = await response.json();
+    if (!conversation?.id) {
+      throw new Error("Conversation id missing in response");
+    }
 
     return redirect(`/messages/${conversation.id}`);
   } catch (error) {
@@ -49,9 +60,10 @@ export default function ConversationNew() {
     const timer = setTimeout(async () => {
       setLoading(true);
       try {
-        const data = await apiFetch(
+        const response = await apiFetch(
           `/api/users/search?query=${encodeURIComponent(query)}`
         );
+        const data = await response.json();
         setResults(data);
       } catch (err) {
         setSearchError(err.message);
