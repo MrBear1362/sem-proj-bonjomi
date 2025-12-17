@@ -1,8 +1,9 @@
 /* overall layout for the app */
 .app-layout {
-  height: 100vh;
+  height: 100dvh;
   max-width: 800px;
   margin: 0 auto;
+  overflow-y: scroll;
 
   /* make grid content fill grid by default */
   & > * {
@@ -11,7 +12,6 @@
 }
 
 .main-content {
-  height: 100dvh;
   width: 100%;
   position: relative;
 }
@@ -33,5 +33,4 @@ nav {
 /* dashboard feed */
 .feed--container {
   padding: 1rem;
-  height: 100%;
 }
