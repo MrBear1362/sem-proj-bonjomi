@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router";
-import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
+import Navigation from "../components/Navigation.jsx";
+import Footer from "../components/Footer.jsx";
 
 export default function Layout() {
   const location = useLocation();
