@@ -17,9 +17,9 @@ export default function StyleGuide() {
 
       <section>
         <h2>Buttons</h2>
-        <Button>Primary Button</Button>
-        <Button variant="secondary">Secondary Button</Button>
-        <Button disabled>Disabled Button</Button>
+        <Button className="btn-primary">Primary Button</Button>
+        <Button variant="secondary" className="btn-secondary">Secondary Button</Button>
+        <Button disabled className="btn-outline">Disabled Button</Button>
       </section>
 
       <section>

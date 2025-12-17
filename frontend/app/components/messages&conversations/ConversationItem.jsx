@@ -9,7 +9,7 @@ export function ConversationItem({ conversation, onDelete }) {
         className="conversation-avatar"
       />
       <div className="conversation-content">
-        <div className="conversation-header">
+        <div className="conversation-item-header">
           <span className="conversation-name">{conversation.name}</span>
           <span className="conversation-time">{conversation.timestamp}</span>
         </div>
