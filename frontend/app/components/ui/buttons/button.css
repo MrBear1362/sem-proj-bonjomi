@@ -63,8 +63,13 @@ button {
   background-color: var(--primary-yellow);
   border: 0;
 
+  a {
+    color: var(--greyscale-900);
+    text-decoration: none;
+  }
+
   &[type="submit"] {
-    padding: .5rem 2rem;
+    padding: 0.5rem 2rem;
     align-self: end;
   }
 }

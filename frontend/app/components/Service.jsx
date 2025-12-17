@@ -34,9 +34,8 @@ export function ServiceCard({ service, mode = "preview" }) {
 
 	return (
 		<section
-			className={`serviceCardContainer ${
-				isDetailMode ? "serviceCardFull" : ""
-			}`}
+			className={`serviceCardContainer ${isDetailMode ? "serviceCardFull" : ""
+				}`}
 		>
 			<header>
 				<div className="profileContainer">
@@ -62,7 +61,7 @@ export function ServiceCard({ service, mode = "preview" }) {
 						<div className="actionButtons">
 							<Button className="btn-primary">Start a chat</Button>
 							{isOwner && (
-								<Link to={`/services/${id}/edit`} className="editButton">
+								<Link to={`/services/${id}/edit`} className="btn-primary">
 									Edit Service
 								</Link>
 							)}
@@ -84,7 +83,7 @@ export function ServiceCard({ service, mode = "preview" }) {
 						</div>
 					</div>
 					// Preview mode: Show link and basic info
-				:	<div className="bottomContainer">
+					: <div className="bottomContainer">
 						<div className="linkContainer">
 							<Link to={`/services/${id}`} className="readMore">
 								Read more
