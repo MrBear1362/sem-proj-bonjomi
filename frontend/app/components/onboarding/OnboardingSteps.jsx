@@ -559,7 +559,10 @@ export function BusinessDetails({ onContinue }) {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="auth-form auth-form-business">
+		<form
+			onSubmit={handleSubmit}
+			className="auth-form auth-form-business flex-clm"
+		>
 			{/* input field for business name */}
 			<InputField
 				type="text"
@@ -573,20 +576,16 @@ export function BusinessDetails({ onContinue }) {
 			/>
 
 			{/* input field for phone number */}
-			<label htmlFor="phone">Phone number</label>
-			<div className="phone-container">
-				<p className="country">🇩🇰</p>
-				<InputField
-					type="tel"
-					id="phone"
-					name="phone"
-					label="Phone number"
-					showLabel={false}
-					required
-					placeholder="Phone number"
-					minLength={8}
-				/>
-			</div>
+			<InputField
+				type="tel"
+				id="phone"
+				name="phone"
+				label="Phone number"
+				showLabel={true}
+				required
+				placeholder="Phone number"
+				minLength={8}
+			/>
 
 			<label htmlFor="location">Where are you located</label>
 			{/* toggle switch for remote option */}
@@ -620,49 +619,49 @@ export function BusinessDetails({ onContinue }) {
 }
 
 export function LineUpPro({ onContinue, onSkip }) {
-  const [selectedPlan, setSelectedPlan] = useState(null);
-  return (
-    <div className="auth-form flex-clm justify-center">
-      <img src="" alt="LineUp logo" className="element-xl" />
-      <h1>Get full access to LineUp</h1>
-      <p className="checklist-item">Unlimited collabs</p>
-      <p className="checklist-item">unlimited connections</p>
-      <p className="checklist-item">Advanced insights</p>
-      <p className="checklist-item">See detailed reviews</p>
+	const [selectedPlan, setSelectedPlan] = useState(null);
+	return (
+		<div className="auth-form flex-clm justify-center">
+			<img src="" alt="LineUp logo" className="element-xl" />
+			<h1>Get full access to LineUp</h1>
+			<p className="checklist-item">Unlimited collabs</p>
+			<p className="checklist-item">unlimited connections</p>
+			<p className="checklist-item">Advanced insights</p>
+			<p className="checklist-item">See detailed reviews</p>
 
-      <RadioCard
-        value="Monthly"
-        selected={selectedPlan}
-        onChange={setSelectedPlan}
-        variant="pricing"
-        title="Monthly"
-        subtitle="58 kr. / month"
-        price="58 kr."
-      />
-      <RadioCard
-        value="Yearly"
-        selected={selectedPlan}
-        onChange={setSelectedPlan}
-        variant="pricing"
-        title="Yearly"
-        subtitle="29 kr. / month"
-        price="348 kr."
-        discount="save 50%"
-      />
-      {/* <LineUpSubscription /> */}
-      <Button
-        className="btn-primary"
-        onClick={onContinue}
-        disabled={!selectedPlan}
-      >
-        Start my 7-day trial
-      </Button>
+			<RadioCard
+				value="Monthly"
+				selected={selectedPlan}
+				onChange={setSelectedPlan}
+				variant="pricing"
+				title="Monthly"
+				subtitle="58 kr. / month"
+				price="58 kr."
+			/>
+			<RadioCard
+				value="Yearly"
+				selected={selectedPlan}
+				onChange={setSelectedPlan}
+				variant="pricing"
+				title="Yearly"
+				subtitle="29 kr. / month"
+				price="348 kr."
+				discount="save 50%"
+			/>
+			{/* <LineUpSubscription /> */}
+			<Button
+				className="btn-primary"
+				onClick={onContinue}
+				disabled={!selectedPlan}
+			>
+				Start my 7-day trial
+			</Button>
 
-      <p className="xs-text">Terms of use and Privacy Policy</p>
+			<p className="xs-text">Terms of use and Privacy Policy</p>
 
-      <button className="btn-skip" onClick={onSkip}>
-        Skip for now
-      </button>
-    </div>
-  );
+			<button className="btn-skip" onClick={onSkip}>
+				Skip for now
+			</button>
+		</div>
+	);
 }
