@@ -13,7 +13,7 @@ export default function ToggleSwitch({ label, onChange }) {
 	};
 
 	return (
-		<div className="switchContainer">
+		<div className="switchContainer flex">
 			<button
 				className={`toggle ${isToggled ? "toggleActive" : ""}`}
 				onClick={handleToggle}
