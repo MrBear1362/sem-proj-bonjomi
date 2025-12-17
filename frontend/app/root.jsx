@@ -15,7 +15,7 @@ import loadingSpinnerStylesHref from "./components/ui/bits/loading-spinner.css?u
 import userIdentifierStylesHref from "./components/ui/bits/user-identifier.css?url";
 import bookmarkStylesHref from "./components/ui/buttons/Bookmark.css?url";
 import buttonStylesHref from "./components/ui/buttons/button.css?url";
-import commentBtnStylesHref from "./components/ui/buttons/Comment.css?url";
+import commentBtnStylesHref from "./components/ui/buttons/comment.css?url";
 import likeStylesHref from "./components/ui/buttons/Like.css?url";
 import tagStylesHref from "./components/ui/buttons/Tag.css?url";
 import toggleStylesHref from "./components/ui/buttons/ToggleSwitch.css?url";
