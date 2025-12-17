@@ -24,7 +24,7 @@ router.post("/api/signup", requireAuth, async (req, res) => {
 
     const signup = await sql`
     INSERT INTO users (auth_user_id, first_name, last_name, phone, city, birth_year, onboarding_step)
-    VALUES (${req.userId}, ${first_name}, ${last_name}, ${phone}, ${city}, ${birth_year}, ${defaultStep})
+    VALUES (${req.userId}, ${first_name}, ${last_name}, ${phone}, ${city}, ${birth_year}, ${initialStep})
     RETURNING auth_user_id, first_name, last_name, phone, city, birth_year, onboarding_step
     `;
 
