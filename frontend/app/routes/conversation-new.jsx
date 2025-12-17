@@ -1,5 +1,5 @@
 import { Form, Link, redirect, useActionData } from "react-router";
-import { apiFetch } from "../lib/apiFetch.js";
+import { apiFetch } from "../library/apiFetch.js";
 import { useEffect, useState } from "react";
 
 export async function clientAction({ request }) {

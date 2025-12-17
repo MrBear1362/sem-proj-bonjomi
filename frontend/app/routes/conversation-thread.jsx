@@ -1,6 +1,6 @@
 import { useLoaderData, useActionData } from "react-router";
-import { apiFetch } from "../lib/apiFetch.js";
-import { supabase } from "../lib/supabase.js";
+import { apiFetch } from "../library/apiFetch.js";
+import { supabase } from "../library/supabase.js";
 import { ConversationHeader } from "../components/messages&conversations/ConversationHeader.jsx";
 import { Message } from "../components/messages&conversations/Message.jsx";
 import { MessageInput } from "../components/messages&conversations/MessageInput.jsx";

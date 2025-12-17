@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router";
-import { apiFetch } from "../lib/apiFetch.js";
+import { apiFetch } from "../library/apiFetch.js";
 import { MessagesHeader } from "../components/messages&conversations/MessagesHeader.jsx";
 import { MessagesTabs } from "../components/messages&conversations/MessagesTabs.jsx";
 import { ConversationItem } from "../components/messages&conversations/ConversationItem.jsx";
