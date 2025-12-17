@@ -20,14 +20,37 @@
 
 	.auth-form {
 		padding-block: 1rem 0;
+		min-width: fit-content;
 		width: 200px;
+		align-items: center;
+
 		margin-top: 2rem;
 		gap: 1rem;
-		& p {
+
+		p {
 			margin-block: 1rem;
 		}
-		& button {
-			margin-top: 1rem;
+
+		button {
+			margin-top: 0;
+		}
+
+		.xs-text {
+			margin-block: 0;
+		}
+
+		.pro-benefits {
+			width: 24rem;
+			margin-bottom: 1rem;
+
+			h1 {
+				margin-bottom: 0.5rem;
+			}
+
+			p {
+				padding: 0 1.5rem;
+				margin-block: 0.5rem;
+			}
 		}
 	}
 }

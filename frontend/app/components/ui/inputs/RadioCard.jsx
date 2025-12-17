@@ -40,13 +40,15 @@ export default function RadioCard({
 
       {variant === "pricing" && (
         <div className="pricing-wrap flex">
-          <div className="col-radio">
-            <span className="radio-dot" />
-          </div>
+          <div className="pricing-collection flex-row">
+            <div className="col-radio">
+              <span className="radio-dot" />
+            </div>
 
-          <div className="col-info">
-            <h4>{title}</h4>
-            {subtitle && <p>{subtitle}</p>}
+            <div className="col-info">
+              <h4>{title}</h4>
+              {subtitle && <p>{subtitle}</p>}
+            </div>
           </div>
 
           <div className="col-price">

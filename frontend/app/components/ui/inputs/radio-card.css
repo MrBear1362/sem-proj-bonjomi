@@ -45,8 +45,24 @@
 
 .pricing-wrap {
   border: 1px solid var(--greyscale-900);
-  padding: 0.5rem 1rem;
+  padding: 1.8rem 1rem;
+  border-radius: 2rem;
   gap: 1rem;
+  justify-content: space-between;
+  min-width: 300px;
+  align-items: center;
+
+  .pricing-collection {
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .col-info {
+    text-align: start;
+    p {
+      margin: 0;
+    }
+  }
 }
 
 .checklist-item::before {
@@ -60,7 +76,7 @@
   border: 1px solid var(--greyscale-500);
   border-radius: 2rem;
   padding: 1rem 2rem;
-  width: 70vw;
+  width: 100%;
 }
 
 .horizontal-wrap {
@@ -80,7 +96,9 @@
   }
 }
 
-.choice {
+.choice-container {
+  width: 60%;
+  justify-content: center;
   gap: 1.5rem;
   margin: 3.75rem 0 2rem 0;
 
